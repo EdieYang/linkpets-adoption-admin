@@ -74,6 +74,54 @@ const frameIn = [
         component: _import('system/function/redirect')
       }
     ]
+  },
+  {
+    path: '/orgManage',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'orgManage',
+        meta: {
+          title: '组织管理',
+          auth: true
+        },
+        component: _import('orgManage/index')
+      }
+    ]
+  },
+  {
+    path: '/adoptRelease',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'adoptRelease',
+        meta: {
+          title: '领养发布',
+          auth: true
+        },
+        component: _import('adoptRelease/index')
+      }
+    ]
+  },
+  {
+    path: '/activityRelease',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'activityRelease',
+        meta: {
+          title: '活动发布',
+          auth: true
+        },
+        component: _import('activityRelease/index')
+      }
+    ]
   }
 ]
 
