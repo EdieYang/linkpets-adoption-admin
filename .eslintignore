@@ -11,3 +11,4 @@ coverage/
 **/*-min.js
 **/*.min.js
 **/*.vue
+**/*.js

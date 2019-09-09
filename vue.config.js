@@ -14,8 +14,18 @@ module.exports = {
   publicPath, // 根据你的实际情况更改这里
   lintOnSave: true,
   devServer: {
-    publicPath // 和 publicPath 保持一致
+    publicPath, // 和 publicPath 保持一致
+    proxy: {
+      '/api': {
+        target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''    //代理的路径
+        }
+      },
+    },
   },
+
   css: {
     loaderOptions: {
       // 设置 scss 公用变量文件
