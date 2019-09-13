@@ -96,15 +96,24 @@ const frameIn = [
     redirect: { name: 'index' },
     component: layoutHeaderAside,
     children: [
-      {
-        path: 'index',
-        name: 'adoptRelease',
-        meta: {
-          title: '领养发布',
-          auth: true
+        {
+            path: 'index',
+            name: 'adoptRelease',
+            meta: {
+              title: '领养发布',
+              auth: true
+            },
+            component: _import('adoptRelease/index')
         },
-        component: _import('adoptRelease/index')
-      }
+        {
+            path: 'new',
+            name: 'adoptNew',
+            meta: {
+                title: '创建领养信息',
+                auth: true
+            },
+            component: _import('adoptRelease/new')
+        }
     ]
   },
   {

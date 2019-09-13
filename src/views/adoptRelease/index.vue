@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h4>领养发布</h4>
-        <el-button slot="header" type="primary" style="margin-bottom: 5px">新增领养信息</el-button>
+        <el-button slot="header" type="primary" style="margin-bottom: 5px" @click="newAdopt">新增领养信息</el-button>
         <d2-crud
                 ref="d2Crud"
                 :columns="columns"
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+    // import {getAdopt}
     export default {
         data() {
             return {
@@ -73,6 +74,14 @@
         },
         mounted() {
             console.log(this.$refs.d2Crud.d2CrudData)
+        },
+        methods: {
+            getList(){
+
+            },
+            newAdopt(){
+                this.$router.push('/adoptRelease/new')
+            }
         }
     }
 </script>
