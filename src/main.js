@@ -6,7 +6,7 @@ import App from './App'
 import d2Admin from '@/plugin/d2admin'
 // store
 import store from '@/store/index'
-//表格
+// 表格
 import D2Crud from '@d2-projects/d2-crud'
 
 // 菜单和路由设置
@@ -14,11 +14,13 @@ import router from './router'
 import menuHeader from '@/menu/header'
 import menuAside from '@/menu/aside'
 import { frameInRoutes } from '@/router/routes'
-
+import VueClipboard from 'vue-clipboard2'
 // 核心插件
-Vue.use(d2Admin);
-//表格
-Vue.use(D2Crud);
+Vue.use(d2Admin)
+// 表格
+Vue.use(D2Crud)
+// 拷贝粘贴板
+Vue.use(VueClipboard)
 
 new Vue({
   router,

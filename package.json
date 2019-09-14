@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "better-scroll": "^1.15.2",
     "core-js": "^2.6.5",
+    "countup.js": "^2.0.4",
     "dayjs": "^1.8.12",
     "element-ui": "^2.12.0",
     "flex.css": "^1.1.7",
@@ -30,6 +31,8 @@
     "screenfull": "^4.2.0",
     "ua-parser-js": "^0.7.19",
     "vue": "^2.6.10",
+    "vue-clipboard2": "^0.3.1",
+    "vue-countup-v2": "^4.0.0",
     "vue-i18n": "^8.14.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
