@@ -1,6 +1,7 @@
 <template>
     <d2-container better-scroll >
         <div style="width:100%;">
+          <el-card>
             <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="formRules"
                      style="width:640px;display: inline-block;">
                 <el-divider content-position="left">上传宠物照片</el-divider>
@@ -139,8 +140,8 @@
                 <el-button class="form-sumbit" type="primary" @click="adoptNew">提 交</el-button>
             </el-form>
             <br>
+          </el-card>
         </div>
-
     </d2-container>
 
 

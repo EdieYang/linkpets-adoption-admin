@@ -72,7 +72,7 @@ const frameIn = [
             path: 'index',
             name: 'adoptRelease',
             meta: {
-              title: '领养发布',
+              title: '领养信息列表',
               auth: true
             },
             component: _import('adoptRelease/index')
@@ -81,7 +81,7 @@ const frameIn = [
             path: 'new',
             name: 'adoptNew',
             meta: {
-                title: '创建领养信息',
+                title: '领养信息发布',
                 auth: true
             },
             component: _import('adoptRelease/new')
