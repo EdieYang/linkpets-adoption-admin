@@ -21,7 +21,7 @@
 
       </el-table-column>
       <el-table-column label="公众号文章封面"
-                       width="220px">
+                       width="230px">
         <template slot-scope="scope">
           <img :src="scope.row.activityCover"
                alt=""
@@ -37,7 +37,7 @@
 
       </el-table-column>
       <el-table-column prop="createDate"
-                       width="140px"
+                       width="170px"
                        label="发布时间">
       </el-table-column>
       <el-table-column fixed="right"
@@ -53,7 +53,7 @@
                      @click="edit(scope.row)">编辑</el-button>
           <el-button type="text"
                      size="medium"
-                     @click="delete(scope.row)">删除</el-button>
+                     @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,7 +128,7 @@
 
 
 <script>
-import { listActivities, postActivity } from '@/api/activity/activityApi.js'
+import { listActivities, postActivity, uptActivity } from '@/api/activity/activityApi.js'
 var pageNum = 1
 var pageSize = 10
 
@@ -188,7 +188,7 @@ export default {
       this.listActivities()
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList);
+      console.log(file, fileList)
       this.form.activityCover = ''
     },
     handlePictureCardPreview (file) {
@@ -232,7 +232,7 @@ export default {
                 message: '上传成功！',
                 type: 'success'
               })
-              this.$refs[formName].resetFields();
+              this.$refs[formName].resetFields()
               this.dialogVisible = false
               this.dialogFormVisible = false
               pageNum = 1
@@ -255,7 +255,7 @@ export default {
                 message: '上传成功！',
                 type: 'success'
               })
-              this.$refs[formName].resetFields();
+              this.$refs[formName].resetFields()
               this.dialogVisible = false
               this.dialogFormVisible = false
               pageNum = 1
@@ -271,7 +271,7 @@ export default {
     },
     cancel (formName) {
       this.dialogFormVisible = false
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     onCopy () {
       this.$message({
@@ -291,12 +291,34 @@ export default {
       this.form.id = row.id
       this.dialogFormVisible = true
     },
-    delete (row) {
+    del (row) {
       console.log(row.id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let actInfo = {
+          id: row.id,
+          isValid: 0
+        };
+        uptActivity(actInfo).then(res => {
+          console.log(res)
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          pageNum = 1
+          this.listActivities()
+        })
+
+      })
+
     }
 
   },
   mounted: function () {
+    pageNum = 1
     this.listActivities()
   }
 }
