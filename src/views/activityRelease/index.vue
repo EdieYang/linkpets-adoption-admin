@@ -4,7 +4,7 @@
     <template slot="header">
 
       <div class="header-cover">
-        <p>发布近期活动，微信公众号文章。</p>
+        <p>发布组织近期活动，微信公众号文章</p>
         <el-button type="primary"
                    size="medium"
                    @click="dialogFormVisible = true">发布新的活动</el-button>
@@ -17,11 +17,13 @@
               style="width: 100%">
       <el-table-column prop="title"
                        width="200px"
+                       align="center"
                        label="公众号文章标题">
 
       </el-table-column>
       <el-table-column label="公众号文章封面"
-                       width="220px">
+                       align="center"
+                       width="230px">
         <template slot-scope="scope">
           <img :src="scope.row.activityCover"
                alt=""
@@ -30,30 +32,49 @@
 
       </el-table-column>
       <el-table-column label="公众号文章链接"
-                       width="500px">
+                       align="center"
+                       width="450px">
         <template slot-scope="scope">
           <p class="hightlight">{{scope.row.activityPath}}</p>
         </template>
 
       </el-table-column>
       <el-table-column prop="createDate"
-                       width="140px"
+                       width="170px"
+                       align="center"
                        label="发布时间">
       </el-table-column>
       <el-table-column fixed="right"
                        label="操作"
+                       align="center"
                        width="180px">
         <template slot-scope="scope">
-          <el-button v-clipboard:copy="scope.row.activityPath"
-                     v-clipboard:success="onCopy"
-                     type="text"
-                     size="medium">复制链接</el-button>
-          <el-button type="text"
-                     size="medium"
-                     @click="edit(scope.row)">编辑</el-button>
-          <el-button type="text"
-                     size="medium"
-                     @click="delete(scope.row)">删除</el-button>
+          <el-tooltip content="预览"
+                      placement="top-start"
+                      effect="light">
+            <el-button icon="el-icon-document"
+                       circle
+                       size="small"
+                       @click="openLink(scope.row.activityPath)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="编辑"
+                      placement="top-start"
+                      effect="light">
+            <el-button type="success"
+                       icon="el-icon-edit"
+                       circle
+                       size="small"
+                       @click="edit(scope.row)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="删除"
+                      placement="top-start"
+                      effect="light">
+            <el-button type="danger"
+                       icon="el-icon-delete-solid"
+                       circle
+                       size="small"
+                       @click="del(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -88,7 +109,6 @@
                      :limit="limit"
                      :data="uploadData"
                      :on-success="handleSuccess"
-                     :on-preview="handlePictureCardPreview"
                      :on-remove="handleRemove"
                      :file-list="fileList">
             <i class="el-icon-plus"></i>
@@ -128,7 +148,7 @@
 
 
 <script>
-import { listActivities, postActivity } from '@/api/activity/activityApi.js'
+import { listActivities, postActivity, uptActivity } from '@/api/activity/activityApi.js'
 var pageNum = 1
 var pageSize = 10
 
@@ -188,7 +208,7 @@ export default {
       this.listActivities()
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList);
+      console.log(file, fileList)
       this.form.activityCover = ''
     },
     handlePictureCardPreview (file) {
@@ -232,7 +252,7 @@ export default {
                 message: '上传成功！',
                 type: 'success'
               })
-              this.$refs[formName].resetFields();
+              this.$refs[formName].resetFields()
               this.dialogVisible = false
               this.dialogFormVisible = false
               pageNum = 1
@@ -255,7 +275,7 @@ export default {
                 message: '上传成功！',
                 type: 'success'
               })
-              this.$refs[formName].resetFields();
+              this.$refs[formName].resetFields()
               this.dialogVisible = false
               this.dialogFormVisible = false
               pageNum = 1
@@ -271,7 +291,7 @@ export default {
     },
     cancel (formName) {
       this.dialogFormVisible = false
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     onCopy () {
       this.$message({
@@ -280,6 +300,7 @@ export default {
       })
     },
     edit (row) {
+      this.fileList = []
       this.form.activityPath = row.activityPath
       this.form.activityCover = row.activityCover
       var file = {
@@ -291,12 +312,37 @@ export default {
       this.form.id = row.id
       this.dialogFormVisible = true
     },
-    delete (row) {
+    del (row) {
       console.log(row.id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let actInfo = {
+          id: row.id,
+          isValid: 0
+        };
+        uptActivity(actInfo).then(res => {
+          console.log(res)
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          pageNum = 1
+          this.listActivities()
+        })
+
+      })
+
+    },
+    openLink (link) {
+      window.open(link, '_blank');
     }
 
   },
   mounted: function () {
+    pageNum = 1
     this.listActivities()
   }
 }

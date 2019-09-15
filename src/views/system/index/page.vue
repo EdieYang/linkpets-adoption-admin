@@ -10,7 +10,7 @@
           <p class="item-title">成功领养总数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="successAdoptCountTotal"
                       :options="options" />
           </p>
         </div>
@@ -18,7 +18,7 @@
           <p class="item-title">发布领养总数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="adoptCountTotal"
                       :options="options" />
           </p>
         </div>
@@ -26,7 +26,7 @@
           <p class="item-title">申请领养总数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="applyCountTotal"
                       :options="options" />
           </p>
         </div>
@@ -42,7 +42,7 @@
           <p class="item-title">一周内发布领养数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="adoptCountInWeek"
                       :options="options" />
           </p>
         </div>
@@ -50,7 +50,7 @@
           <p class="item-title">一周内粉丝增长数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="fansCountInWeek"
                       :options="options" />
           </p>
         </div>
@@ -58,7 +58,7 @@
           <p class="item-title">一周内领养申请数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="applyCountInWeek"
                       :options="options" />
           </p>
         </div>
@@ -75,7 +75,7 @@
           <p class="item-title">一个月内成功领养数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="successAdoptCountInMonth"
                       :options="options" />
           </p>
         </div>
@@ -83,7 +83,7 @@
           <p class="item-title">一个月内上传照片数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="galleryCountInMonth"
                       :options="options" />
           </p>
         </div>
@@ -91,7 +91,7 @@
           <p class="item-title">一个月内发布活动数</p>
           <p class="item-val">
             <ICountUp :delay="delay"
-                      :endVal="endVal"
+                      :endVal="activityCountInMonth"
                       :options="options" />
           </p>
         </div>
@@ -102,6 +102,7 @@
 </template>
 <script>
 import ICountUp from 'vue-countup-v2';
+import { getOrgStatistic } from '@/api/statistic/statisticApi.js'
 export default {
   components: {
     ICountUp
@@ -109,7 +110,16 @@ export default {
   data () {
     return {
       delay: 2000,
-      endVal: 12,
+      activityCountInMonth: 0,
+      adoptCountInWeek: 0,
+      adoptCountTotal: 0,
+      applyCountInWeek: 0,
+      applyCountTotal: 0,
+      fansCountInWeek: 0,
+      fansCountTotal: 0,
+      galleryCountInMonth: 0,
+      successAdoptCountInMonth: 0,
+      successAdoptCountTotal: 0,
       options: {
         useEasing: true,
         useGrouping: true,
@@ -121,7 +131,27 @@ export default {
     }
   },
   methods: {
+    getOrgStatistic (orgId) {
+      getOrgStatistic(orgId).then(res => {
+        console.log(res)
+        this.activityCountInMonth = res.activityCountInMonth
+        this.adoptCountInWeek = res.adoptCountInWeek
+        this.adoptCountTotal = res.adoptCountTotal
+        this.applyCountInWeek = res.applyCountInWeek
+        this.applyCountTotal = res.applyCountTotal
+        this.fansCountInWeek = res.fansCountInWeek
+        this.fansCountTotal = res.fansCountTotal
+        this.galleryCountInMonth = res.galleryCountInMonth
+        this.successAdoptCountInMonth = res.successAdoptCountInMonth
+        this.successAdoptCountTotal = res.successAdoptCountTotal
 
+      }).catch(err => {
+        // 异常情况
+      })
+    }
+  },
+  mounted: function () {
+    this.getOrgStatistic('2')
   }
 }
 </script>
@@ -147,7 +177,7 @@ export default {
 .item-title {
   height: 40px;
   line-height: 40px;
-  font-size: 23px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
 }
