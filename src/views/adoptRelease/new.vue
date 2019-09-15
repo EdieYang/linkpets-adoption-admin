@@ -147,7 +147,7 @@
 </template>
 
 <script>
-    import {adoptNew} from "@/api/adoptRelease/adoptReleaseApi"
+    import {adoptNew,adoptDetail} from "@/api/adoptRelease/adoptReleaseApi"
     import util from '@/libs/util'
     export default {
         name: "new",
@@ -161,6 +161,7 @@
                 }
             };
             return {
+                pageType:"",
                 form:{
                     mediaList:"", //宠物照片
 
@@ -347,45 +348,37 @@
                 }
             }
         },
+        mounted(){
+            this.pageType = this.$route.query.type;
+            if(this.pageType === "edit"){
+                this.adoptDetail()
+            }
+        },
         methods:{
-            handleRemove(file, fileList) {
-                this.picArr=[];
-                fileList.forEach(item => {
-                    let picList ={
-                        mediaType: item.response.data.substring(item.response.data.indexOf('.') + 1),
-                        mediaPath: item.response.data,
-                    };
-                    this.picArr.push(picList)
+            adoptDetail(){
+                let data={
+                    petId: this.$route.query.petId,
+                    userId: util.cookies.get("userId")
+                };
+                adoptDetail(data).then(res => {
+                    console.log(res)
+                    this.form = JSON.parse(JSON.stringify(res.petInfo))
+                    // this.form.mediaList.forEach(_data => {
+                    //     this.dialogImageUrl.push(_data.mediaPath)
+                    // });
+                    this.form.mediaList = JSON.stringify(this.mediaList)
+                    let petCharacteristicArr=[]
+                    JSON.parse(this.form.petCharacteristic).forEach(_data => {
+                        petCharacteristicArr.push(_data.value)
+                    });
+                    this.form.petCharacteristic = petCharacteristicArr
+                    let adoptRequirementsArr=[]
+                    JSON.parse(this.form.adoptRequirements).forEach(_data => {
+                        adoptRequirementsArr.push(_data.value)
+                    });
+                    this.form.adoptRequirements = adoptRequirementsArr
+
                 });
-                this.form.mediaList = JSON.stringify(this.picArr);
-            },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.form.mediaList = file.url;
-                this.dialogVisible = true;
-            },
-            handleSuccess(response, file, fileList){
-                this.canUpload = true
-                this.picArr=[];
-                fileList.forEach(item => {
-                    let picList ={
-                        mediaType: item.response.data.substring(item.response.data.indexOf('.') + 1),
-                        mediaPath: item.response.data,
-                    };
-                    this.picArr.push(picList)
-                });
-                this.form.mediaList = JSON.stringify(this.picArr)
-            },
-            handleBefore(){
-                if(this.picArr.length >5){
-                    alert("图片最多上传6张！");
-                    return false
-                }else if(this.canUpload === true){
-                    this.canUpload = false
-                    return true
-                }else{
-                    return false
-                }
             },
             adoptNew(){
                 this.$refs.form.validate((valid) => {
@@ -416,7 +409,47 @@
                         });
                     }
                 })
-            }
+            },
+            handleRemove(file, fileList) {
+                this.picArr=[];
+                fileList.forEach(item => {
+                    let picList ={
+                        mediaType: item.response.data.substring(item.response.data.indexOf('.') + 1),
+                        mediaPath: item.response.data,
+                    };
+                    this.picArr.push(picList)
+                });
+                this.form.mediaList = JSON.stringify(this.picArr);
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.form.mediaList = file.url;
+                this.dialogVisible = true;
+            },
+            handleSuccess(response, file, fileList){
+                console.log(response)
+                this.canUpload = true
+                this.picArr=[];
+                fileList.forEach(item => {
+                    let picList ={
+                        mediaType: item.response.data.substring(item.response.data.indexOf('.') + 1),
+                        mediaPath: item.response.data,
+                    };
+                    this.picArr.push(picList)
+                });
+                this.form.mediaList = JSON.stringify(this.picArr)
+            },
+            handleBefore(){
+                if(this.picArr.length >5){
+                    alert("图片最多上传6张！");
+                    return false
+                }else if(this.canUpload === true){
+                    this.canUpload = false
+                    return true
+                }else{
+                    return false
+                }
+            },
         }
     }
 </script>

@@ -72,10 +72,13 @@
                 });
             },
             newAdopt(){
-                this.$router.push('/adoptRelease/new')
+                this.$router.push({ path:'/adoptRelease/new',query: { type: "new"} })
             },
-            check(){
-
+            check(petId){
+                this.$router.push({ path: '/adoptRelease/check',query: { petId: petId } });
+            },
+            edit(petId){
+                this.$router.push({ path: '/adoptRelease/new',query: { petId: petId, type: "edit"} });
             }
         }
     }
