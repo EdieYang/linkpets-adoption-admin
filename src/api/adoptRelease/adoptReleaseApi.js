@@ -24,6 +24,18 @@ export function adoptNew (data) {
   })
 }
 
+/**
+ * 新增领养发布
+ * @param data
+ */
+export function adoptEdit (data) {
+  return request({
+    url: '/test/adopt/pets/info',
+    method: 'put',
+    data
+  })
+}
+
 export function adoptDetail (data) {
   return request({
     url: '/test/adopt/pets/'+data.petId,

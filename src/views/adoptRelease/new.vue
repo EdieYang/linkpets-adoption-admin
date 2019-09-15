@@ -1,7 +1,7 @@
 <template>
     <d2-container better-scroll >
         <div style="width:100%;">
-          <el-card>
+          <el-card v-loading="pageLoading">
             <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="formRules"
                      style="width:640px;display: inline-block;">
                 <el-divider content-position="left">上传宠物照片</el-divider>
@@ -14,6 +14,7 @@
                             :on-remove="handleRemove"
                             :on-success="handleSuccess"
                             :before-upload="handleBefore"
+                            :file-list="fileList"
                             >
                         <i class="el-icon-plus"></i>
                     </el-upload>
@@ -148,7 +149,7 @@
 </template>
 
 <script>
-    import {adoptNew,adoptDetail} from "@/api/adoptRelease/adoptReleaseApi"
+    import {adoptNew,adoptDetail,adoptEdit} from "@/api/adoptRelease/adoptReleaseApi"
     import util from '@/libs/util'
     export default {
         name: "new",
@@ -162,6 +163,7 @@
                 }
             };
             return {
+                pageLoading:false,
                 pageType:"",
                 form:{
                     mediaList:"", //宠物照片
@@ -192,6 +194,7 @@
                     orgId: util.cookies.get('orgId'),
                 },
                 picArr:[],
+                fileList:[],
                 dialogImageUrl: '',
                 dialogVisible: false,
                 canUpload:true,
@@ -361,24 +364,32 @@
                     petId: this.$route.query.petId,
                     userId: util.cookies.get("userId")
                 };
+                this.pageLoading = true;
                 adoptDetail(data).then(res => {
-                    console.log(res)
+                  this.pageLoading = false;
                     this.form = JSON.parse(JSON.stringify(res.petInfo))
-                    // this.form.mediaList.forEach(_data => {
-                    //     this.dialogImageUrl.push(_data.mediaPath)
-                    // });
-                    this.form.mediaList = JSON.stringify(this.mediaList)
-                    let petCharacteristicArr=[]
+                    this.form.mediaList.forEach(_data => {
+                      let file = {
+                        name: '',
+                        mediaId:_data.mediaId,
+                        url: "https://pic.linchongpets.com/"+_data.mediaPath
+                      }
+                      this.fileList.push(file)
+                    });
+                    this.form.mediaList = JSON.stringify(this.form.mediaList)
+                    let characteristicArr=[]
                     JSON.parse(this.form.petCharacteristic).forEach(_data => {
-                        petCharacteristicArr.push(_data.value)
+                        characteristicArr.push(_data.value)
                     });
-                    this.form.petCharacteristic = petCharacteristicArr
-                    let adoptRequirementsArr=[]
+                    this.form.petCharacteristic = characteristicArr
+                    let requirementsArr=[]
                     JSON.parse(this.form.adoptRequirements).forEach(_data => {
-                        adoptRequirementsArr.push(_data.value)
+                        if(_data.value === "10"){
+                            this.requirementsText = _data.name 
+                        }
+                        requirementsArr.push(_data.value)
                     });
-                    this.form.adoptRequirements = adoptRequirementsArr
-
+                    this.form.adoptRequirements = requirementsArr
                 });
             },
             adoptNew(){
@@ -387,7 +398,7 @@
                         let formData = JSON.parse(JSON.stringify(this.form))
                         let petCharacteristicArr = []
                         this.petCharacteristic.forEach(_data => {
-                            for (let value in formData.petCharacteristic) {
+                            for (let value of formData.petCharacteristic) {
                                 if(_data.value === value){
                                     petCharacteristicArr.push(_data)
                                 }
@@ -395,19 +406,37 @@
                         });
                         let adoptRequirementsArr = []
                         this.adoptRequirements.forEach(_data => {
-                            for (let value in formData.adoptRequirements) {
+                            for (let value of formData.adoptRequirements) {
                                 if(_data.value === value){
+                                    if(value === "10"){
+                                        _data.name = this.requirementsText
+                                    }
                                     adoptRequirementsArr.push(_data)
                                 }
                             }
                         });
-                        formData.mediaList = JSON.parse(formData.mediaList)
-                        formData.petCharacteristic = JSON.stringify(petCharacteristicArr)
-                        formData.adoptRequirements = JSON.stringify(adoptRequirementsArr)
-                        console.log(formData)
-                        adoptNew(formData).then(res => {
-                            console.log(res)
-                        });
+                        formData.mediaList = JSON.parse(formData.mediaList);
+                        formData.petCharacteristic = JSON.stringify(petCharacteristicArr);
+                        formData.adoptRequirements = JSON.stringify(adoptRequirementsArr);
+                        formData.createBy = util.cookies.get('userId');
+                        formData.orgId = util.cookies.get('orgId');
+                        this.pageLoading = true;
+                        if(this.pageType === "edit"){
+                            formData.petId = this.$route.query.petId
+                            adoptEdit(formData).then(res => {
+                                console.log(res)
+                                this.pageLoading = false;
+                                this.$message.success('更新成功')
+                                // this.$router.push('/adoptRelease/index')
+                            });
+                        }else if(this.pageType === "new"){
+                            adoptNew(formData).then(res => {
+                                console.log(res)
+                                this.pageLoading = false;
+                                this.$message.success('创建成功')
+                                // this.$router.push('/adoptRelease/index')
+                            });
+                        }
                     }
                 })
             },
@@ -428,7 +457,6 @@
                 this.dialogVisible = true;
             },
             handleSuccess(response, file, fileList){
-                console.log(response)
                 this.canUpload = true
                 this.picArr=[];
                 fileList.forEach(item => {
