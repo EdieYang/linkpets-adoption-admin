@@ -1,10 +1,8 @@
 <template>
   <d2-container better-scroll>
     <template slot="header">
-
-      <h2>领养管理</h2>
       <div class="header-cover">
-        <p>发布领养信息。</p>
+        <p>发布领养信息</p>
         <el-button type="primary"
                    size="medium"
                    @click="newAdopt">新增领养信息</el-button>

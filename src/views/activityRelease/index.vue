@@ -4,7 +4,7 @@
     <template slot="header">
 
       <div class="header-cover">
-        <p>发布近期活动，微信公众号文章。</p>
+        <p>发布组织近期活动，微信公众号文章</p>
         <el-button type="primary"
                    size="medium"
                    @click="dialogFormVisible = true">发布新的活动</el-button>
