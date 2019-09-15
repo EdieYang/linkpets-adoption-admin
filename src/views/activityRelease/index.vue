@@ -17,10 +17,12 @@
               style="width: 100%">
       <el-table-column prop="title"
                        width="200px"
+                       align="center"
                        label="公众号文章标题">
 
       </el-table-column>
       <el-table-column label="公众号文章封面"
+                       align="center"
                        width="230px">
         <template slot-scope="scope">
           <img :src="scope.row.activityCover"
@@ -30,7 +32,8 @@
 
       </el-table-column>
       <el-table-column label="公众号文章链接"
-                       width="500px">
+                       align="center"
+                       width="450px">
         <template slot-scope="scope">
           <p class="hightlight">{{scope.row.activityPath}}</p>
         </template>
@@ -38,22 +41,40 @@
       </el-table-column>
       <el-table-column prop="createDate"
                        width="170px"
+                       align="center"
                        label="发布时间">
       </el-table-column>
       <el-table-column fixed="right"
                        label="操作"
+                       align="center"
                        width="180px">
         <template slot-scope="scope">
-          <el-button v-clipboard:copy="scope.row.activityPath"
-                     v-clipboard:success="onCopy"
-                     type="text"
-                     size="medium">复制链接</el-button>
-          <el-button type="text"
-                     size="medium"
-                     @click="edit(scope.row)">编辑</el-button>
-          <el-button type="text"
-                     size="medium"
-                     @click="del(scope.row)">删除</el-button>
+          <el-tooltip content="预览"
+                      placement="top-start"
+                      effect="light">
+            <el-button icon="el-icon-document"
+                       circle
+                       size="small"
+                       @click="openLink(scope.row.activityPath)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="编辑"
+                      placement="top-start"
+                      effect="light">
+            <el-button type="success"
+                       icon="el-icon-edit"
+                       circle
+                       size="small"
+                       @click="edit(scope.row)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="删除"
+                      placement="top-start"
+                      effect="light">
+            <el-button type="danger"
+                       icon="el-icon-delete-solid"
+                       circle
+                       size="small"
+                       @click="del(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -88,7 +109,6 @@
                      :limit="limit"
                      :data="uploadData"
                      :on-success="handleSuccess"
-                     :on-preview="handlePictureCardPreview"
                      :on-remove="handleRemove"
                      :file-list="fileList">
             <i class="el-icon-plus"></i>
@@ -280,6 +300,7 @@ export default {
       })
     },
     edit (row) {
+      this.fileList = []
       this.form.activityPath = row.activityPath
       this.form.activityCover = row.activityCover
       var file = {
@@ -314,6 +335,9 @@ export default {
 
       })
 
+    },
+    openLink (link) {
+      window.open(link, '_blank');
     }
 
   },
