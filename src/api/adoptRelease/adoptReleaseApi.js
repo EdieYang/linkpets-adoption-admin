@@ -1,9 +1,17 @@
 import request from '@/plugin/axios'
 
-export function Login (data) {
+export function adoptNew (data) {
   return request({
-    url: '/api?uri=/adopt/login/login',
+    url: '/test/adopt/pets/info',
     method: 'post',
     data
+  })
+}
+
+export function adoptList (data) {
+  return request({
+    url: '/test/adopt/orgs/pets',
+    method: 'get',
+    params: data
   })
 }

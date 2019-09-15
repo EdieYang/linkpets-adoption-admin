@@ -85,6 +85,15 @@ const frameIn = [
                 auth: true
             },
             component: _import('adoptRelease/new')
+        },
+        {
+          path: 'check',
+          name: 'adoptCheck',
+          meta: {
+            title: '查看领养信息',
+            auth: true
+          },
+          component: _import('adoptRelease/check')
         }
     ]
   },

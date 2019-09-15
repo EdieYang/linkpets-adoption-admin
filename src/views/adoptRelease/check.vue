@@ -1,10 +1,13 @@
 <template>
-    $END$
+
 </template>
 
 <script>
     export default {
-        name: "check"
+        name: "check",
+        methods:{
+
+        }
     }
 </script>
 

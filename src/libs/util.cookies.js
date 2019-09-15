@@ -13,7 +13,8 @@ cookies.set = function (name = 'default', value = '', cookieSetting = {}) {
     expires: 1
   }
   Object.assign(currentCookieSetting, cookieSetting)
-  Cookies.set(`d2admin-${process.env.VUE_APP_VERSION}-${name}`, value, currentCookieSetting)
+  // Cookies.set(`d2admin-${process.env.VUE_APP_VERSION}-${name}`, value, currentCookieSetting)
+  Cookies.set(name, value, currentCookieSetting)
 }
 
 /**
@@ -21,7 +22,8 @@ cookies.set = function (name = 'default', value = '', cookieSetting = {}) {
  * @param {String} name cookie name
  */
 cookies.get = function (name = 'default') {
-  return Cookies.get(`d2admin-${process.env.VUE_APP_VERSION}-${name}`)
+  // return Cookies.get(`d2admin-${process.env.VUE_APP_VERSION}-${name}`)
+  return Cookies.get(name)
 }
 
 /**

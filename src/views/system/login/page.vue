@@ -75,34 +75,34 @@
               <span>注册用户</span>
             </p>
             <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              快速选择用户（测试功能）
-            </el-button>
+            <!--<el-button class="page-login&#45;&#45;quick" size="default" type="info" @click="dialogVisible = true">-->
+              <!--快速选择用户（测试功能）-->
+            <!--</el-button>-->
           </div>
         </div>
         <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
-            <a
-              v-for="language in $languages"
-              :key="language.value"
-              :command="language.value"
-              @click="$i18n.locale = language.value">
-              {{ language.label }}
-            </a>
-          </p>
-          <p class="page-login--content-footer-copyright">
-            Copyright
-            <d2-icon name="copyright"/>
-            2018 D2 Projects 开源组织出品
-            <a href="https://github.com/FairyEver">
-              @FairyEver
-            </a>
-          </p>
-          <p class="page-login--content-footer-options">
-            <a href="#">帮助</a>
-            <a href="#">隐私</a>
-            <a href="#">条款</a>
-          </p>
+          <!--<p class="page-login&#45;&#45;content-footer-locales">-->
+            <!--<a-->
+              <!--v-for="language in $languages"-->
+              <!--:key="language.value"-->
+              <!--:command="language.value"-->
+              <!--@click="$i18n.locale = language.value">-->
+              <!--{{ language.label }}-->
+            <!--</a>-->
+          <!--</p>-->
+          <!--<p class="page-login&#45;&#45;content-footer-copyright">-->
+            <!--Copyright-->
+            <!--<d2-icon name="copyright"/>-->
+            <!--2018 D2 Projects 开源组织出品-->
+            <!--<a href="https://github.com/FairyEver">-->
+              <!--@FairyEver-->
+            <!--</a>-->
+          <!--</p>-->
+          <!--<p class="page-login&#45;&#45;content-footer-options">-->
+            <!--<a href="#">帮助</a>-->
+            <!--<a href="#">隐私</a>-->
+            <!--<a href="#">条款</a>-->
+          <!--</p>-->
         </div>
       </div>
     </div>
@@ -125,6 +125,7 @@
 <script>
 import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
+import util from '@/libs/util'
 import {Login} from '../../../api/login/loginApi.js'
 export default {
   data () {
@@ -152,8 +153,8 @@ export default {
       ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
+        username: '',
+        password: '',
         code: 'v9am'
       },
       // 表单校验
@@ -202,8 +203,8 @@ export default {
      * @param {Object} user 用户信息
      */
     handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
+      this.formLogin.username = user.username;
+      this.formLogin.password = user.password;
       this.submit()
     },
     /**
@@ -217,11 +218,13 @@ export default {
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           let userInfo = {
-            "userAcc": "123456",
-            "password": "e10adc3949ba59abbe56e057f20f883e"
+            "userAcc": this.formLogin.username,
+            "password": this.$md5(this.formLogin.password)
           };
           Login(userInfo).then(res => {
-            console.log(res)
+            console.log(res);
+            util.cookies.set('userId', res.userId);
+            util.cookies.set('orgId', res.orgId);
             this.$router.push('/adoptRelease/index')
           });
 

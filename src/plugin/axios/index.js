@@ -58,7 +58,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   response => {
-    console.log(response)
     // status 是 axios 返回数据中的 status
     const status = response.status
     // dataAxios 是 axios 返回数据中的 data
