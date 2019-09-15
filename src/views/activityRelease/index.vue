@@ -3,7 +3,6 @@
   <d2-container>
     <template slot="header">
 
-      <h2>活动管理</h2>
       <div class="header-cover">
         <p>发布近期活动，微信公众号文章。</p>
         <el-button type="primary"
@@ -16,18 +15,13 @@
     <el-table :data="tableData"
               border
               style="width: 100%">
-      <el-table-column fixed
-                       prop="id"
-                       width="100px"
-                       label="活动ID">
-
-      </el-table-column>
-      <el-table-column fixed
-                       prop="title"
+      <el-table-column prop="title"
+                       width="200px"
                        label="公众号文章标题">
 
       </el-table-column>
-      <el-table-column label="公众号文章封面">
+      <el-table-column label="公众号文章封面"
+                       width="220px">
         <template slot-scope="scope">
           <img :src="scope.row.activityCover"
                alt=""
@@ -42,15 +36,24 @@
         </template>
 
       </el-table-column>
+      <el-table-column prop="createDate"
+                       width="140px"
+                       label="发布时间">
+      </el-table-column>
       <el-table-column fixed="right"
                        label="操作"
-                       width="140px">
+                       width="180px">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)"
+          <el-button v-clipboard:copy="scope.row.activityPath"
+                     v-clipboard:success="onCopy"
                      type="text"
-                     size="medium">查看</el-button>
+                     size="medium">复制链接</el-button>
           <el-button type="text"
-                     size="medium">编辑</el-button>
+                     size="medium"
+                     @click="edit(scope.row)">编辑</el-button>
+          <el-button type="text"
+                     size="medium"
+                     @click="delete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,37 +64,50 @@
                :closeOnClickModal="closeOnClickModal"
                :closeOnPressEscape="closeOnPressEscape"
                :showClose="showClose">
-      <el-form :model="form">
+      <el-form :model="form"
+               ref="ruleForm"
+               :rules="rules">
         <el-form-item label="公众号文章标题"
-                      :label-width="formLabelWidth">
+                      :label-width="formLabelWidth"
+                      prop="title">
           <el-input v-model="form.title"
                     autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="公众号文章链接"
-                      :label-width="formLabelWidth">
+                      :label-width="formLabelWidth"
+                      prop="activityPath">
           <el-input v-model="form.activityPath"
                     autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="公众号文章封面"
-                      :label-width="formLabelWidth">
-          <el-upload action="https://jsonplaceholder.typicode.com/posts/"
+                      :label-width="formLabelWidth"
+                      prop="activityCover">
+          <el-upload action="https://www.linchongpets.com/lpCmsTest/oss/image"
                      list-type="picture-card"
+                     :multiple="multiple"
+                     :limit="limit"
+                     :data="uploadData"
+                     :on-success="handleSuccess"
                      :on-preview="handlePictureCardPreview"
-                     :on-remove="handleRemove">
+                     :on-remove="handleRemove"
+                     :file-list="fileList">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%"
-                 :src="dialogImageUrl"
+                 :src="form.activityCover"
                  alt="">
+
           </el-dialog>
+          <el-input type="hidden"
+                    v-model="form.activityCover" />
         </el-form-item>
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="cancel('rulleForm')">取 消</el-button>
         <el-button type="primary"
-                   @click="save">上 传</el-button>
+                   @click="save('ruleForm')">上 传</el-button>
       </div>
     </el-dialog>
 
@@ -118,9 +134,50 @@ var pageSize = 10
 
 export default {
   name: "index",
+  data () {
+    return {
+      tableData: [],
+      dialogFormVisible: false,
+      form: {
+        title: '',
+        activityPath: '',
+        activityCover: ''
+      },
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      showClose: false,
+      activityDetail: false,
+      activityPath: '',
+      formLabelWidth: '120px',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      currentPage: 1,
+      total: 0,
+      rules: {
+        title: [
+          { required: true, message: '请输入公众号文章标题', trigger: 'blur' }
+        ],
+        activityPath: [
+          { required: true, message: '请输入公众号文章链接', trigger: 'blur' }
+        ],
+        activityCover: [
+          { required: true, message: '请上传公众号文章封面', trigger: 'change' }
+        ]
+      },
+      uploadData: {
+        userId: "123123",
+        ossZone: "organization"
+      },
+      multiple: false,
+      limit: 1,
+      fileList: []
+    }
+  },
   methods: {
     handleClick (row) {
       console.log(row);
+      this.activityPath = row.activityPath
+      this.activityDetail = true
     },
     handleSizeChange (val) {
       pageSize = val
@@ -132,10 +189,15 @@ export default {
     },
     handleRemove (file, fileList) {
       console.log(file, fileList);
+      this.form.activityCover = ''
     },
     handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url;
+      this.activityCover = file.url;
       this.dialogVisible = true;
+    },
+    handleSuccess (response, file, fileList) {
+      console.log(response)
+      this.form.activityCover = "https://pic.linchongpets.com/" + response.data
     },
     listActivities () {
       let actInfo = {
@@ -153,49 +215,89 @@ export default {
         // 异常情况
       })
     },
-    save () {
-      let actInfo = {
-        orgId: "2",
-        title: this.form.title,
-        activityPath: this.form.activityPath,
-        activityCover: this.form.activityCover
-      };
-      postActivity(actInfo).then(res => {
-        console.log(res)
-        this.currentPage = res.pageNum
-        this.total = res.total
-        this.tableData = res.list
+    save (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.form.id != '') {
+            let actInfo = {
+              id: this.form.id,
+              orgId: "2",
+              title: this.form.title,
+              activityPath: this.form.activityPath,
+              activityCover: this.form.activityCover
+            };
+            uptActivity(actInfo).then(res => {
+              console.log(res)
+              this.$message({
+                message: '上传成功！',
+                type: 'success'
+              })
+              this.$refs[formName].resetFields();
+              this.dialogVisible = false
+              this.dialogFormVisible = false
+              pageNum = 1
+              this.listActivities()
 
-      }).catch(err => {
-        // 异常情况
+            }).catch(err => {
+              // 异常情况
+            })
+          } else {
+
+            let actInfo = {
+              orgId: "2",
+              title: this.form.title,
+              activityPath: this.form.activityPath,
+              activityCover: this.form.activityCover
+            };
+            postActivity(actInfo).then(res => {
+              console.log(res)
+              this.$message({
+                message: '上传成功！',
+                type: 'success'
+              })
+              this.$refs[formName].resetFields();
+              this.dialogVisible = false
+              this.dialogFormVisible = false
+              pageNum = 1
+              this.listActivities()
+
+            }).catch(err => {
+              // 异常情况
+            })
+
+          }
+        }
       })
     },
-    cancel () {
+    cancel (formName) {
       this.dialogFormVisible = false
+      this.$refs[formName].resetFields();
+    },
+    onCopy () {
+      this.$message({
+        message: '复制成功！',
+        type: 'success'
+      })
+    },
+    edit (row) {
+      this.form.activityPath = row.activityPath
+      this.form.activityCover = row.activityCover
+      var file = {
+        name: '',
+        url: this.form.activityCover
+      }
+      this.fileList.push(file)
+      this.form.title = row.title
+      this.form.id = row.id
+      this.dialogFormVisible = true
+    },
+    delete (row) {
+      console.log(row.id)
     }
 
   },
   mounted: function () {
     this.listActivities()
-  },
-  data () {
-    return {
-      tableData: [],
-      dialogFormVisible: false,
-      form: {
-        title: '',
-        activityPath: '',
-        activityCover: ''
-      },
-      closeOnClickModal: false,
-      closeOnPressEscape: false,
-      showClose: false,
-      formLabelWidth: '120px',
-      dialogImageUrl: '',
-      dialogVisible: false,
-      currentPage: 1,
-      total: 0
-    }
   }
 }
 </script>
