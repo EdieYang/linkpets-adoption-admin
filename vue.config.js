@@ -10,7 +10,8 @@ process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
 let publicPath = process.env.VUE_APP_BASE_URL
 
 module.exports = {
-  baseUrl:publicPath, // 根据你的实际情况更改这里
+  publicPath:publicPath,
+  // baseUrl:publicPath, // 根据你的实际情况更改这里
   lintOnSave: true,
   devServer: {
     
