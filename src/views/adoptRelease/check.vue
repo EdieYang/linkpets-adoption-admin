@@ -6,7 +6,7 @@
                 <el-divider content-position="left">上传宠物照片</el-divider>
                 <el-form-item label="照片" prop="mediaList" >
                     <el-upload
-                            action="https://www.linchongpets.com/lpCmsTest/oss/image"
+                            :action="actionUrl"
                             list-type="picture-card"
                             :data="ossData"
                             :on-preview="handlePictureCardPreview"
@@ -152,6 +152,7 @@
         data () {
             return {
                 petId:"",
+                actionUrl:"https://www.linchongpets.com/lpCmsTest/oss/image"
             }
         },
         mounted(){

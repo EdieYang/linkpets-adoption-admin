@@ -6,33 +6,33 @@ const resolve = dir => require('path').join(__dirname, dir)
 // 增加环境变量
 process.env.VUE_APP_VERSION = require('./package.json').version
 process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
-
 // 基础路径 注意发布之前要先修改这里
-let publicPath = '/'
+let publicPath = process.env.VUE_APP_BASE_URL
 
 module.exports = {
-  publicPath, // 根据你的实际情况更改这里
+  baseUrl:publicPath, // 根据你的实际情况更改这里
   lintOnSave: true,
   devServer: {
-    publicPath, // 和 publicPath 保持一致
-    proxy: {
-      '/api': {
-        // target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8?uri=',
-        target: 'http://192.168.0.110:8095/lpCmsTest',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''    //代理的路径
-        }
-      },
-      '/test': {
-        // target: 'https://www.linchongpets.com/lpCmsTest',
-        target: 'http://192.168.0.110:8095/lpCmsTest',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/test': ''    //代理的路径
-        }
-      },
-    },
+    
+    publicPath:publicPath, // 和 publicPath 保持一致
+    // proxy: {
+    //   '/api': {
+    //     // target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8?uri=',
+    //     target: 'https://www.linchongpets.com/lpCmsTest',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': ''    //代理的路径
+    //     }
+    //   },
+    //   '/test': {
+    //     // target: 'https://www.linchongpets.com/lpCmsTest',
+    //     target: 'http://192.168.0.110:8095/lpCmsTest',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/test': ''    //代理的路径
+    //     }
+    //   },
+    // },
   },
 
   css: {
@@ -92,13 +92,6 @@ module.exports = {
     // 重新设置 alias
     config.resolve.alias
       .set('@api', resolve('src/api'))
-    // 判断环境加入模拟数据
-    const entry = config.entry('app')
-    if (process.env.VUE_APP_BUILD_MODE !== 'nomock') {
-      entry
-        .add('@/mock')
-        .end()
-    }
   },
   // i18n
   pluginOptions: {

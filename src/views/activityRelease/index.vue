@@ -53,8 +53,11 @@
           <el-input v-model="form.activityPath" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="公众号文章封面" :label-width="formLabelWidth" prop="activityCover">
-          <el-upload action="https://www.linchongpets.com/lpCmsTest/oss/image" ref="upload" list-type="picture-card" :multiple="multiple" :limit="limit" :data="uploadData" :on-success="handleSuccess" :on-remove="handleRemove" :file-list="fileList">
+          <el-upload :action="actionUrl" ref="upload" list-type="picture-card" :multiple="multiple" :limit="limit" :data="uploadData" :on-success="handleSuccess" :on-remove="handleRemove" :file-list="fileList" :before-upload="beforeThumbImageUpload">
             <i class="el-icon-plus"></i>
+            <div slot="tip" class="el-upload__tip">
+              支持bmp/png/jpeg/jpg/gif格式，大小不超过5M
+            </div>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="form.activityCover" alt="">
@@ -81,6 +84,8 @@
 
 <script>
 import { listActivities, postActivity, uptActivity } from '@/api/activity/activityApi.js'
+import util from '@/libs/util'
+
 var pageNum = 1
 var pageSize = 10
 
@@ -89,6 +94,7 @@ export default {
   data() {
     return {
       tableData: [],
+      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image',
       dialogFormVisible: false,
       form: {
         id: '',
@@ -118,7 +124,7 @@ export default {
         ]
       },
       uploadData: {
-        userId: "123123",
+        userId: util.cookies.get("userId"),
         ossZone: "organization"
       },
       multiple: false,
@@ -140,8 +146,22 @@ export default {
       pageNum = val
       this.listActivities()
     },
+    beforeThumbImageUpload(file) {
+      const isType = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/jpg';
+      const isLt = file.size / 1024 / 1024 < 5
+      debugger
+      if (!isType) {
+        this.$message.error('上传图片格式不对!')
+        return isType
+      }
+      if (!isLt) {
+        this.$message.error('上传图片大小不能超过2M!')
+      }
+      return isType && isLt
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList)
+      this.fileList = fileList
       this.form.activityCover = ''
     },
     handlePictureCardPreview(file) {
@@ -216,6 +236,10 @@ export default {
 
             }).catch(err => {
               // 异常情况
+              this.$message({
+                message: '上传失败！',
+                type: 'error'
+              })
             })
 
           }
