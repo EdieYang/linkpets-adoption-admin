@@ -125,7 +125,7 @@
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-        <el-button @click="cancel('rulleForm')">取 消</el-button>
+        <el-button @click="cancel('ruleForm')">取 消</el-button>
         <el-button type="primary"
                    @click="save('ruleForm')">上 传</el-button>
       </div>
@@ -290,8 +290,10 @@ export default {
       })
     },
     cancel (formName) {
-      this.dialogFormVisible = false
       this.$refs[formName].resetFields()
+      this.fileList = []
+      this.form.activityCover = ''
+      this.dialogFormVisible = false
     },
     onCopy () {
       this.$message({
