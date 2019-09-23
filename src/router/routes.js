@@ -68,33 +68,33 @@ const frameIn = [
     redirect: { name: 'index' },
     component: layoutHeaderAside,
     children: [
-        {
-            path: 'index',
-            name: 'adoptRelease',
-            meta: {
-              title: '领养信息列表',
-              auth: true
-            },
-            component: _import('adoptRelease/index')
+      {
+        path: 'index',
+        name: 'adoptRelease',
+        meta: {
+          title: '领养信息列表',
+          auth: true
         },
-        {
-            path: 'new',
-            name: 'adoptNew',
-            meta: {
-                title: '领养信息发布',
-                auth: true
-            },
-            component: _import('adoptRelease/new')
+        component: _import('adoptRelease/index')
+      },
+      {
+        path: 'new',
+        name: 'adoptNew',
+        meta: {
+          title: '领养信息发布',
+          auth: true
         },
-        {
-          path: 'check',
-          name: 'adoptCheck',
-          meta: {
-            title: '查看领养信息',
-            auth: true
-          },
-          component: _import('adoptRelease/check')
-        }
+        component: _import('adoptRelease/new')
+      },
+      {
+        path: 'check',
+        name: 'adoptCheck',
+        meta: {
+          title: '查看领养信息',
+          auth: true
+        },
+        component: _import('adoptRelease/check')
+      }
     ]
   },
   {
@@ -142,8 +142,4 @@ const errorPage = [
 export const frameInRoutes = frameIn
 
 // 重新组织后导出
-export default [
-  ...frameIn,
-  ...frameOut,
-  ...errorPage
-]
+export default [...frameIn, ...frameOut, ...errorPage]

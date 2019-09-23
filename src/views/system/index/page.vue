@@ -103,6 +103,10 @@
 <script>
 import ICountUp from 'vue-countup-v2';
 import { getOrgStatistic } from '@/api/statistic/statisticApi.js'
+import util from '@/libs/util'
+
+var orgId = ''
+
 export default {
   components: {
     ICountUp
@@ -131,7 +135,7 @@ export default {
     }
   },
   methods: {
-    getOrgStatistic (orgId) {
+    getOrgStatistic () {
       getOrgStatistic(orgId).then(res => {
         console.log(res)
         this.activityCountInMonth = res.activityCountInMonth
@@ -151,7 +155,14 @@ export default {
     }
   },
   mounted: function () {
-    this.getOrgStatistic('2')
+    orgId = util.cookies.get("orgId")
+    if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
+      this.$router.push({
+        name: 'login'
+      })
+      return
+    }
+    this.getOrgStatistic()
   }
 }
 </script>
