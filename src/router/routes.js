@@ -112,6 +112,47 @@ const frameIn = [
         component: _import('activityRelease/index')
       }
     ]
+  },
+  {
+    path: '/galleryRelease',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'galleryRelease',
+        meta: {
+          title: '相册墙',
+          auth: true
+        },
+        component: _import('galleryRelease/index')
+      }
+    ]
+  },
+  {
+    path: '/adoptedMgn',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'adoptedMgn',
+        meta: {
+          title: '送养备案',
+          auth: true
+        },
+        component: _import('adoptedMgn/index')
+      },
+      {
+        path: 'detail',
+        name: 'adoptedMgnDetail',
+        meta: {
+          title: '备案详情',
+          auth: true
+        },
+        component: _import('adoptedMgn/detail')
+      }
+    ]
   }
 ]
 
