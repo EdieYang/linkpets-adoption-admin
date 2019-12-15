@@ -6,9 +6,19 @@
                  :model="formInline"
                  class="demo-form-inline">
           <el-form-item label="排序">
-            <el-select v-model="formInline.sortType"
+            <el-select v-model="formInline.orderBy"
                        placeholder="请选择">
               <el-option v-for="item in sortTypeOptions"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="圈子类型">
+            <el-select v-model="formInline.groupType"
+                       placeholder="请选择">
+              <el-option v-for="item in circleTypeOptions"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -235,6 +245,13 @@ export default {
       currentPage: 1,
       total: 0,
       sortTypeOptions: [{
+        label: '默认排序',
+        value: '0'
+      }, {
+        label: '按创建时间排序',
+        value: '1'
+      }],
+      circleTypeOptions: [{
         label: '活动圈',
         value: '1'
       }, {
@@ -249,7 +266,8 @@ export default {
         value: '0'
       }],
       formInline: {
-        sortType: '',
+        groupType: '',
+        orderBy: '',
         onlineStatus: ''
       },
       form: {
@@ -303,7 +321,8 @@ export default {
       let data = {
         pageNum: pageNum,
         pageSize: pageSize,
-        groupType: this.formInline.sortType,
+        groupType: this.formInline.groupType,
+        orderBy: this.formInline.orderBy,
         isActive: this.formInline.onlineStatus
       }
       circleList(data).then(res => {
@@ -358,8 +377,9 @@ export default {
       this.getList()
     },
     reset () {
-      this.formInline.sortType = ''
+      this.formInline.groupType = ''
       this.formInline.onlineStatus = ''
+      this.formInline.orderBy = ''
       this.getList()
     },
     handleSuccess (response, file, fileList) {
