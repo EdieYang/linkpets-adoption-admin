@@ -153,6 +153,22 @@ const frameIn = [
         component: _import('adoptedMgn/detail')
       }
     ]
+  },
+  {
+    path: '/circleMgn',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'circleMgn',
+        meta: {
+          title: '圈子管理',
+          auth: true
+        },
+        component: _import('circleMgn/index')
+      }
+    ]
   }
 ]
 

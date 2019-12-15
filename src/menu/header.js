@@ -5,5 +5,6 @@ export default [
   { path: '/adoptRelease/index', title: '领养发布', icon: 'flask' },
   { path: '/activityRelease/index', title: '活动发布', icon: 'tachometer' },
   { path: '/galleryRelease/index', title: '照片墙', icon: 'camera-retro' },
-  { path: '/adoptedMgn/index', title: '送养备案', icon: 'address-card-o' }
+  { path: '/adoptedMgn/index', title: '送养备案', icon: 'address-card-o' },
+  { path: '/circleMgn/index', title: '圈子管理', icon: 'user-circle-o' }
 ]
