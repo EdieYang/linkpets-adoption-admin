@@ -156,6 +156,18 @@
       <el-form :model="form"
                ref="ruleForm"
                :rules="rules">
+        <el-form-item label="圈子类型"
+                      :label-width="formLabelWidth"
+                      prop="groupType">
+          <el-select v-model="form.groupType"
+                      placeholder="请选择">
+            <el-option v-for="item in circleTypeOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="圈子名称"
                       :label-width="formLabelWidth"
                       prop="groupName">
@@ -188,7 +200,8 @@
                      :on-success="handleSuccess"
                      :on-remove="handleRemove"
                      :file-list="fileList"
-                     :before-upload="beforeThumbImageUpload">
+                     :before-upload="beforeThumbImageUpload"
+                     :class="{'disableUpload' : disableUpload}">
             <i class="el-icon-plus"></i>
             <div slot="tip"
                  class="el-upload__tip">
@@ -274,7 +287,8 @@ export default {
         customerSupport: '',
         groupBanner: '',
         groupInfo: '',
-        groupName: ''
+        groupName: '',
+        groupType: ''
       },
       dialogFormVisible: false,
       dialogSortVisible: false,
@@ -287,6 +301,9 @@ export default {
         ],
         groupInfo: [
           { required: true, message: '请输入圈子简介', trigger: 'blur' }
+        ],
+        groupType: [
+          { required: true, message: '请选择圈子类型', trigger: 'change' }
         ],
         groupBanner: [
           { required: true, message: '请上传圈子banner图', trigger: 'change' }
@@ -303,7 +320,8 @@ export default {
         userId: util.cookies.get("userId"),
         ossZone: "organization"
       },
-      fileList: []
+      fileList: [],
+      disableUpload: false
     }
   },
   mounted () {
@@ -355,11 +373,13 @@ export default {
       this.form = {}
       this.fileList = []
       this.dialogFormVisible = true
+      this.disableUpload = false
     },
     edit (val) {
       this.dialogFormVisible = true
       this.form = val
       this.fileList = [{url: this.form.groupBanner}]
+      this.disableUpload = this.form.groupBanner !== ''
     },
     editSort (val) {
       this.dialogSortVisible = true
@@ -385,11 +405,13 @@ export default {
     handleSuccess (response, file, fileList) {
       console.log(response)
       this.form.groupBanner = "https://pic.linchongpets.com/" + response.data
+      this.disableUpload = true
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
       this.fileList = fileList
       this.form.groupBanner = ''
+      this.disableUpload = false
     },
     beforeThumbImageUpload (file) {
       const isType = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/jpg';
@@ -412,25 +434,29 @@ export default {
       this.getList()
     },
     save () {
-      var req = {
-        customerSupport: this.form.customerSupport,
-        groupBanner: this.form.groupBanner,
-        groupInfo: this.form.groupInfo,
-        groupName: this.form.groupName
-      }
-      if (this.form.groupId) {
-        req.groupId = this.form.groupId
-        circleEdit(req).then(res => {
-        this.dialogFormVisible = false
-        this.$message.success('更新成功')
-        })
-      } else {
-        circleNew(req).then(res => {
-          this.dialogFormVisible = false
-          this.$message.success('创建成功')
-          this.getList()
-        })
-      }
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          var req = {
+            customerSupport: this.form.customerSupport,
+            groupBanner: this.form.groupBanner,
+            groupInfo: this.form.groupInfo,
+            groupName: this.form.groupName,
+            groupType: this.form.groupType
+          }
+          if (this.form.groupId) {
+            req.groupId = this.form.groupId
+            circleEdit(req).then(res => {
+            this.dialogFormVisible = false
+            this.$message.success('更新成功')
+            })
+          } else {
+            circleNew(req).then(res => {
+              this.dialogFormVisible = false
+              this.$message.success('创建成功')
+              this.getList()
+            })
+          }
+      }})
     }
   }
 }
@@ -451,5 +477,10 @@ export default {
 }
 .tag-pop {
   margin-bottom: 5px;
+}
+</style>
+<style>
+.disableUpload .el-upload {
+  display: none;
 }
 </style>
