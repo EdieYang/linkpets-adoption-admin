@@ -17,6 +17,8 @@ import menuHeader from '@/menu/header'
 import menuAside from '@/menu/aside'
 import { frameInRoutes } from '@/router/routes'
 import htmlToPdf from '@/libs/htmlToPdf'
+import moment from 'moment'
+import VueUeditorWrap from 'vue-ueditor-wrap'
 // 核心插件
 Vue.use(d2Admin)
 // 表格
@@ -26,6 +28,8 @@ Vue.use(htmlToPdf)
 
 // MD5加密
 Vue.prototype.$md5 = md5
+Vue.prototype.$moment = moment
+Vue.component('VueUeditorWrap', VueUeditorWrap)
 
 new Vue({
   router,

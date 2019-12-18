@@ -169,6 +169,31 @@ const frameIn = [
         component: _import('circleMgn/index')
       }
     ]
+  },
+  {
+    path: '/activityMgn',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'activityMgn',
+        meta: {
+          title: '活动管理',
+          auth: true
+        },
+        component: _import('activityMgn/index')
+      },
+      {
+        path: 'new',
+        name: 'activityNew',
+        meta: {
+          title: '活动管理',
+          auth: true
+        },
+        component: _import('activityMgn/new')
+      }
+    ]
   }
 ]
 
