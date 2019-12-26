@@ -194,6 +194,31 @@ const frameIn = [
         component: _import('activityMgn/new')
       }
     ]
+  },
+  {
+    path: '/questionnaireMgn',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'questionnaireMgn',
+        meta: {
+          title: '问卷管理',
+          auth: true
+        },
+        component: _import('questionnaireMgn/index')
+      },
+      {
+        path: 'new',
+        name: 'questionnaireNew',
+        meta: {
+          title: '问卷管理',
+          auth: true
+        },
+        component: _import('questionnaireMgn/new')
+      }
+    ]
   }
 ]
 

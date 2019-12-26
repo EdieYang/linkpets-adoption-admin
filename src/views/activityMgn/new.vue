@@ -140,9 +140,9 @@
                        v-model="form.questionnaireId"
                        style="margin:0 20px">
               <el-option v-for="item in questionnaireTypeOptions"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
+                         :key="item.questionnaireId"
+                         :label="item.questionnaireTitle"
+                         :value="item.questionnaireId">
               </el-option>
             </el-select>
             <el-button v-if="form.activityShouldQuestionnaire"
@@ -173,6 +173,7 @@
 
 <script>
 import { circleList, activityNew, activityEdit, activityDetail } from "@/api/activityManage/activityManageApi"
+import { questionnaireListAll } from "@/api/questionnaireManage/questionnaireManageApi"
 import util from '@/libs/util'
 var orgId = ''
 
@@ -243,13 +244,7 @@ export default {
         label: '线上活动',
         value: '2'
       }],
-      questionnaireTypeOptions: [{
-        label: '绝育问卷',
-        value: '1'
-      }, {
-        label: '活动问卷1',
-        value: '2'
-      }],
+      questionnaireTypeOptions: [],
       circles: [],
       addressRange: ["上海市 黄浦区", "上海市 徐汇区", "上海市 长宁区", "上海市 静安区", "上海市 普陀区", "上海市 虹口区",
         "上海市 杨浦区", "上海市 闵行区", "上海市 宝山区", "上海市 嘉定区", "上海市 浦东新区", "上海市 金山区",
@@ -311,6 +306,7 @@ export default {
       this.activityDetail()
     }
     this.getCircleList()
+    this.getQuestionnaireList()
   },
   methods: {
     activityDetail () {
@@ -380,7 +376,7 @@ export default {
       return this.$moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     addQuestionnaire () {
-
+      this.$router.push({ path: '/questionnaireMgn/new', query: { type: "new" } })
     },
     addTime () {
       this.form.joinTime.push([])
@@ -406,6 +402,11 @@ export default {
       circleList(data).then(res => {
         console.log(res)
         this.circles = res
+      });
+    },
+    getQuestionnaireList () {
+      questionnaireListAll().then(res => {
+        this.questionnaireTypeOptions = res
       });
     },
   }

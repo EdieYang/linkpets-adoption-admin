@@ -7,5 +7,6 @@ export default [
   { path: '/galleryRelease/index', title: '照片墙', icon: 'camera-retro' },
   { path: '/adoptedMgn/index', title: '送养备案', icon: 'address-card-o' },
   { path: '/circleMgn/index', title: '圈子管理', icon: 'user-circle-o' },
-  { path: '/activityMgn/index', title: '活动管理', icon: 'calendar' }
+  { path: '/activityMgn/index', title: '活动管理', icon: 'calendar' },
+  { path: '/questionnaireMgn/index', title: '问卷管理', icon: 'question-circle-o' }
 ]
