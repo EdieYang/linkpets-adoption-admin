@@ -13,6 +13,18 @@ export function circleList(data) {
 }
 
 /**
+ * 查询圈子列表
+ * @param data
+ */
+export function circleListAll(data) {
+  return request({
+    url: '/adopt/group/list',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
  * 创建圈子
  * @param data
  */

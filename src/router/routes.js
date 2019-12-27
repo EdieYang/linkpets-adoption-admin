@@ -219,6 +219,22 @@ const frameIn = [
         component: _import('questionnaireMgn/new')
       }
     ]
+  },
+  {
+    path: '/postMgn',
+    redirect: { name: 'index' },
+    component: layoutHeaderAside,
+    children: [
+      {
+        path: 'index',
+        name: 'postMgn',
+        meta: {
+          title: '发帖内容管理',
+          auth: true
+        },
+        component: _import('postMgn/index')
+      }
+    ]
   }
 ]
 
