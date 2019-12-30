@@ -2,86 +2,64 @@
   <div class="page-login">
     <div class="page-login--layer page-login--layer-area">
       <ul class="circles">
-        <li v-for="n in 10"
-            :key="n"></li>
+        <li v-for="n in 10" :key="n"></li>
       </ul>
     </div>
-    <div class="page-login--layer">
-      <div class="page-login--content"
-           flex="dir:top main:justify cross:stretch box:justify">
-        <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
-            上海宠物公益组织大联盟
-          </p>
-        </div>
-        <div class="page-login--content-main"
-             flex="dir:top main:center cross:center">
-          <!-- form -->
-          <div class="page-login--form">
-            <el-card shadow="never">
-              <p style="font-size:20px;text-align:center;margin-top:0">联盟后台管理系统</p>
-              <el-form ref="loginForm"
-                       label-position="top"
-                       :rules="rules"
-                       :model="formLogin"
-                       size="default">
-                <el-form-item prop="username">
-                  <el-input type="text"
-                            v-model="formLogin.username"
-                            placeholder="用户名">
-                    <i slot="prepend"
-                       class="fa fa-user-circle-o"></i>
-                  </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                  <el-input type="password"
-                            v-model="formLogin.password"
-                            placeholder="密码">
-                    <i slot="prepend"
-                       class="fa fa-keyboard-o"></i>
-                  </el-input>
-                </el-form-item>
-                <el-button size="default"
-                           @click="submit"
-                           type="primary"
-                           class="button-login">
-                  登录
-                </el-button>
-              </el-form>
-            </el-card>
-          </div>
-        </div>
-        <div class="page-login--content-footer">
-          <p class="page-login--content-header-motto-copyright">©linchongpets.com</p>
+    <div class="page-login-layer">
+      <div class="login-layer-container">
+        <!-- form -->
+        <div class="page-login-form">
+          <p class="page-login-header">linkpets-cms</p>
+          <p class="page-login-title">邻宠公益运营平台</p>
+          <el-form
+            ref="loginForm"
+            label-position="top"
+            :rules="rules"
+            :model="formLogin"
+            class="login-form"
+          >
+            <el-form-item prop="username" label="账号">
+              <el-input
+                class="form-input"
+                type="text"
+                size="medium"
+                v-model="formLogin.username"
+                placeholder="用户名"
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password" label="密码">
+              <el-input
+                class="form-input"
+                type="password"
+                size="medium"
+                v-model="formLogin.password"
+                :show-password="true"
+                placeholder="密码"
+              >
+              </el-input>
+            </el-form-item>
+            <el-button
+              size="default"
+              @click="submit"
+              type="primary"
+              class="button-login"
+            >
+              登录
+            </el-button>
+          </el-form>
         </div>
       </div>
     </div>
-    <el-dialog title="快速选择用户"
-               :visible.sync="dialogVisible"
-               width="400px">
-      <el-row :gutter="10"
-              style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users"
-                :key="index"
-                :span="8">
-          <div class="page-login--quick-user"
-               @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o" />
-            <span>{{user.name}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-// import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 import util from '@/libs/util'
-import { Login } from '../../../api/login/loginApi.js'
+import * as loginService from '@/api/sys/login'
 export default {
-  data () {
+  data() {
     return {
       timeInterval: null,
       // time: dayjs().format('HH:mm:ss'),
@@ -92,23 +70,12 @@ export default {
           name: 'Admin',
           username: 'admin',
           password: 'admin'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
         }
       ],
       // 表单
       formLogin: {
         username: '',
-        password: '',
-        code: 'v9am'
+        password: ''
       },
       // 表单校验
       rules: {
@@ -125,59 +92,48 @@ export default {
             message: '请输入密码',
             trigger: 'blur'
           }
-        ],
-        code: [
-          {
-            required: true,
-            message: '请输入验证码',
-            trigger: 'blur'
-          }
         ]
       }
     }
   },
-  mounted () {
-
-  },
-  beforeDestroy () {
-
-  },
+  mounted() {},
+  beforeDestroy() {},
   methods: {
-    ...mapActions('d2admin/account', [
-      'login'
-    ]),
+    ...mapActions('d2admin/account', ['login']),
     /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
      */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username;
-      this.formLogin.password = user.password;
+    handleUserBtnClick(user) {
+      this.formLogin.username = user.username
+      this.formLogin.password = user.password
       this.submit()
     },
     /**
      * @description 提交表单
      */
     // 提交登录信息
-    submit () {
-      this.$refs.loginForm.validate((valid) => {
+    submit() {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           let userInfo = {
-            "userAcc": this.formLogin.username,
-            "password": this.$md5(this.formLogin.password)
-          };
-          Login(userInfo).then(res => {
-            console.log(res);
-            util.cookies.set('userId', res.userId);
-            util.cookies.set('orgId', res.orgId);
-            this.$router.push('/adoptRelease/index')
-          });
+            userAccount: this.formLogin.username,
+            password: this.$sha256(this.formLogin.password)
+          }
+          console.log(this.$sha256(this.formLogin.password))
+          loginService.sysLogin(userInfo).then(res => {
+            console.log(res)
+            util.cookies.set('userId', res.userId)
+            util.cookies.set('token', res.token)
+            util.cookies.set('userName', res.userName)
+            this.$router.push('/index')
+          })
         } else {
           // 登录表单校验失败
-          this.$message.error('表单校验失败，请检查')
+          this.$message.error('请输入完整账号密码！')
         }
       })
     }
@@ -186,159 +142,72 @@ export default {
 </script>
 
 <style lang="scss">
+.page-login-layer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.login-layer-container {
+  height: 100%;
+  width: 40%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #fff;
+}
+
+.page-login-form {
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-login-header {
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+.page-login-title {
+  margin: 0 0;
+  font-size: 20px;
+}
+
+.login-form {
+  margin-top: 50px;
+}
+
+.form-input .el-input__inner {
+  width: 300px;
+  border: 0 none;
+  border-bottom: 1px solid #999;
+  border-radius: 0;
+}
+
+.button-login {
+  border-radius: 0;
+  width: 300px;
+  margin-top: 30px;
+  font-size: 22px;
+  box-shadow: -4px -4px 10px #eaeaea;
+}
+
 .page-login {
   @extend %unable-select;
-  $backgroundColor: #f0f2f5;
+  $backgroundColor: #fff;
   // ---
   background-color: $backgroundColor;
+  background-image: url('/image/local/login.jpg');
+  background-repeat: no-repeat;
   height: 100%;
+  background-size: auto 100%;
   position: relative;
-  // 层
-  .page-login--layer {
-    @extend %full;
-    overflow: auto;
-  }
-  .page-login--layer-area {
-    overflow: hidden;
-  }
-  // 时间
-  .page-login--layer-time {
-    font-size: 24em;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.03);
-    overflow: hidden;
-  }
-  // 登陆页面控件的容器
-  .page-login--content {
-    height: 100%;
-    min-height: 500px;
-  }
-  // header
-  .page-login--content-header {
-    padding: 1em 0;
-    .page-login--content-header-motto {
-      margin: 0px;
-      padding: 0px;
-      color: $color-text-normal;
-      text-align: center;
-      font-size: 15px;
-    }
-  }
-  // main
-  .page-login--logo {
-    width: 240px;
-    margin-bottom: 2em;
-    margin-top: -2em;
-  }
-  // 登录表单
-  .page-login--form {
-    width: 280px;
-    // 卡片
-    .el-card {
-      margin-bottom: 15px;
-    }
-    // 登录按钮
-    .button-login {
-      width: 100%;
-    }
-    // 输入框左边的图表区域缩窄
-    .el-input-group__prepend {
-      padding: 0px 14px;
-    }
-    .login-code {
-      height: 40px - 2px;
-      display: block;
-      margin: 0px -20px;
-      border-top-right-radius: 2px;
-      border-bottom-right-radius: 2px;
-    }
-    // 登陆选项
-    .page-login--options {
-      margin: 0px;
-      padding: 0px;
-      font-size: 14px;
-      color: $color-primary;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-    .page-login--quick {
-      width: 100%;
-    }
-  }
-  // 快速选择用户面板
-  .page-login--quick-user {
-    @extend %flex-center-col;
-    padding: 10px 0px;
-    border-radius: 4px;
-    &:hover {
-      background-color: $color-bg;
-      i {
-        color: $color-text-normal;
-      }
-      span {
-        color: $color-text-normal;
-      }
-    }
-    i {
-      font-size: 36px;
-      color: $color-text-sub;
-    }
-    span {
-      font-size: 12px;
-      margin-top: 10px;
-      color: $color-text-sub;
-    }
-  }
-  // footer
-  .page-login--content-footer {
-    padding: 1em 0;
-    .page-login--content-footer-locales {
-      padding: 0px;
-      margin: 0px;
-      margin-bottom: 15px;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: center;
-      color: $color-text-normal;
-      a {
-        color: $color-text-normal;
-        margin: 0 0.5em;
-        &:hover {
-          color: $color-text-main;
-        }
-      }
-    }
-    .page-login--content-footer-copyright {
-      padding: 0px;
-      margin: 0px;
-      margin-bottom: 10px;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: center;
-      color: $color-text-normal;
-      a {
-        color: $color-text-normal;
-      }
-    }
-    .page-login--content-header-motto-copyright {
-      margin: 0px;
-      padding: 0px;
-      color: $color-text-normal;
-      text-align: center;
-      font-size: 12px;
-    }
-    .page-login--content-footer-options {
-      padding: 0px;
-      margin: 0px;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: center;
-      a {
-        color: $color-text-normal;
-        margin: 0 1em;
-      }
-    }
-  }
+  font-family: PingFangSC-Regular, San Francisco;
+  min-width: 1200px;
+  min-height: 800px;
   // 背景
   .circles {
     position: absolute;
@@ -404,8 +273,8 @@ export default {
       }
       &:nth-child(6) {
         left: 75%;
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: 120px;
         animation-delay: 3s;
       }
       &:nth-child(7) {

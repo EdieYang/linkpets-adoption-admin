@@ -1,59 +1,63 @@
 // Vue
-import Vue from 'vue'
-import i18n from './i18n'
-import App from './App'
+import Vue from "vue";
+import i18n from "./i18n";
+import App from "./App";
 // 核心插件
-import d2Admin from '@/plugin/d2admin'
+import d2Admin from "@/plugin/d2admin";
 // store
-import store from '@/store/index'
+import store from "@/store/index";
 // 表格
-import D2Crud from '@d2-projects/d2-crud'
+import D2Crud from "@d2-projects/d2-crud";
 // MD5加密
-import md5 from 'js-md5'
+import md5 from "js-md5";
+// SHA256加密
+import sha256 from "js-sha256";
+// 时间格式转换
+import moment from "moment";
 
 // 菜单和路由设置
-import router from './router'
-import menuHeader from '@/menu/header'
-import menuAside from '@/menu/aside'
-import { frameInRoutes } from '@/router/routes'
-import htmlToPdf from '@/libs/htmlToPdf'
-import moment from 'moment'
-import VueUeditorWrap from 'vue-ueditor-wrap'
+import router from "./router";
+import htmlToPdf from "@/libs/htmlToPdf";
+ 
+import VueUeditorWrap from "vue-ueditor-wrap";
 // 核心插件
-Vue.use(d2Admin)
+Vue.use(d2Admin);
 // 表格
-Vue.use(D2Crud)
+Vue.use(D2Crud);
 // PDF
-Vue.use(htmlToPdf)
+Vue.use(htmlToPdf);
 
 // MD5加密
-Vue.prototype.$md5 = md5
-Vue.prototype.$moment = moment
-Vue.component('VueUeditorWrap', VueUeditorWrap)
+Vue.prototype.$md5 = md5;
+//Sha256加密
+Vue.prototype.$sha256 = sha256
+Vue.prototype.$moment = moment;
+Vue.component("VueUeditorWrap", VueUeditorWrap);
 
 new Vue({
   router,
   store,
   i18n,
   render: h => h(App),
-  created () {
-    // 处理路由 得到每一级的路由设置
-    this.$store.commit('d2admin/page/init', frameInRoutes)
-    // 设置顶栏菜单
-    this.$store.commit('d2admin/menu/headerSet', menuHeader)
-    // 设置侧边栏菜单
-    this.$store.commit('d2admin/menu/asideSet', menuAside)
-    // 初始化菜单搜索功能
-    this.$store.commit('d2admin/search/init', menuHeader)
-  },
-  mounted () {
+  created() {},
+  mounted() {
     // 展示系统信息
-    this.$store.commit('d2admin/releases/versionShow')
+    this.$store.commit("d2admin/releases/versionShow");
     // 用户登录后从数据库加载一系列的设置
-    this.$store.dispatch('d2admin/account/load')
+    this.$store.dispatch("d2admin/account/load");
     // 获取并记录用户 UA
-    this.$store.commit('d2admin/ua/get')
+    this.$store.commit("d2admin/ua/get");
     // 初始化全屏监听
-    this.$store.dispatch('d2admin/fullscreen/listen')
+    this.$store.dispatch("d2admin/fullscreen/listen");
+  },
+  watch: {
+    '$route.matched'(val) {
+      let fullAside = this.$store.state.d2admin.menu.fullAside
+      const _side = fullAside.filter(menu => menu.path === val[0].path)
+      this.$store.commit(
+        'd2admin/menu/asideSet',
+        _side.length > 0 ? _side[0].children : []
+      )
+    }
   }
-}).$mount('#app')
+}).$mount("#app");

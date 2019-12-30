@@ -4,14 +4,14 @@ import { Message } from 'element-ui'
 import util from '@/libs/util'
 
 // 创建一个错误
-function errorCreate (msg) {
+function errorCreate(msg) {
   const error = new Error(msg)
   errorLog(error)
   throw error
 }
 
 // 记录和显示错误
-function errorLog (error) {
+function errorLog(error) {
   // 添加到日志
   store.dispatch('d2admin/log/push', {
     message: '数据请求异常',
@@ -32,28 +32,32 @@ function errorLog (error) {
     duration: 5 * 1000
   })
 }
-console.log(process.env)
 // 创建一个 axios 实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API,
-  timeout: 10000 // 请求超时时间
+  // baseURL: process.env.VUE_APP_API,
+  baseURL: '',
+  timeout: 20000 // 请求超时时间
 })
 
 // 请求拦截器
 service.interceptors.request.use(
   config => {
     // 在请求发送之前做一些处理
-    const token = util.cookies.get('token');
-    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['X-Token'] = token;
+    if (!/^https:\/\/|http:\/\//.test(config.url)) {
+      const token = util.cookies.get('token')
+      if (token && token !== 'undefined') {
+        // 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
+        config.headers['Authorization'] = token
+      }
+    }
     return config
   },
   error => {
     // 发送失败
-    console.log(error);
+    console.log(error)
     return Promise.reject(error)
   }
-);
+)
 
 // 响应拦截器
 service.interceptors.response.use(
@@ -72,18 +76,30 @@ service.interceptors.response.use(
       // 有 code 代表这是一个后端接口 可以进行进一步的判断
       switch (code) {
         case 0:
-          // [ 示例 ] code === 200 代表没有错误
           return dataAxios.data
         case 200:
           // [ 示例 ] code === 200 代表没有错误
           return dataAxios.data
-        case 'xxx':
-          // [ 示例 ] 其它和后台约定的 code
-          errorCreate(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
+        case 40001:
+          //登录账户不存在
+          errorCreate(
+            `[ code: 40001 ] ${dataAxios.message}: ${response.config.url}`
+          )
+          break
+        case 40002:
+          // 密码错误
+          errorCreate(
+            `[ code: 40002 ] ${dataAxios.message}: ${response.config.url}`
+          )
+          break
+        case 40003:
+          // TOKEN验证失败
+          util.cookies.set('token', '')
+          errorCreate(`登录超时，请重新登录`)
           break
         default:
           // 不是正确的 code
-          errorCreate(`${dataAxios.msg}: ${response.config.url}`)
+          errorCreate(`${dataAxios.message}: ${response.config.url}`)
           break
       }
     }
@@ -91,18 +107,41 @@ service.interceptors.response.use(
   error => {
     if (error && error.response) {
       switch (error.response.status) {
-        case 400: error.message = '请求错误'; break
-        case 401: error.message = '未授权，请登录'; break
-        case 403: error.message = '拒绝访问'; break
-        case 404: error.message = `请求地址出错: ${error.response.config.url}`; break
-        case 408: error.message = '请求超时'; break
-        case 500: error.message = '服务器内部错误'; break
-        case 501: error.message = '服务未实现'; break
-        case 502: error.message = '网关错误'; break
-        case 503: error.message = '服务不可用'; break
-        case 504: error.message = '网关超时'; break
-        case 505: error.message = 'HTTP版本不受支持'; break
-        default: break
+        case 400:
+          error.message = '请求错误'
+          break
+        case 401:
+          error.message = '未授权，请登录'
+          break
+        case 403:
+          error.message = '拒绝访问'
+          break
+        case 404:
+          error.message = `请求地址出错: ${error.response.config.url}`
+          break
+        case 408:
+          error.message = '请求超时'
+          break
+        case 500:
+          error.message = '服务器内部错误'
+          break
+        case 501:
+          error.message = '服务未实现'
+          break
+        case 502:
+          error.message = '网关错误'
+          break
+        case 503:
+          error.message = '服务不可用'
+          break
+        case 504:
+          error.message = '网关超时'
+          break
+        case 505:
+          error.message = 'HTTP版本不受支持'
+          break
+        default:
+          break
       }
     }
     errorLog(error)

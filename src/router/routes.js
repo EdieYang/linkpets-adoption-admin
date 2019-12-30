@@ -47,195 +47,195 @@ const frameIn = [
       }
     ]
   },
-  {
-    path: '/orgManage',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'orgManage',
-        meta: {
-          title: '组织管理',
-          auth: true
-        },
-        component: _import('orgManage/index')
-      }
-    ]
-  },
-  {
-    path: '/adoptRelease',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'adoptRelease',
-        meta: {
-          title: '领养信息列表',
-          auth: true
-        },
-        component: _import('adoptRelease/index')
-      },
-      {
-        path: 'new',
-        name: 'adoptNew',
-        meta: {
-          title: '领养信息发布',
-          auth: true
-        },
-        component: _import('adoptRelease/new')
-      },
-      {
-        path: 'check',
-        name: 'adoptCheck',
-        meta: {
-          title: '查看领养信息',
-          auth: true
-        },
-        component: _import('adoptRelease/check')
-      }
-    ]
-  },
-  {
-    path: '/activityRelease',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'activityRelease',
-        meta: {
-          title: '活动发布',
-          auth: true
-        },
-        component: _import('activityRelease/index')
-      }
-    ]
-  },
-  {
-    path: '/galleryRelease',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'galleryRelease',
-        meta: {
-          title: '相册墙',
-          auth: true
-        },
-        component: _import('galleryRelease/index')
-      }
-    ]
-  },
-  {
-    path: '/adoptedMgn',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'adoptedMgn',
-        meta: {
-          title: '送养备案',
-          auth: true
-        },
-        component: _import('adoptedMgn/index')
-      },
-      {
-        path: 'detail',
-        name: 'adoptedMgnDetail',
-        meta: {
-          title: '备案详情',
-          auth: true
-        },
-        component: _import('adoptedMgn/detail')
-      }
-    ]
-  },
-  {
-    path: '/circleMgn',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'circleMgn',
-        meta: {
-          title: '圈子管理',
-          auth: true
-        },
-        component: _import('circleMgn/index')
-      }
-    ]
-  },
-  {
-    path: '/activityMgn',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'activityMgn',
-        meta: {
-          title: '活动管理',
-          auth: true
-        },
-        component: _import('activityMgn/index')
-      },
-      {
-        path: 'new',
-        name: 'activityNew',
-        meta: {
-          title: '活动管理',
-          auth: true
-        },
-        component: _import('activityMgn/new')
-      }
-    ]
-  },
-  {
-    path: '/questionnaireMgn',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'questionnaireMgn',
-        meta: {
-          title: '问卷管理',
-          auth: true
-        },
-        component: _import('questionnaireMgn/index')
-      },
-      {
-        path: 'new',
-        name: 'questionnaireNew',
-        meta: {
-          title: '问卷管理',
-          auth: true
-        },
-        component: _import('questionnaireMgn/new')
-      }
-    ]
-  },
-  {
-    path: '/postMgn',
-    redirect: { name: 'index' },
-    component: layoutHeaderAside,
-    children: [
-      {
-        path: 'index',
-        name: 'postMgn',
-        meta: {
-          title: '发帖内容管理',
-          auth: true
-        },
-        component: _import('postMgn/index')
-      }
-    ]
-  }
+  // {
+  //   path: '/orgManage',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'orgManage',
+  //       meta: {
+  //         title: '组织管理',
+  //         auth: true
+  //       },
+  //       component: _import('orgManage/index')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/adoptRelease',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'adoptRelease',
+  //       meta: {
+  //         title: '领养信息列表',
+  //         auth: true
+  //       },
+  //       component: _import('adoptRelease/index')
+  //     },
+  //     {
+  //       path: 'new',
+  //       name: 'adoptNew',
+  //       meta: {
+  //         title: '领养信息发布',
+  //         auth: true
+  //       },
+  //       component: _import('adoptRelease/new')
+  //     },
+  //     {
+  //       path: 'check',
+  //       name: 'adoptCheck',
+  //       meta: {
+  //         title: '查看领养信息',
+  //         auth: true
+  //       },
+  //       component: _import('adoptRelease/check')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/activityRelease',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'activityRelease',
+  //       meta: {
+  //         title: '活动发布',
+  //         auth: true
+  //       },
+  //       component: _import('activityRelease/index')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/galleryRelease',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'galleryRelease',
+  //       meta: {
+  //         title: '相册墙',
+  //         auth: true
+  //       },
+  //       component: _import('galleryRelease/index')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/adoptedMgn',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'adoptedMgn',
+  //       meta: {
+  //         title: '送养备案',
+  //         auth: true
+  //       },
+  //       component: _import('adoptedMgn/index')
+  //     },
+  //     {
+  //       path: 'detail',
+  //       name: 'adoptedMgnDetail',
+  //       meta: {
+  //         title: '备案详情',
+  //         auth: true
+  //       },
+  //       component: _import('adoptedMgn/detail')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/circleMgn',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'circleMgn',
+  //       meta: {
+  //         title: '圈子管理',
+  //         auth: true
+  //       },
+  //       component: _import('circleMgn/index')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/activityMgn',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'activityMgn',
+  //       meta: {
+  //         title: '活动管理',
+  //         auth: true
+  //       },
+  //       component: _import('activityMgn/index')
+  //     },
+  //     {
+  //       path: 'new',
+  //       name: 'activityNew',
+  //       meta: {
+  //         title: '活动管理',
+  //         auth: true
+  //       },
+  //       component: _import('activityMgn/new')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/questionnaireMgn',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'questionnaireMgn',
+  //       meta: {
+  //         title: '问卷管理',
+  //         auth: true
+  //       },
+  //       component: _import('questionnaireMgn/index')
+  //     },
+  //     {
+  //       path: 'new',
+  //       name: 'questionnaireNew',
+  //       meta: {
+  //         title: '问卷管理',
+  //         auth: true
+  //       },
+  //       component: _import('questionnaireMgn/new')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/postMgn',
+  //   redirect: { name: 'index' },
+  //   component: layoutHeaderAside,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'postMgn',
+  //       meta: {
+  //         title: '发帖内容管理',
+  //         auth: true
+  //       },
+  //       component: _import('postMgn/index')
+  //     }
+  //   ]
+  // }
 ]
 
 /**

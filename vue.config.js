@@ -16,24 +16,17 @@ module.exports = {
   devServer: {
     
     publicPath:publicPath, // 和 publicPath 保持一致
-    // proxy: {
-    //   '/api': {
-    //     // target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8?uri=',
-    //     target: 'https://www.linchongpets.com/lpCmsTest',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': ''    //代理的路径
-    //     }
-    //   },
-    //   '/test': {
-    //     // target: 'https://www.linchongpets.com/lpCmsTest',
-    //     target: 'http://192.168.0.110:8095/lpCmsTest',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/test': ''    //代理的路径
-    //     }
-    //   },
-    // },
+    proxy: {
+      '/api': {
+        // target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8?uri=',
+        // target: 'https://result.eolinker.com/SSn5AuU5fa51ddababb58a0370bc6211478ffd8d9a8ca24?uri=',
+        target: 'http://localhost:8095/lpCmsTest/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '' // 代理的路径
+        }
+      }
+    }
   },
 
   css: {
