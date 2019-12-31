@@ -203,6 +203,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+  name:'AdoptionBackup',
   data () {
     return {
       data: [],

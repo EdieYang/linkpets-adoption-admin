@@ -129,7 +129,7 @@ export default {
             util.cookies.set('userId', res.userId)
             util.cookies.set('token', res.token)
             util.cookies.set('userName', res.userName)
-            this.$router.push('/index')
+            setTimeout(()=>{this.$router.push('/index')},500)
           })
         } else {
           // 登录表单校验失败

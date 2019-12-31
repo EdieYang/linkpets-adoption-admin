@@ -252,6 +252,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+  name:'GroupIndex',
   data () {
     return {
       data: [],

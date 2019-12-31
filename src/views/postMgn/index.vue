@@ -151,6 +151,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+  name:'PostIndex',
   data () {
     return {
       data: [],

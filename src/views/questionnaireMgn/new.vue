@@ -100,7 +100,7 @@ Vue.use(VueInputAutowidth)
 var orgId = ''
 
 export default {
-  name: "new",
+   name:'QuestionnaireNew',
   components: { draggable },
   data () {
     return {

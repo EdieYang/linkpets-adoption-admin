@@ -186,6 +186,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+  name:'ActivityIndex',
   data () {
     return {
       data: [],
@@ -254,10 +255,10 @@ export default {
       });
     },
     addActivity () {
-      this.$router.push({ path: '/activityMgn/new', query: { type: "new" } })
+      this.$router.push({ path: '/group/activity/new', query: { type: "new" } })
     },
     edit (val) {
-      this.$router.push({ path: '/activityMgn/new', query: { activityId: val, type: "edit" } })
+      this.$router.push({ path: '/group/activity/new', query: { activityId: val, type: "edit" } })
     },
     handleSizeChange (val) {
       pageSize = val

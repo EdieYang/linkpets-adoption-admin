@@ -148,7 +148,7 @@
     import {adoptDetail} from "@/api/adoptRelease/adoptReleaseApi"
     import util from '@/libs/util'
     export default {
-        name: "check",
+        name: "AdoptionCheck",
         data () {
             return {
                 petId:"",

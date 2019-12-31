@@ -266,6 +266,7 @@ import util from '@/libs/util'
 var orgId = ''
 var applyId = ''
 export default {
+  name:'AdoptionBackupDetail',
   data () {
     return {
       centerDialogVisible: false,

@@ -121,7 +121,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
-  name: "orgMange",
+  name: "Organization",
   data () {
     return {
       tableData: [],

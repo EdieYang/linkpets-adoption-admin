@@ -169,7 +169,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
-  name: "index",
+  name: "AdoptionWxArticle",
   data () {
     return {
       tableData: [],

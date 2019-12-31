@@ -335,6 +335,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+   name: "AdoptionRealseIndex",
   data () {
     return {
       data: [],
@@ -401,7 +402,7 @@ export default {
       });
     },
     newAdopt () {
-      this.$router.push({ path: '/adoptRelease/new', query: { type: "new" } })
+      this.$router.push({ path: '/adoption/new', query: { type: "new" } })
     },
     switchline (petId, status) {
       let data = {
@@ -413,7 +414,7 @@ export default {
       });
     },
     edit (petId) {
-      this.$router.push({ path: '/adoptRelease/new', query: { petId: petId, type: "edit" } });
+      this.$router.push({ path: '/adoption/new', query: { petId: petId, type: "edit" } });
     },
     handleSizeChange (val) {
       pageSize = val

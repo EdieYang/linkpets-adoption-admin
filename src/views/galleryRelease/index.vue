@@ -43,7 +43,7 @@ var orgId = ''
 
 
 export default {
-  name: "index",
+  name: "AdoptionGallery",
   data () {
     return {
       tableData: [],

@@ -79,6 +79,7 @@ var pageSize = 10
 var orgId = ''
 
 export default {
+  name:'QuestionnaireIndex',
   data () {
     return {
       data: [],
@@ -125,10 +126,10 @@ export default {
       })
     },
     addQuestionnaire () {
-      this.$router.push({ path: '/questionnaireMgn/new', query: { type: "new" } })
+      this.$router.push({ path: '/group/questionnaire/new', query: { type: "new" } })
     },
     edit (val) {
-      this.$router.push({ path: '/questionnaireMgn/new', query: { questionnaireId: val, type: "edit" } })
+      this.$router.push({ path: '/group/questionnaire/new', query: { questionnaireId: val, type: "edit" } })
     },
     handleSizeChange (val) {
       pageSize = val
