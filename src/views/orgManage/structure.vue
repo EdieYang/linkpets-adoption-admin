@@ -1,54 +1,93 @@
 <template>
   <d2-container>
     <template slot="header">
-      <div class="header-cover">
-        <p>管理组织下系统用户</p>
-      </div>
       <div>
         <el-button
           type="danger"
           size="small"
           round
           @click="dialogFormVisible = true"
-          >完善组织信息</el-button
+          >创建组织</el-button
         >
         <el-button
           type="primary"
           size="small"
           round
           @click="dialogFormVisible = true"
-          >创建账号</el-button
+          >创建组织账号</el-button
         >
       </div>
     </template>
 
-    <el-table :data="tableData" style="width: 100%" height="450px;">
-      <el-table-column prop="userAcc" label="系统账号" center width="200px">
+    <el-table :data="tableData" style="width: 100%" height="650">
+      <el-table-column
+        prop="orgName"
+        label="组织名称"
+        align="center"
+        width="200px"
+      >
       </el-table-column>
-      <el-table-column prop="userAcc" label="初始密码" center width="200px">
-        <p>123456</p>
-      </el-table-column>
-      <el-table-column prop="nickName" label="微信昵称" center width="200px">
-      </el-table-column>
-      <el-table-column label="微信头像" width="200px" center>
+      <el-table-column label="组织logo" width="250px" align="center">
         <template slot-scope="scope">
           <img
-            :src="scope.row.portrait"
+            :src="picturePrefix + scope.row.logo"
             alt=""
-            style="width: 80px;height: 80px;border-radius:10px"
+            style="width: 120px;height: 120px;border-radius:5px"
           />
         </template>
       </el-table-column>
+
+      <el-table-column label="组织背景照" width="250px" align="center">
+        <template slot-scope="scope">
+          <img
+            :src="picturePrefix + scope.row.coverImg"
+            alt=""
+            style="width: 160px;height: 120px;border-radius:5px"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="brief"
+        label="组织简介"
+        align="center"
+        width="200px"
+      >
+      </el-table-column>
+
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-tooltip content="编辑" placement="top-start" effect="light">
+          <el-tooltip
+            content="修改组织信息"
+            placement="top-start"
+            effect="light"
+          >
             <el-button
               type="primary"
               icon="el-icon-edit"
               circle
               size="small"
-              @click="editUser(scope.row.petId)"
+              @click="edit(scope.row.orgId)"
+            ></el-button>
+          </el-tooltip>
+
+          <el-tooltip content="删除组织" placement="top-start" effect="light">
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              size="small"
+              @click="delOrg(scope.row.orgId)"
+            ></el-button>
+          </el-tooltip>
+
+          <el-tooltip content="组织成员" placement="top-start" effect="light">
+            <el-button
+              type="warning"
+              icon="el-icon-s-custom"
+              circle
+              size="small"
+              @click="orgMember(scope.row.orgId, scope.row.orgName)"
             ></el-button>
           </el-tooltip>
         </template>
@@ -84,6 +123,34 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item
+          label="公益组织logo"
+          :label-width="formLabelWidth"
+          prop="orgLogo"
+        >
+          <el-upload
+            :action="actionUrl"
+            ref="upload"
+            list-type="picture-card"
+            :multiple="multiple"
+            :limit="limit"
+            :data="uploadData"
+            :on-success="handleLogoSuccess"
+            :on-remove="handleLogoRemove"
+            :file-list="logoFileList"
+            :before-upload="beforeThumbImageUpload"
+          >
+            <i class="el-icon-plus"></i>
+            <div slot="tip" class="el-upload__tip">
+              建议尺寸 支持bmp/png/jpeg/jpg/gif格式，大小不超过5M
+            </div>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="form.orgLogo" alt="" />
+          </el-dialog>
+          <el-input type="hidden" v-model="form.orgLogo" />
+        </el-form-item>
+
         <el-form-item
           label="公益组织背景图"
           :label-width="formLabelWidth"
@@ -130,24 +197,24 @@
       >
       </el-pagination>
     </template>
+    <org-member :org="org" v-model="orgMemberDialogVisible" />
   </d2-container>
 </template>
 
 <script>
-import {
-  listOrgUsers,
-  getOrgInfo,
-  saveOrgInfo
-} from '@/api/orgManage/orgManageApi'
+import * as orgService from '@/api/orgManage/orgManageApi'
 import util from '@/libs/util'
+import orgMember from './orgMember'
 var pageNum = 1
 var pageSize = 10
 var orgId = ''
 
 export default {
-  name: 'Organization',
+  name: 'OrganizationStructure',
+  components: { orgMember },
   data() {
     return {
+      org: {},
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -158,6 +225,7 @@ export default {
       formLabelWidth: '120px',
       dialogImageUrl: '',
       dialogVisible: false,
+      orgMemberDialogVisible: false,
       rules: {
         orgName: [
           { required: true, message: '请输入公益组织名称', trigger: 'blur' }
@@ -167,31 +235,37 @@ export default {
         ],
         orgImage: [
           { required: true, message: '请上传公益组织背景图', trigger: 'change' }
+        ],
+        orgLogo: [
+          { required: true, message: '请上传公益组织logo', trigger: 'change' }
         ]
       },
       form: {
         id: '',
         orgName: '',
         orgBrief: '',
-        orgImage: ''
+        orgImage: '',
+        orgLogo: ''
       },
       uploadData: {
-        userId: util.cookies.get('userId'),
         ossZone: 'organization'
       },
       multiple: false,
       limit: 1,
       fileList: [],
-      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image'
+      logoFileList: [],
+      actionUrl: '/api/oss/image/backend',
+      picturePrefix: util.picturePath
     }
   },
   methods: {
-    listOrgUsers() {
+    listOrg() {
       let req = {
         pageNum: pageNum,
         pageSize: pageSize
       }
-      listOrgUsers(orgId, req)
+      orgService
+        .getOrgPage(req)
         .then(res => {
           console.log(res)
           this.currentPage = res.pageNum
@@ -202,37 +276,44 @@ export default {
           // 异常情况
         })
     },
-    getOrgInfo() {
+    getOrgInfo(orgId) {
       let req = {
         orgId: orgId
       }
-      getOrgInfo(req).then(res => {
+      orgService.getOrgInfo(req).then(res => {
         var orgInfo = res
         this.form.orgName = orgInfo.orgName
         this.form.orgBrief = orgInfo.brief
-        debugger
         this.form.orgImage = orgInfo.coverImg
+        this.form.orgLogo = orgInfo.logo
         this.fileList = []
+        this.logoFileList = []
         if (orgInfo.coverImg != '') {
           var file = {
-            name: '',
-            url: this.form.orgImage
+            name: 'coverImg',
+            url: util.picturePath + this.form.orgImage
           }
           this.fileList.push(file)
+        }
+        if (orgInfo.logo != '') {
+          var file = {
+            name: 'logo',
+            url: util.picturePath + this.form.orgLogo
+          }
+          this.logoFileList.push(file)
         }
       })
     },
     handleSizeChange(val) {
       pageSize = val
-      this.listOrgUsers()
+      this.listOrg()
     },
     handleCurrentChange(val) {
       pageNum = val
-      this.listOrgUsers()
+      this.listOrg()
     },
     cancel() {
       this.dialogFormVisible = false
-      this.getOrgInfo()
     },
     beforeThumbImageUpload(file) {
       const isType =
@@ -242,7 +323,6 @@ export default {
         file.type === 'image/bmp' ||
         file.type === 'image/jpg'
       const isLt = file.size / 1024 / 1024 < 5
-      debugger
       if (!isType) {
         this.$message.error('上传图片格式不对!')
         return isType
@@ -257,38 +337,89 @@ export default {
       this.fileList = fileList
       this.form.orgImage = ''
     },
-    handlePictureCardPreview(file) {
-      this.activityCover = file.url
-      this.dialogVisible = true
-    },
     handleSuccess(response, file, fileList) {
       console.log(response)
-      this.form.orgImage = 'https://pic.linchongpets.com/' + response.data
+      this.form.orgImage = response.data
+    },
+    handleLogoRemove(file, fileList) {
+      console.log(file, fileList)
+      this.logoFileList = fileList
+      this.form.orgLogo = ''
+    },
+    handleLogoSuccess(response, file, fileList) {
+      console.log(response)
+      this.form.orgLogo = response.data
     },
     save() {
+      this.$refs['ruleForm'].validate(valid => {
+        if (valid) {
+          if (orgId != '') {
+            this.editOrg(orgId)
+            return
+          }
+          var req = {
+            brief: this.form.orgBrief,
+            coverImg: this.form.orgImage,
+            logo: this.form.orgLogo,
+            orgName: this.form.orgName
+          }
+          orgService.saveOrgInfo(req).then(res => {
+            this.dialogFormVisible = false
+            this.$message.success('创建成功')
+            this.listOrg()
+          })
+        }
+      })
+    },
+    delOrg(orgId) {
+      this.$confirm('确认删除该组织?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          var req = {
+            orgId: orgId
+          }
+          orgService.delOrg(req).then(res => {
+            this.dialogFormVisible = false
+            this.$message.success('删除成功')
+            this.listOrg()
+          })
+        })
+        .catch(() => {})
+    },
+    edit(id) {
+      orgId = id
+      this.getOrgInfo(id)
+      this.dialogFormVisible = true
+    },
+    editOrg(id) {
       var req = {
-        brief: this.form.orgBrief,
-        coverImg: this.form.orgImage,
         orgName: this.form.orgName,
-        orgId: orgId
+        brief: this.form.orgBrief,
+        logo: this.form.orgLogo,
+        coverImg: this.form.orgImage,
+        orgId: id
       }
-      saveOrgInfo(req).then(res => {
+      orgService.uptOrgInfo(req).then(res => {
         this.dialogFormVisible = false
         this.$message.success('更新成功')
+        this.listOrg()
       })
+    },
+    orgMember(id, orgName) {
+      orgId = id
+      this.org = {
+        orgId: id,
+        orgName: orgName
+      }
+      this.orgMemberDialogVisible = true
     }
   },
   mounted: function() {
-    // orgId = util.cookies.get("orgId")
-    // if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
-    //   this.$router.push({
-    //     name: 'login'
-    //   })
-    //   return
-    // }
     pageNum = 1
-    this.listOrgUsers()
-    this.getOrgInfo()
+    this.listOrg()
   }
 }
 </script>

@@ -42,3 +42,17 @@ export function delUsers(data) {
     params: data
   })
 }
+export function saveOrgUser(data) {
+  return request({
+    url: '/api/sys/user/orgUser',
+    method: 'post',
+    params: data
+  })
+}
+export function delOrgUser(data) {
+  return request({
+    url: '/api/sys/user/orgUser',
+    method: 'delete',
+    params: data
+  })
+}

@@ -14,6 +14,13 @@ export function getRole(data) {
     params: data
   })
 }
+export function getRoleByRoleCode(data) {
+  return request({
+    url: '/api/sys/role/roleCode',
+    method: 'get',
+    params: data
+  })
+}
 export function saveRole(data) {
   return request({
     url: '/api/sys/role',
@@ -77,6 +84,3 @@ export function saveRoleMenus(data) {
     params: data
   })
 }
-
-
-

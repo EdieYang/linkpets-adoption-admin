@@ -94,8 +94,12 @@ service.interceptors.response.use(
           break
         case 40003:
           // TOKEN验证失败
-          util.cookies.set('token', '')
+          util.cookies.remove('token')
           errorCreate(`登录超时，请重新登录`)
+          break
+        case 30004:
+          // TOKEN验证失败
+          errorCreate(`创建组织账号失败`)
           break
         default:
           // 不是正确的 code
