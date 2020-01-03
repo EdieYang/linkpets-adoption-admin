@@ -86,16 +86,18 @@
           >
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="roleCode">
+      <el-table-column label="角色" prop="roleCode" width="200">
         <template slot-scope="scope">
-          <el-tag
-            v-if="scope.row.roleCode == 'ORG_STAFF'"
+          
+          
+          <el-tag v-for="role in scope.row.sysRoleList" 
+            v-if="role.roleCode == 'ORG_STAFF'"
             size="mini"
             type="info"
             >组织志愿者</el-tag
           >
-          <el-tag
-            v-if="scope.row.roleCode == 'ORG_ADMIN'"
+          <el-tag v-for="role in scope.row.sysRoleList" 
+            v-if="role.roleCode == 'ORG_ADMIN'"
             size="mini"
             type="danger"
             >组织管理者</el-tag
@@ -122,8 +124,9 @@
             circle
             @click="delOrgMember(scope.row.userId)"
           ></el-button>
+          <template v-for="role in scope.row.sysRoleList">
           <el-button
-            v-if="scope.row.roleCode != 'ORG_ADMIN'"
+            v-if="role.roleCode != 'ORG_ADMIN'"
             type="warning"
             title="设置组织管理员"
             size="mini"
@@ -132,7 +135,7 @@
             @click="addOrgUserAdminRole(scope.row.sysUserId)"
           ></el-button>
           <el-button
-            v-if="scope.row.roleCode == 'ORG_ADMIN'"
+            v-if="role.roleCode == 'ORG_ADMIN'"
             type="info"
             title="设置组织志愿者"
             size="mini"
@@ -140,6 +143,7 @@
             circle
             @click="delOrgUserAdminRole(scope.row.sysUserId)"
           ></el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
