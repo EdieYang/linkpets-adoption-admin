@@ -205,39 +205,39 @@ import {
   activityNew,
   activityEdit,
   activityDetail
-} from "@/api/activityManage/activityManageApi";
-import { questionnaireListAll } from "@/api/questionnaireManage/questionnaireManageApi";
-import util from "@/libs/util";
-var orgId = "";
+} from '@/api/activityManage/activityManageApi'
+import { questionnaireListAll } from '@/api/questionnaireManage/questionnaireManageApi'
+import util from '@/libs/util'
+var orgId = ''
 
 export default {
-  name: "ActivityNew",
+  name: 'ActivityNew',
   data() {
     var checkTime = (rule, value, callback) => {
       value.map(item => {
         if (!item[0] || !item[1]) {
-          return callback(new Error("请选择参加活动时间"));
+          return callback(new Error('请选择参加活动时间'))
         }
-      });
-      callback();
-    };
+      })
+      callback()
+    }
     return {
       pageLoading: false,
-      pageType: "",
+      pageType: '',
       form: {
-        groupId: "",
-        activityTitle: "",
-        activityType: "",
-        activityTime: "",
-        applyTime: "",
-        activityArea: "",
-        activityAddress: "",
-        activityCost: "",
-        activityPoint: "",
-        activityBanner: "",
-        customerSupport: "",
-        activityContent: "",
-        activityPickTime: "",
+        groupId: '',
+        activityTitle: '',
+        activityType: '',
+        activityTime: '',
+        applyTime: '',
+        activityArea: '',
+        activityAddress: '',
+        activityCost: '',
+        activityPoint: '',
+        activityBanner: '',
+        customerSupport: '',
+        activityContent: '',
+        activityPickTime: '',
         joinTime: [[]],
         activityShouldVerify: false,
         activityShouldQuestionnaire: false
@@ -245,327 +245,325 @@ export default {
       config: {
         toolbars: [
           [
-            "fullscreen",
-            "source",
-            "|",
-            "undo",
-            "redo",
-            "|",
-            "bold",
-            "italic",
-            "underline",
-            "fontborder",
-            "strikethrough",
-            "superscript",
-            "subscript",
-            "removeformat",
-            "formatmatch",
-            "autotypeset",
-            "blockquote",
-            "pasteplain",
-            "|",
-            "forecolor",
-            "backcolor",
-            "insertorderedlist",
-            "insertunorderedlist",
-            "selectall",
-            "cleardoc",
-            "|",
-            "rowspacingtop",
-            "rowspacingbottom",
-            "lineheight",
-            "|",
-            "customstyle",
-            "paragraph",
-            "fontfamily",
-            "fontsize",
-            "|",
-            "directionalityltr",
-            "directionalityrtl",
-            "indent",
-            "|",
-            "justifyleft",
-            "justifycenter",
-            "justifyright",
-            "justifyjustify",
-            "|",
-            "touppercase",
-            "tolowercase",
-            "|",
-            "link",
-            "unlink",
-            "anchor",
-            "|",
-            "imagenone",
-            "imageleft",
-            "imageright",
-            "imagecenter",
-            "|",
-            "emotion",
-            "map",
-            "insertframe",
-            "insertcode",
-            "template",
-            "|",
-            "horizontal",
-            "date",
-            "time",
-            "spechars",
-            "|",
-            "inserttable",
-            "deletetable",
-            "insertparagraphbeforetable",
-            "insertrow",
-            "deleterow",
-            "insertcol",
-            "deletecol",
-            "mergecells",
-            "mergeright",
-            "mergedown",
-            "splittocells",
-            "splittorows",
-            "splittocols",
-            "charts",
-            "|",
-            "preview",
-            "searchreplace"
+            'fullscreen',
+            'source',
+            '|',
+            'undo',
+            'redo',
+            '|',
+            'bold',
+            'italic',
+            'underline',
+            'fontborder',
+            'strikethrough',
+            'superscript',
+            'subscript',
+            'removeformat',
+            'formatmatch',
+            'autotypeset',
+            'blockquote',
+            'pasteplain',
+            '|',
+            'forecolor',
+            'backcolor',
+            'insertorderedlist',
+            'insertunorderedlist',
+            'selectall',
+            'cleardoc',
+            '|',
+            'rowspacingtop',
+            'rowspacingbottom',
+            'lineheight',
+            '|',
+            'customstyle',
+            'paragraph',
+            'fontfamily',
+            'fontsize',
+            '|',
+            'directionalityltr',
+            'directionalityrtl',
+            'indent',
+            '|',
+            'justifyleft',
+            'justifycenter',
+            'justifyright',
+            'justifyjustify',
+            '|',
+            'touppercase',
+            'tolowercase',
+            '|',
+            'link',
+            'unlink',
+            'anchor',
+            '|',
+            'imagenone',
+            'imageleft',
+            'imageright',
+            'imagecenter',
+            '|',
+            'emotion',
+            'map',
+            'insertframe',
+            'insertcode',
+            'template',
+            '|',
+            'horizontal',
+            'date',
+            'time',
+            'spechars',
+            '|',
+            'inserttable',
+            'deletetable',
+            'insertparagraphbeforetable',
+            'insertrow',
+            'deleterow',
+            'insertcol',
+            'deletecol',
+            'mergecells',
+            'mergeright',
+            'mergedown',
+            'splittocells',
+            'splittorows',
+            'splittocols',
+            'charts',
+            '|',
+            'preview',
+            'searchreplace'
           ]
         ],
-        UEDITOR_HOME_URL: "/lib/UEditor/"
+        UEDITOR_HOME_URL: '/lib/UEditor/'
       },
-      dialogImageUrl: "",
+      dialogImageUrl: '',
       dialogVisible: false,
       fileList: [],
       actionUrl: '/api/oss/image/backend',
-      ossData: { "ossZone ": "group/activity" },
+      ossData: { 'ossZone ': 'group/activity' },
+      picturePrefix: util.picturePath,
       activityTypeOptions: [
         {
-          label: "线下活动",
-          value: "1"
+          label: '线下活动',
+          value: '1'
         },
         {
-          label: "线上活动",
-          value: "2"
+          label: '线上活动',
+          value: '2'
         }
       ],
       questionnaireTypeOptions: [],
       circles: [],
       addressRange: [
-        "上海市 黄浦区",
-        "上海市 徐汇区",
-        "上海市 长宁区",
-        "上海市 静安区",
-        "上海市 普陀区",
-        "上海市 虹口区",
-        "上海市 杨浦区",
-        "上海市 闵行区",
-        "上海市 宝山区",
-        "上海市 嘉定区",
-        "上海市 浦东新区",
-        "上海市 金山区",
-        "上海市 松江区",
-        "上海市 青浦区",
-        "上海市 奉贤区",
-        "上海市 崇明区"
+        '上海市 黄浦区',
+        '上海市 徐汇区',
+        '上海市 长宁区',
+        '上海市 静安区',
+        '上海市 普陀区',
+        '上海市 虹口区',
+        '上海市 杨浦区',
+        '上海市 闵行区',
+        '上海市 宝山区',
+        '上海市 嘉定区',
+        '上海市 浦东新区',
+        '上海市 金山区',
+        '上海市 松江区',
+        '上海市 青浦区',
+        '上海市 奉贤区',
+        '上海市 崇明区'
       ],
       formRules: {
         groupId: [
-          { required: true, message: "请选择活动圈子", trigger: "change" }
+          { required: true, message: '请选择活动圈子', trigger: 'change' }
         ],
         activityTitle: [
-          { required: true, message: "请输入活动标题", trigger: "blur" }
+          { required: true, message: '请输入活动标题', trigger: 'blur' }
         ],
         activityType: [
-          { required: true, message: "请选择活动属性", trigger: "change" }
+          { required: true, message: '请选择活动属性', trigger: 'change' }
         ],
         activityTime: [
-          { required: true, message: "请选择活动时间", trigger: "change" }
+          { required: true, message: '请选择活动时间', trigger: 'change' }
         ],
         joinTime: [
           {
             required: true,
             validator: checkTime,
-            message: "请选择参加活动时间",
-            trigger: "change"
+            message: '请选择参加活动时间',
+            trigger: 'change'
           }
         ],
         applyTime: [
-          { required: true, message: "请选择活动报名时间", trigger: "change" }
+          { required: true, message: '请选择活动报名时间', trigger: 'change' }
         ],
         activityArea: [
-          { required: true, message: "请选择活动所在市区", trigger: "change" }
+          { required: true, message: '请选择活动所在市区', trigger: 'change' }
         ],
         activityAddress: [
-          { required: true, message: "请输入活动地址", trigger: "blur" }
+          { required: true, message: '请输入活动地址', trigger: 'blur' }
         ],
         activityCost: [
-          { required: true, message: "请输入消耗积分", trigger: "change" }
+          { required: true, message: '请输入消耗积分', trigger: 'change' }
         ],
         activityPoint: [
-          { required: true, message: "请输入获得积分", trigger: "change" }
+          { required: true, message: '请输入获得积分', trigger: 'change' }
         ],
         activityBanner: [
-          { required: true, message: "请选择活动banner图", trigger: "change" }
+          { required: true, message: '请选择活动banner图', trigger: 'change' }
         ],
         customerSupport: [
-          { required: true, message: "请输入活动管理员微信", trigger: "blur" }
+          { required: true, message: '请输入活动管理员微信', trigger: 'blur' }
         ],
         activityContent: [
-          { required: true, message: "请输入活动详情", trigger: "blur" }
+          { required: true, message: '请输入活动详情', trigger: 'blur' }
         ]
       },
       disableUpload: false
-    };
+    }
   },
   mounted() {
-    orgId = util.cookies.get("orgId");
-    if (orgId == "" || orgId == null || typeof orgId == "undefined") {
+    orgId = util.cookies.get('orgId')
+    if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
       this.$router.push({
-        name: "login"
-      });
-      return;
+        name: 'login'
+      })
+      return
     }
-    this.pageType = this.$route.query.type;
-    if (this.pageType === "edit") {
-      this.activityDetail();
+    this.pageType = this.$route.query.type
+    if (this.pageType === 'edit') {
+      this.activityDetail()
     }
-    this.getCircleList();
-    this.getQuestionnaireList();
+    this.getCircleList()
+    this.getQuestionnaireList()
   },
   methods: {
     activityDetail() {
       let data = {
         activityId: this.$route.query.activityId
-      };
-      this.pageLoading = true;
+      }
+      this.pageLoading = true
       activityDetail(data).then(res => {
-        this.pageLoading = false;
-        res.joinTime = [];
-        this.form = JSON.parse(JSON.stringify(res));
-        this.form.activityShouldVerify = this.form.activityShouldVerify === "1";
+        this.pageLoading = false
+        res.joinTime = []
+        this.form = JSON.parse(JSON.stringify(res))
+        this.form.activityShouldVerify = this.form.activityShouldVerify === '1'
         this.form.activityShouldQuestionnaire =
-          this.form.activityShouldQuestionnaire === "1";
-        this.fileList = [{ url: this.form.activityBanner }];
+          this.form.activityShouldQuestionnaire === '1'
+        this.fileList = [{ url: this.picturePrefix + this.form.activityBanner }]
         this.form.activityTime = [
           this.form.activityStartTime,
           this.form.activityEndTime
-        ];
+        ]
         this.form.applyTime = [
           this.form.activityRegisterStartTime,
           this.form.activityRegisterEndTime
-        ];
-        this.disableUpload = this.form.activityBanner !== "";
-        let time = this.form.activityPickTime.split(",");
+        ]
+        this.disableUpload = this.form.activityBanner !== ''
+        let time = this.form.activityPickTime.split(',')
         time.map(item => {
-          this.form.joinTime.push([item.split("-")[0], item.split("-")[1]]);
-        });
-      });
+          this.form.joinTime.push([item.split('-')[0], item.split('-')[1]])
+        })
+      })
     },
     adoptNew() {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.form.activityStartTime = this.formatTime(
             this.form.activityTime[0]
-          );
-          this.form.activityEndTime = this.formatTime(
-            this.form.activityTime[1]
-          );
+          )
+          this.form.activityEndTime = this.formatTime(this.form.activityTime[1])
           this.form.activityRegisterStartTime = this.formatTime(
             this.form.applyTime[0]
-          );
+          )
           this.form.activityRegisterEndTime = this.formatTime(
             this.form.applyTime[1]
-          );
-          let pickTime = "";
+          )
+          let pickTime = ''
           this.form.joinTime.map(item => {
             pickTime = pickTime
               .concat(this.formatTime(item[0]))
-              .concat("-")
+              .concat(' - ')
               .concat(this.formatTime(item[1]))
-              .concat(",");
-          });
+              .concat(',')
+          })
           this.form.activityPickTime = pickTime.substring(
             0,
             pickTime.length - 1
-          );
+          )
           this.form.activityShouldVerify = this.form.activityShouldVerify
-            ? "1"
-            : "0";
+            ? '1'
+            : '0'
           this.form.activityShouldQuestionnaire = this.form
             .activityShouldQuestionnaire
-            ? "1"
-            : "0";
-          delete this.form.activityTime;
-          delete this.form.applyTime;
-          delete this.form.joinTime;
-          console.log(this.form);
-          this.pageLoading = true;
-          if (this.pageType === "edit") {
-            this.form.activityId = this.$route.query.activityId;
+            ? '1'
+            : '0'
+          delete this.form.activityTime
+          delete this.form.applyTime
+          delete this.form.joinTime
+          console.log(this.form)
+          this.pageLoading = true
+          if (this.pageType === 'edit') {
+            this.form.activityId = this.$route.query.activityId
             activityEdit(this.form).then(res => {
-              console.log(res);
-              this.pageLoading = false;
-              this.$message.success("更新成功");
-              this.$router.go(-1);
-            });
-          } else if (this.pageType === "new") {
+              console.log(res)
+              this.pageLoading = false
+              this.$message.success('更新成功')
+              this.$router.go(-1)
+            })
+          } else if (this.pageType === 'new') {
             activityNew(this.form).then(res => {
-              console.log(res);
-              this.pageLoading = false;
-              this.$message.success("创建成功");
-              this.$refs["form"].resetFields();
-              this.$router.go(-1);
-            });
+              console.log(res)
+              this.pageLoading = false
+              this.$message.success('创建成功')
+              this.$refs['form'].resetFields()
+              this.$router.go(-1)
+            })
           }
         }
-      });
+      })
     },
     cancel() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     formatTime(date) {
-      return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+      return this.$moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     addQuestionnaire() {
       this.$router.push({
-        path: "/group/questionnaire/new",
-        query: { type: "new" }
-      });
+        path: '/group/questionnaire/new',
+        query: { type: 'new' }
+      })
     },
     addTime() {
-      this.form.joinTime.push([]);
+      this.form.joinTime.push([])
     },
     handleRemove(file, fileList) {
-      console.log(file);
-      this.form.activityBanner = "";
-      this.disableUpload = false;
+      console.log(file)
+      this.form.activityBanner = ''
+      this.disableUpload = false
     },
     handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
     handleSuccess(response, file, fileList) {
-      this.form.activityBanner =
-        "https://pic.linchongpets.com/" + file.response.data;
-      this.disableUpload = true;
+      this.form.activityBanner = file.response.data
+      this.disableUpload = true
     },
     getCircleList() {
       let data = {
         groupType: 1,
         isActive: 1
-      };
+      }
       circleList(data).then(res => {
-        console.log(res);
-        this.circles = res;
-      });
+        console.log(res)
+        this.circles = res
+      })
     },
     getQuestionnaireList() {
       questionnaireListAll().then(res => {
-        this.questionnaireTypeOptions = res;
-      });
+        this.questionnaireTypeOptions = res
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>
