@@ -38,7 +38,7 @@ export function adoptEdit(data) {
 
 export function adoptDetail(data) {
   return request({
-    url: '/adopt/pets/' + data.petId,
+    url: '/adopt/pets/pet',
     method: 'get',
     params: data
   })

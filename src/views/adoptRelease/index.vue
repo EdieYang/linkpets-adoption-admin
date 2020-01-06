@@ -89,7 +89,7 @@
                        align="center"
                        width="120px;">
         <template slot-scope="scope">
-          <img :src="scope.row.mediaList.length>0?picPath+scope.row.mediaList[0].mediaPath:''"
+          <img :src="scope.row.mediaList.length>0?picturePrefix+scope.row.mediaList[0].mediaPath:''"
                alt="暂无图片"
                style="width: 90px;height: 90px;border-radius:5px;">
         </template>
@@ -341,7 +341,7 @@ export default {
       data: [],
       currentPage: 1,
       total: 0,
-      picPath: 'https://pic.linchongpets.com/',
+      picturePrefix: util.picturePath,
       petTypeOptions: [{
         label: '猫',
         value: '2'
@@ -376,12 +376,6 @@ export default {
   },
   mounted () {
     orgId = util.cookies.get("orgId")
-    if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
-      this.$router.push({
-        name: 'login'
-      })
-      return
-    }
     this.getList()
   },
   methods: {
@@ -393,7 +387,6 @@ export default {
         petType: this.formInline.petType,
         adoptStatus: this.formInline.adoptStatus
       }
-      debugger
       adoptList(data).then(res => {
         console.log(res.list)
         this.data = res.list
@@ -410,6 +403,11 @@ export default {
         adoptStatus: status
       }
       adoptEdit(data).then(res => {
+        this.$notify({
+            title: '操作成功',
+            message: '',
+            type: 'success'
+          })
         this.getList()
       });
     },

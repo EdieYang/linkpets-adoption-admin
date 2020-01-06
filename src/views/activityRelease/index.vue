@@ -173,7 +173,11 @@ export default {
   data () {
     return {
       tableData: [],
-      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image',
+       uploadData: {
+        userId: util.cookies.get("userId"),
+        ossZone: "organization/article"
+      },
+      actionUrl: '/api/oss/image/backend',
       dialogFormVisible: false,
       form: {
         id: '',
@@ -201,10 +205,6 @@ export default {
         activityCover: [
           { required: true, message: '请上传公众号文章封面', trigger: 'change' }
         ]
-      },
-      uploadData: {
-        userId: util.cookies.get("userId"),
-        ossZone: "organization"
       },
       multiple: false,
       limit: 1,
@@ -249,7 +249,7 @@ export default {
     },
     handleSuccess (response, file, fileList) {
       console.log(response)
-      this.form.activityCover = "https://pic.linchongpets.com/" + response.data
+      this.form.activityCover = util.picturePath + response.data
     },
     listActivities () {
       let actInfo = {

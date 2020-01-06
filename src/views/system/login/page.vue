@@ -129,6 +129,7 @@ export default {
             util.cookies.set('userId', res.userId)
             util.cookies.set('token', res.token)
             util.cookies.set('userName', res.userName)
+            util.cookies.set('orgId',res.orgId)
             setTimeout(()=>{this.$router.push('/index')},500)
           })
         } else {

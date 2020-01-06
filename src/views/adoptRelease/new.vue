@@ -2,215 +2,129 @@
   <d2-container better-scroll>
     <div style="width:100%;">
       <el-card v-loading="pageLoading">
-        <el-form ref="form"
-                 :model="form"
-                 label-width="90px"
-                 label-position="left"
-                 :rules="formRules"
-                 style="width:640px;display: inline-block;">
+        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="formRules" style="width:640px;display: inline-block;">
           <el-divider content-position="left">上传宠物照片</el-divider>
-          <el-form-item label="照片"
-                        prop="mediaList">
-            <el-upload :action="actionUrl"
-                       list-type="picture-card"
-                       :data="ossData"
-                       :on-preview="handlePictureCardPreview"
-                       :on-remove="handleRemove"
-                       :on-success="handleSuccess"
-                       :before-upload="handleBefore"
-                       :file-list="fileList">
+          <el-form-item label="照片" prop="mediaList">
+            <el-upload :action="actionUrl" list-type="picture-card" :data="ossData" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-success="handleSuccess" :before-upload="handleBefore" :file-list="fileList">
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%"
-                   :src="dialogImageUrl"
-                   alt="">
+              <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
-            <el-input v-model="form.mediaList"
-                      v-show="false"></el-input>
+            <el-input v-model="form.mediaList" v-show="false"></el-input>
           </el-form-item>
 
           <el-divider content-position="left">宠物信息</el-divider>
-          <el-form-item label="昵称"
-                        prop="petName">
-            <el-input v-model="form.petName"
-                      placeholder="请输入昵称"></el-input>
+          <el-form-item label="昵称" prop="petName">
+            <el-input v-model="form.petName" placeholder="请输入昵称"></el-input>
           </el-form-item>
-          <el-form-item label="年龄"
-                        prop="petAge">
-            <el-select v-model="form.petAge"
-                       placeholder="请选择年龄"
-                       value=""
-                       style="width:100%;">
-              <el-option v-for="value in ageRange"
-                         :label="value"
-                         :value="value"></el-option>
+          <el-form-item label="年龄" prop="petAge">
+            <el-select v-model="form.petAge" placeholder="请选择年龄" value="" style="width:100%;">
+              <el-option v-for="value in ageRange" :label="value" :value="value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="类别"
-                        prop="petType">
-            <el-radio-group v-model="form.petType"
-                            size="small">
-              <el-radio label="1"
-                        border>狗狗</el-radio>
-              <el-radio label="2"
-                        border>猫咪</el-radio>
+          <el-form-item label="类别" prop="petType">
+            <el-radio-group v-model="form.petType" size="small">
+              <el-radio label="1" border>狗狗</el-radio>
+              <el-radio label="2" border>猫咪</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="性别"
-                        prop="petSex">
-            <el-radio-group v-model="form.petSex"
-                            size="small">
-              <el-radio label="1"
-                        border>未知</el-radio>
-              <el-radio label="2"
-                        border>男孩</el-radio>
-              <el-radio label="3"
-                        border>女孩</el-radio>
+          <el-form-item label="性别" prop="petSex">
+            <el-radio-group v-model="form.petSex" size="small">
+              <el-radio label="1" border>未知</el-radio>
+              <el-radio label="2" border>男孩</el-radio>
+              <el-radio label="3" border>女孩</el-radio>
             </el-radio-group>
           </el-form-item>
 
           <el-divider content-position="left">宠物现状</el-divider>
-          <el-form-item label="绝育"
-                        prop="petSterilization">
-            <el-radio-group v-model="form.petSterilization"
-                            size="small">
-              <el-radio label="3"
-                        border>不详</el-radio>
-              <el-radio label="1"
-                        border>已绝育</el-radio>
-              <el-radio label="2"
-                        border>未绝育</el-radio>
+          <el-form-item label="绝育" prop="petSterilization">
+            <el-radio-group v-model="form.petSterilization" size="small">
+              <el-radio label="3" border>不详</el-radio>
+              <el-radio label="1" border>已绝育</el-radio>
+              <el-radio label="2" border>未绝育</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="疫苗"
-                        prop="petVaccine">
-            <el-radio-group v-model="form.petVaccine"
-                            size="small">
-              <el-radio label="3"
-                        border>不详</el-radio>
-              <el-radio label="1"
-                        border>已接种</el-radio>
-              <el-radio label="2"
-                        border>未接种</el-radio>
-              <el-radio label="4"
-                        border>接种中</el-radio>
+          <el-form-item label="疫苗" prop="petVaccine">
+            <el-radio-group v-model="form.petVaccine" size="small">
+              <el-radio label="3" border>不详</el-radio>
+              <el-radio label="1" border>已接种</el-radio>
+              <el-radio label="2" border>未接种</el-radio>
+              <el-radio label="4" border>接种中</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="驱虫"
-                        prop="petParasite">
-            <el-radio-group v-model="form.petParasite"
-                            size="small">
-              <el-radio label="3"
-                        border>不详</el-radio>
-              <el-radio label="1"
-                        border>已驱</el-radio>
-              <el-radio label="2"
-                        border>未驱</el-radio>
+          <el-form-item label="驱虫" prop="petParasite">
+            <el-radio-group v-model="form.petParasite" size="small">
+              <el-radio label="3" border>不详</el-radio>
+              <el-radio label="1" border>已驱</el-radio>
+              <el-radio label="2" border>未驱</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="体型"
-                        prop="petSomatotype">
-            <el-radio-group v-model="form.petSomatotype"
-                            size="small">
-              <el-radio label="4"
-                        border>大型</el-radio>
-              <el-radio label="3"
-                        border>中型</el-radio>
-              <el-radio label="2"
-                        border>小型</el-radio>
-              <el-radio label="1"
-                        border>迷你</el-radio>
+          <el-form-item label="体型" prop="petSomatotype">
+            <el-radio-group v-model="form.petSomatotype" size="small">
+              <el-radio label="4" border>大型</el-radio>
+              <el-radio label="3" border>中型</el-radio>
+              <el-radio label="2" border>小型</el-radio>
+              <el-radio label="1" border>迷你</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="毛发"
-                        prop="petHair">
-            <el-radio-group v-model="form.petHair"
-                            size="small">
-              <el-radio label="1"
-                        border>无毛</el-radio>
-              <el-radio label="2"
-                        border>短毛</el-radio>
-              <el-radio label="3"
-                        border>长毛</el-radio>
-              <el-radio label="4"
-                        border>卷毛</el-radio>
+          <el-form-item label="毛发" prop="petHair">
+            <el-radio-group v-model="form.petHair" size="small">
+              <el-radio label="1" border>无毛</el-radio>
+              <el-radio label="2" border>短毛</el-radio>
+              <el-radio label="3" border>长毛</el-radio>
+              <el-radio label="4" border>卷毛</el-radio>
             </el-radio-group>
           </el-form-item>
 
           <el-divider content-position="left">宠物特点<span class="divider-remarks">（最多选择3个选项）</span></el-divider>
-          <el-form-item label="特点"
-                        prop="petCharacteristic">
-            <el-checkbox-group v-model="form.petCharacteristic"
-                               :max="3"
-                               size="small">
-              <el-checkbox v-for="item in petCharacteristic"
-                           :label="item.value"
-                           :key="item.value"
-                           border>{{item.name}}</el-checkbox>
+          <el-form-item label="特点" prop="petCharacteristic">
+            <el-checkbox-group v-model="form.petCharacteristic" :max="3" size="small">
+              <el-checkbox v-for="item in petCharacteristic" :label="item.value" :key="item.value" border>{{item.name}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
 
           <el-divider content-position="left">领养要求</el-divider>
-          <el-form-item label="要求"
-                        prop="adoptRequirements">
+          <el-form-item label="要求" prop="adoptRequirements">
             <el-checkbox-group v-model="form.adoptRequirements">
               <div v-for="item in adoptRequirements">
-                <el-checkbox :label="item.value"
-                             :key="item.value"
-                             v-if="item.value==10">其他(先勾选再填信息)</el-checkbox>
-                <el-checkbox :label="item.value"
-                             :key="item.value"
-                             v-else>{{item.name}}</el-checkbox>
+                <el-checkbox :label="item.value" :key="item.value" v-if="item.value==10">其他(先勾选再填信息)</el-checkbox>
+                <el-checkbox :label="item.value" :key="item.value" v-else>{{item.name}}</el-checkbox>
               </div>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="">
-            <el-input type="textarea"
-                      placeholder="请输入内容"
-                      v-model="requirementsText"
-                      maxlength="200"
-                      rows="5"
-                      show-word-limit></el-input>
+            <el-input type="textarea" placeholder="请输入内容" v-model="requirementsText" maxlength="200" rows="5" show-word-limit></el-input>
           </el-form-item>
 
           <el-divider content-position="left">送养故事</el-divider>
-          <el-form-item label="故事"
-                        prop="story">
-            <el-input type="textarea"
-                      placeholder="请描述宠物饮食偏好、行为习惯、运动量等，以及送养原因、宠物过往经历、情感故事等。"
-                      v-model="form.story"
-                      maxlength="200"
-                      rows="5"
-                      show-word-limit></el-input>
+          <el-form-item label="故事" prop="story">
+            <el-input type="textarea" placeholder="请描述宠物饮食偏好、行为习惯、运动量等，以及送养原因、宠物过往经历、情感故事等。" v-model="form.story" maxlength="200" rows="5" show-word-limit></el-input>
           </el-form-item>
 
           <el-divider content-position="left">联系方式</el-divider>
-          <el-form-item label="所在地"
-                        prop="address">
-            <el-select v-model="form.address"
-                       placeholder="请选择所在地（仅限上海市）"
-                       value=""
-                       style="width:100%;">
-              <el-option v-for="value in addressRange"
-                         :label="value"
-                         :value="value"></el-option>
+          <el-form-item label="所在地" prop="address">
+            <el-select v-model="form.address" placeholder="请选择所在地（仅限上海市）" value="" style="width:100%;">
+              <el-option v-for="value in addressRange" :label="value" :value="value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="微信号"
-                        prop="wxId">
-            <el-input v-model="form.wxId"
-                      placeholder="请输入微信号"></el-input>
+          <el-form-item label="微信号" prop="wxId">
+            <el-input v-model="form.wxId" placeholder="请输入微信号"></el-input>
           </el-form-item>
-          <el-form-item label="手机号"
-                        prop="mobilePhone">
-            <el-input v-model="form.mobilePhone"
-                      placeholder="请输入手机号"></el-input>
+          <el-form-item label="手机号" prop="mobilePhone">
+            <el-input v-model="form.mobilePhone" placeholder="请输入手机号"></el-input>
+          </el-form-item>
+          <el-divider content-position="left">绑定发布用户账号</el-divider>
+          <el-form-item label="发布用户" prop="createBy">
+            <el-select v-model="form.createBy" placeholder="选择发布此信息的用户" style="width:100%;">
+              <el-option v-for="item in orgUserList" :label="item.nickName" :value="item.userId">
+                <span style="float: left">昵称：{{ item.nickName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">手机号：{{ item.mobilePhone }}</span>
+              </el-option>
+            </el-select>
           </el-form-item>
 
-          <el-button class="form-sumbit"
-                     type="primary"
-                     @click="adoptNew">提 交</el-button>
+          <el-button class="form-sumbit" type="primary" @click="adoptNew">提 交</el-button>
         </el-form>
         <br>
       </el-card>
@@ -221,12 +135,13 @@
 
 <script>
 import { adoptNew, adoptDetail, adoptEdit } from "@/api/adoptRelease/adoptReleaseApi"
+import * as orgService from '@/api/orgManage/orgManageApi'
 import util from '@/libs/util'
 var orgId = ''
 
 export default {
   name: "AdoptionNew",
-  data () {
+  data() {
     let validMobile = (rule, value, callback) => {
       let reg = /^1(3|4|5|7|8)\d{9}$/;
       if (!reg.test(value)) {
@@ -238,7 +153,8 @@ export default {
     return {
       pageLoading: false,
       pageType: "",
-      actionUrl: "https://www.linchongpets.com/lpCmsTest/oss/image",
+      actionUrl: '/api/oss/image/backend',
+      picturePrefix: util.picturePath,
       form: {
         mediaList: "", //宠物照片
 
@@ -264,15 +180,16 @@ export default {
         wxId: "", //微信号
         mobilePhone: "", //手机号
 
-        createBy: util.cookies.get('userId'),
+        createBy: '',
         orgId: util.cookies.get('orgId'),
       },
       picArr: [],
+      orgUserList: [],
       fileList: [],
       dialogImageUrl: '',
       dialogVisible: false,
       canUpload: true,
-      ossData: { 'userId ': util.cookies.get('userId'), 'ossZone ': 'adopt' },
+      ossData: { 'userId ': util.cookies.get('userId'), 'ossZone ': 'adoption' },
       ageRange: ['不详', '0-3个月', '4-6个月', '7-12个月', '1岁', '2岁', '3岁', '4岁', '5岁', '6岁', '7岁',
         '8岁', '9岁', '10岁', '11岁', '12岁', '13岁', '14岁', '15岁', '16岁', '17岁', '18岁', '19岁', '20岁'],
       petCharacteristic: [
@@ -416,6 +333,9 @@ export default {
         address: [
           { required: true, message: '请选择address', trigger: 'change' },
         ],
+        createBy: [
+          { required: true, message: '请选择发布用户', trigger: 'change' },
+        ],
         wxId: [
           { required: true, message: '请填写微信号', trigger: 'blur' },
         ],
@@ -426,39 +346,42 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     orgId = util.cookies.get("orgId")
-    if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
-      this.$router.push({
-        name: 'login'
-      })
-      return
-    }
     this.pageType = this.$route.query.type;
     if (this.pageType === "edit") {
       this.adoptDetail()
     }
+    this.getOrgUserList()
   },
   methods: {
-    adoptDetail () {
+    getOrgUserList() {
+      this.orgUserList = []
+      let data = {
+        orgId: orgId
+      };
+      orgService.listOrgUsers(data).then(res => {
+        this.orgUserList = res
+      })
+    },
+    adoptDetail() {
       //清空遗留数据
       this.picArr = []
       this.fileList = []
       this.requirementsText = ''
       let data = {
-        petId: this.$route.query.petId,
-        userId: util.cookies.get("userId")
+        petId: this.$route.query.petId
       };
       this.pageLoading = true;
       adoptDetail(data).then(res => {
         this.pageLoading = false;
         console.log(res.petInfo)
-        this.form = JSON.parse(JSON.stringify(res.petInfo))
+        this.form = JSON.parse(JSON.stringify(res))
         this.form.mediaList.forEach(_data => {
           let file = {
             name: '',
             mediaId: _data.mediaId,
-            url: "https://pic.linchongpets.com/" + _data.mediaPath
+            url: this.picturePrefix + _data.mediaPath
           }
           this.fileList.push(file)
         });
@@ -479,7 +402,7 @@ export default {
         this.form.adoptRequirements = requirementsArr
       });
     },
-    adoptNew () {
+    adoptNew() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.picArr.length == 0) {
@@ -517,7 +440,6 @@ export default {
           formData.mediaList = JSON.parse(formData.mediaList);
           formData.petCharacteristic = JSON.stringify(petCharacteristicArr);
           formData.adoptRequirements = JSON.stringify(adoptRequirementsArr);
-          formData.createBy = util.cookies.get('userId');
           formData.orgId = util.cookies.get('orgId');
           this.pageLoading = true;
           if (this.pageType === "edit") {
@@ -548,7 +470,7 @@ export default {
         }
       })
     },
-    handleRemove (file, fileList) {
+    handleRemove(file, fileList) {
       console.log(file)
       let tempMediaList = JSON.parse(this.form.mediaList)
       tempMediaList.forEach(picItem => {
@@ -564,11 +486,11 @@ export default {
         }
       }
     },
-    handlePictureCardPreview (file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleSuccess (response, file, fileList) {
+    handleSuccess(response, file, fileList) {
       this.canUpload = true
       console.log(file)
       let picFile = {
@@ -584,7 +506,7 @@ export default {
       tempMediaList.push(picFile)
       this.form.mediaList = JSON.stringify(tempMediaList)
     },
-    handleBefore () {
+    handleBefore() {
       if (this.picArr.length > 5) {
         alert("图片最多上传6张！");
         return false
