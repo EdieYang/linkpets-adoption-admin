@@ -21,19 +21,43 @@
           <el-form-item label-width="0">
             <el-row :gutter="20" v-if="!isPreview">
               <el-col :span="8">
-                <div class="box-content" @click="addSingle">
+                <el-button
+                  plain
+                  type="primary"
+                  icon="el-icon-success"
+                  style="width:100%;"
+                  @click="addSingle"
+                  >添加单选问题</el-button
+                >
+                <!-- <div class="box-content" >
                   <span class="single-tag">单选题</span>
-                </div>
+                </div> -->
               </el-col>
               <el-col :span="8">
-                <div class="box-content" @click="addMultiple">
+                <el-button
+                  plain
+                  type="primary"
+                  icon="el-icon-s-operation"
+                  style="width:100%;"
+                  @click="addMultiple"
+                  >添加多选问题</el-button
+                >
+                <!-- <div class="box-content" @click="addMultiple">
                   <span class="multiple-tag">多选题</span>
-                </div>
+                </div> -->
               </el-col>
               <el-col :span="8">
-                <div class="box-content" @click="addFill">
+                <el-button
+                  plain
+                  type="primary"
+                  icon="el-icon-edit"
+                  style="width:100%;"
+                  @click="addFill"
+                  >添加填空题</el-button
+                >
+                <!-- <div class="box-content" @click="addFill">
                   <span class="fill-tag">填空题</span>
-                </div>
+                </div> -->
               </el-col>
             </el-row>
             <draggable v-model="topics">
@@ -184,7 +208,7 @@
               >
               <el-button
                 class="btn-style"
-                type="primary"
+                type="success"
                 @click="handlePreview"
                 v-if="!isPreview"
                 >预览</el-button
