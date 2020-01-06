@@ -312,8 +312,11 @@ export default {
       pageNum = val
       this.listOrg()
     },
-    cancel() {
+    cancel(formName) {
       this.dialogFormVisible = false
+      this.fileList = []
+      this.logoFileList = []
+      this.$refs[formName].resetFields()
     },
     beforeThumbImageUpload(file) {
       const isType =

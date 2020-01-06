@@ -88,15 +88,15 @@
       </el-table-column>
       <el-table-column label="角色" prop="roleCode" width="200">
         <template slot-scope="scope">
-          
-          
-          <el-tag v-for="role in scope.row.sysRoleList" 
+          <el-tag
+            v-for="role in scope.row.sysRoleList"
             v-if="role.roleCode == 'ORG_STAFF'"
             size="mini"
             type="info"
             >组织志愿者</el-tag
           >
-          <el-tag v-for="role in scope.row.sysRoleList" 
+          <el-tag
+            v-for="role in scope.row.sysRoleList"
             v-if="role.roleCode == 'ORG_ADMIN'"
             size="mini"
             type="danger"
@@ -124,26 +124,24 @@
             circle
             @click="delOrgMember(scope.row.userId)"
           ></el-button>
-          <template v-for="role in scope.row.sysRoleList">
           <el-button
-            v-if="role.roleCode != 'ORG_ADMIN'"
+            v-if="!scope.row.isAdmin && scope.row.isAdd == 1"
             type="warning"
-            title="设置组织管理员"
+            title="设置为组织管理员"
             size="mini"
             icon="el-icon-setting"
             circle
             @click="addOrgUserAdminRole(scope.row.sysUserId)"
           ></el-button>
           <el-button
-            v-if="role.roleCode == 'ORG_ADMIN'"
+            v-if="scope.row.isAdmin && scope.row.isAdd == 1"
             type="info"
-            title="设置组织志愿者"
+            title="设置为组织志愿者"
             size="mini"
             icon="el-icon-setting"
             circle
             @click="delOrgUserAdminRole(scope.row.sysUserId)"
           ></el-button>
-          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -190,7 +188,8 @@ export default {
         prop: '',
         order: ''
       },
-      orgAdminRoleId: ''
+      orgAdminRoleId: '',
+      orgUserList: []
     }
   },
   watch: {
@@ -216,8 +215,20 @@ export default {
         mobilePhone: this.searchForm.mobilePhone
       }
       orgService.getOrgUserPage(query).then(data => {
-        this.tableData = data.list
+        var userList = data.list
         this.page.total = data.total
+        userList.forEach(element => {
+          element.isAdmin = false
+          if (element.sysRoleList != null) {
+            element.sysRoleList.forEach(role => {
+              if (role.roleCode == 'ORG_ADMIN') {
+                element.isAdmin = true
+                return
+              }
+            })
+          }
+        })
+        this.tableData = userList
       })
     },
     getOrgTableData() {
@@ -229,8 +240,20 @@ export default {
         orgId: this.org.orgId
       }
       orgService.getOrgUserPage(query).then(data => {
-        this.tableData = data.list
+        var userList = data.list
         this.page.total = data.total
+        userList.forEach(element => {
+          element.isAdmin = false
+          if (element.sysRoleList != null) {
+            element.sysRoleList.forEach(role => {
+              if (role.roleCode == 'ORG_ADMIN') {
+                element.isAdmin = true
+                return
+              }
+            })
+          }
+        })
+        this.tableData = userList
       })
     },
     handleSearchFormSubmit() {
