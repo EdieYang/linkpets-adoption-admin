@@ -101,6 +101,10 @@ service.interceptors.response.use(
           // TOKEN验证失败
           errorCreate(`创建组织账号失败`)
           break
+          case 30010:
+          errorCreate(`${dataAxios.msg}`)
+          break
+          
         default:
           // 不是正确的 code
           errorCreate(`${dataAxios.message}: ${response.config.url}`)

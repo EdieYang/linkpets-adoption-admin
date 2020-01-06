@@ -224,7 +224,6 @@ export default {
     return {
       pageLoading: false,
       pageType: "",
-      actionUrl: "https://www.linchongpets.com/lpCmsTest/oss/image",
       form: {
         groupId: "",
         activityTitle: "",
@@ -337,7 +336,8 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       fileList: [],
-      ossData: { "userId ": util.cookies.get("userId"), "ossZone ": "adopt" },
+      actionUrl: '/api/oss/image/backend',
+      ossData: { "ossZone ": "group/activity" },
       activityTypeOptions: [
         {
           label: "线下活动",
@@ -528,7 +528,7 @@ export default {
     },
     addQuestionnaire() {
       this.$router.push({
-        path: "/questionnaireMgn/new",
+        path: "/group/questionnaire/new",
         query: { type: "new" }
       });
     },

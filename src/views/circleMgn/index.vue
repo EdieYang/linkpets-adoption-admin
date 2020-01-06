@@ -67,7 +67,7 @@
       <el-table-column label="圈子banner图"
                        align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.groupBanner"
+          <img :src="picturePrefix+scope.row.groupBanner"
                alt="暂无图片"
                style="width: 90px;height: 90px;border-radius:5px;">
         </template>
@@ -314,12 +314,12 @@ export default {
         ]
       },
       formLabelWidth: '120px',
-      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image',
+      actionUrl: '/api/oss/image/backend',
+      picturePrefix: util.picturePath,
       multiple: false,
       limit: 1,
       uploadData: {
-        userId: util.cookies.get("userId"),
-        ossZone: "organization"
+        ossZone: "group"
       },
       fileList: [],
       disableUpload: false
@@ -405,7 +405,7 @@ export default {
     },
     handleSuccess (response, file, fileList) {
       console.log(response)
-      this.form.groupBanner = "https://pic.linchongpets.com/" + response.data
+      this.form.groupBanner = response.data
       this.disableUpload = true
     },
     handleRemove (file, fileList) {
