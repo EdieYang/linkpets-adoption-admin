@@ -208,7 +208,7 @@ import {
 } from '@/api/activityManage/activityManageApi'
 import { questionnaireListAll } from '@/api/questionnaireManage/questionnaireManageApi'
 import util from '@/libs/util'
-var orgId = ''
+ 
 
 export default {
   name: 'ActivityNew',
@@ -341,11 +341,11 @@ export default {
       picturePrefix: util.picturePath,
       activityTypeOptions: [
         {
-          label: '线下活动',
+          label: '线上活动',
           value: '1'
         },
         {
-          label: '线上活动',
+          label: '线下活动',
           value: '2'
         }
       ],
@@ -419,13 +419,6 @@ export default {
     }
   },
   mounted() {
-    orgId = util.cookies.get('orgId')
-    if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
-      this.$router.push({
-        name: 'login'
-      })
-      return
-    }
     this.pageType = this.$route.query.type
     if (this.pageType === 'edit') {
       this.activityDetail()
@@ -458,7 +451,7 @@ export default {
         this.disableUpload = this.form.activityBanner !== ''
         let time = this.form.activityPickTime.split(',')
         time.map(item => {
-          this.form.joinTime.push([item.split('-')[0], item.split('-')[1]])
+          this.form.joinTime.push([item.split(' - ')[0], item.split(' - ')[1]])
         })
       })
     },
