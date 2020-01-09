@@ -6,7 +6,7 @@ import request from '@/plugin/axios'
  */
 export function questionnaireList(data) {
   return request({
-    url: '/adopt/questionnaire/page',
+    url: '/questionnaire/page',
     method: 'get',
     params: data
   })
@@ -18,7 +18,7 @@ export function questionnaireList(data) {
  */
 export function questionnaireNew(data) {
   return request({
-    url: '/adopt/questionnaire',
+    url: '/questionnaire',
     method: 'post',
     data
   })
@@ -30,7 +30,7 @@ export function questionnaireNew(data) {
  */
 export function questionnaireEdit(data) {
   return request({
-    url: '/adopt/questionnaire',
+    url: '/questionnaire',
     method: 'put',
     data
   })
@@ -42,7 +42,7 @@ export function questionnaireEdit(data) {
  */
 export function questionnaireDetail(data) {
   return request({
-    url: '/adopt/questionnaire',
+    url: '/questionnaire',
     method: 'get',
     params: data
   })
@@ -54,7 +54,7 @@ export function questionnaireDetail(data) {
  */
 export function questionnaireDelete(data) {
   return request({
-    url: '/adopt/questionnaire',
+    url: '/questionnaire',
     method: 'delete',
     params: data
   })
@@ -66,7 +66,7 @@ export function questionnaireDelete(data) {
  */
 export function questionnaireListAll(data) {
   return request({
-    url: '/adopt/questionnaire/list',
+    url: '/questionnaire/list',
     method: 'get',
     params: data
   })

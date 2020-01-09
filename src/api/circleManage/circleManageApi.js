@@ -6,7 +6,7 @@ import request from '@/plugin/axios'
  */
 export function circleList(data) {
   return request({
-    url: '/adopt/group/page',
+    url: '/group/page',
     method: 'get',
     params: data
   })
@@ -18,7 +18,7 @@ export function circleList(data) {
  */
 export function circleListAll(data) {
   return request({
-    url: '/adopt/group/list',
+    url: '/group/list',
     method: 'get',
     params: data
   })
@@ -30,7 +30,7 @@ export function circleListAll(data) {
  */
 export function circleNew(data) {
   return request({
-    url: '/adopt/group',
+    url: '/group',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function circleNew(data) {
  */
 export function circleEdit(data) {
   return request({
-    url: '/adopt/group',
+    url: '/group',
     method: 'put',
     data
   })

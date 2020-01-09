@@ -6,7 +6,7 @@ import request from '@/plugin/axios'
  */
 export function postList(data) {
   return request({
-    url: '/adopt/group/post/page',
+    url: '/group/post/page',
     method: 'get',
     params: data
   })
@@ -18,7 +18,7 @@ export function postList(data) {
  */
 export function postDelete(data) {
   return request({
-    url: '/adopt/group/post',
+    url: '/group/post',
     method: 'delete',
     params: data
   })
