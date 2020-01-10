@@ -56,7 +56,7 @@
       </el-table-column>
       <el-table-column label="实名状态" align="center" width="120">
         <template slot-scope="scope">
-          {{ scope.row.authenticated == 0 ? "未实名" : "已实名" }}
+          {{ scope.row.authenticated == 0 ? '未实名' : '已实名' }}
         </template>
       </el-table-column>
       <el-table-column
@@ -137,6 +137,9 @@
           <el-input
             v-model="rewardPoints"
             type="number"
+            step="1"
+            min="0"
+            @change="handlePointChange"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -145,26 +148,53 @@
         <el-button
           type="primary"
           @click="
-            addUserPoints();
-            pointsDialogFormVisible = false;
+            addUserPoints()
+            pointsDialogFormVisible = false
           "
           >充 值</el-button
         >
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="用户备注"
+      :visible.sync="memoDialogFormVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form :model="form" :rules="rules" ref="ruleForm">
+        <el-form-item label="填写用户备注" label-width="120px" prop="memo">
+          <el-input
+            v-model="form.memo"
+            autocomplete="off"
+            max-length="20"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancelRegisterDialogFormVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="addUserMemo('ruleForm')"
+          >提 交</el-button
+        >
+      </div>
+    </el-dialog>
+
     <user-detail :userId="userId" v-model="userDetailDialogVisible" />
   </d2-container>
 </template>
 
 <script>
-import * as userService from "@/api/user/userApi";
-import util from "@/libs/util";
-import userDetail from "./userDetail";
-var pageNum = 1;
-var pageSize = 10;
+import * as userService from '@/api/user/userApi'
+import util from '@/libs/util'
+import userDetail from './userDetail'
+var pageNum = 1
+var pageSize = 10
 
 export default {
-  name: "UserIndex",
+  name: 'UserIndex',
   components: { userDetail },
   data() {
     return {
@@ -173,27 +203,38 @@ export default {
       total: 0,
       authenticateOptions: [
         {
-          label: "未实名",
-          value: "0"
+          label: '未实名',
+          value: '0'
         },
         {
-          label: "已实名",
-          value: "1"
+          label: '已实名',
+          value: '1'
         }
       ],
       formInline: {
-        wxAccount: "",
-        mobilePhone: "",
-        authenticated: ""
+        wxAccount: '',
+        mobilePhone: '',
+        authenticated: ''
       },
       picturePrefix: util.picturePath,
-      userId:"",
-      userDetailDialogVisible:false,
-      pointsDialogFormVisible:false
-    };
+      userId: '',
+      rewardPoints: 0,
+      form: {
+        memo: ''
+      },
+      userDetailDialogVisible: false,
+      pointsDialogFormVisible: false,
+      memoDialogFormVisible: false,
+      rules: {
+        memo: [
+          { required: true, message: '请输入用户备注', trigger: 'blur' },
+          { max: 20, message: '小于20个字符', trigger: 'blur' }
+        ]
+      }
+    }
   },
   mounted() {
-    this.getUserPage();
+    this.getUserPage()
   },
   methods: {
     getUserPage() {
@@ -203,65 +244,110 @@ export default {
         wxAccount: this.formInline.wxAccount,
         mobilePhone: this.formInline.mobilePhone,
         authenticated: this.formInline.authenticated
-      };
+      }
       userService.userPage(data).then(res => {
-        console.log(res.list);
-        this.data = res.list;
-        this.currentPage = res.pageNum;
-        this.total = res.total;
-      });
+        console.log(res.list)
+        this.data = res.list
+        this.currentPage = res.pageNum
+        this.total = res.total
+      })
     },
-
+    handlePointChange(val) {
+      this.rewardPoints = this.clearNoNum(value)
+    },
+    clearNoNum(value) {
+      value = value.replace(/[^\d.]/g, '') //清除“数字”和“.”以外的字符
+      value = value.replace(/\.{2,}/g, '.') //只保留第一个. 清除多余的
+      value = value
+        .replace('.', '$#$')
+        .replace(/\./g, '')
+        .replace('$#$', '.')
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3') //只能输入两个小数
+      if ((value.indexOf('.') < 0 && value != '') || value.indexOf('.') == 0) {
+        //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+        value = parseFloat(value)
+      }
+      if (value < 0) {
+        value = 0 - value
+      }
+      return value
+    },
     handleSizeChange(val) {
-      pageSize = val;
-      this.getUserPage();
+      pageSize = val
+      this.getUserPage()
     },
     handleCurrentChange(val) {
-      pageNum = val;
-      this.getUserPage();
+      pageNum = val
+      this.getUserPage()
     },
     search() {
-      this.getUserPage();
+      this.getUserPage()
     },
     userDetail(id) {
-      this.userId = id;
-      this.userDetailDialogVisible = true;
+      this.userId = id
+      this.userDetailDialogVisible = true
     },
     addPoints(userId) {
-      this.userId = userId;
-      this.pointsDialogFormVisible = true;
+      this.userId = userId
+      this.pointsDialogFormVisible = true
     },
     addUserPoints() {
       let data = {
         userId: this.userId,
-        channel: 7,
-        targetId: this.activityId
-      };
+        channel: 10,
+        targetId: '',
+        points: this.rewardPoints
+      }
       userService.addUserPointStatement(data).then(res => {
         if (res != 0) {
           this.$notify({
-            title: "操作成功",
-            message: "添加积分",
-            type: "success"
-          });
+            title: '操作成功',
+            message: '添加积分',
+            type: 'success'
+          })
         } else {
           this.$notify({
-            title: "操作失败",
-            message: "已添加积分",
-            type: "error"
-          });
+            title: '操作失败',
+            message: '已添加积分',
+            type: 'error'
+          })
         }
-        this.getGroupActivityRegisterPage();
-      });
+        this.rewardPoints = 0
+        this.getUserPage()
+      })
+    },
+    addMemo(userId) {
+      this.userId = userId
+      this.memoDialogFormVisible = true
+    },
+    addUserMemo(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let data = {
+            userId: this.userId,
+            memo: this.form.memo
+          }
+          userService.updateUserMemo(data).then(res => {
+            this.$notify({
+              title: '操作成功',
+              message: '已添加备注',
+              type: 'success'
+            })
+            this.memoDialogFormVisible = false
+            this.form.memo = ''
+            this.getUserPage()
+          })
+        }
+      })
     },
     reset() {
-      this.formInline.wxAccount = "";
-      this.formInline.mobilePhone = "";
-      this.formInline.authenticated = "";
-      this.getUserPage();
+      this.formInline.wxAccount = ''
+      this.formInline.mobilePhone = ''
+      this.formInline.authenticated = ''
+      this.getUserPage()
     }
   }
-};
+}
 </script>
 
 <style scoped>

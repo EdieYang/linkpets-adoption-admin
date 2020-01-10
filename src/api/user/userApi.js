@@ -6,11 +6,7 @@ import request from '@/plugin/axios'
  * @param data
  */
 export function userPage(data) {
-  return request({
-    url: '/users/page',
-    method: 'get',
-    params: data
-  })
+    return request({url: '/users/page', method: 'get', params: data})
 }
 
 /**
@@ -18,11 +14,7 @@ export function userPage(data) {
  * @param data
  */
 export function userDetail(data) {
-  return request({
-    url: '/users/user',
-    method: 'get',
-    params: data
-  })
+    return request({url: '/users/user', method: 'get', params: data})
 }
 
 /**
@@ -30,9 +22,13 @@ export function userDetail(data) {
  * @param data
  */
 export function addUserPointStatement(data) {
-  return request({
-    url: '/pointStatement',
-    method: 'post',
-    params: data
-  })
+    return request({url: '/pointStatement', method: 'post', params: data})
+}
+
+/**
+ * 添加用户系统备注
+ * @param data
+ */
+export function updateUserMemo(data) {
+    return request({url: '/users/user/memo', method: 'put', params: data})
 }
