@@ -148,6 +148,21 @@
               "
             ></el-button>
           </el-tooltip>
+          <el-tooltip
+            content="详情"
+            placement="top-start"
+            effect="light"
+          >
+            <el-button
+              type="warning"
+              icon="el-icon-reading"
+              circle
+              size="small"
+              @click="
+                detail(scope.row.id)
+              "
+            ></el-button>
+          </el-tooltip>
           <el-tooltip content="编辑" placement="top-start" effect="light">
             <el-button
               type="success"
@@ -274,6 +289,12 @@ export default {
     },
     addActivity() {
       this.$router.push({ path: '/group/activity/new', query: { type: 'new' } })
+    },
+    detail(val){
+       this.$router.push({
+        path: '/group/activity/detail',
+        query: { activityId: val}
+      })
     },
     edit(val) {
       this.$router.push({

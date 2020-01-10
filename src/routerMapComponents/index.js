@@ -83,6 +83,11 @@ let componentMaps = {
       /* webpackChunkName: "user" */
       '@/views/activityMgn/new'
     ),
+    activityDetail: () =>
+    import(
+      /* webpackChunkName: "user" */
+      '@/views/activityMgn/detail'
+    ),
   questionnaireIndex: () =>
     import(
       /* webpackChunkName: "user" */
