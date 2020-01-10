@@ -118,4 +118,7 @@ export default {
   z-index: -9999;
   opacity: 0;
 }
+.el-form-item__content {
+  line-height: 1
+}
 </style>

@@ -262,8 +262,6 @@ export default {
             'underline',
             'fontborder',
             'strikethrough',
-            'superscript',
-            'subscript',
             'removeformat',
             'formatmatch',
             'autotypeset',
@@ -298,7 +296,6 @@ export default {
             'touppercase',
             'tolowercase',
             '|',
-            'link',
             'unlink',
             'anchor',
             '|',
@@ -307,10 +304,8 @@ export default {
             'imageright',
             'imagecenter',
             '|',
-            'emotion',
             'map',
             'insertframe',
-            'insertcode',
             'template',
             '|',
             'horizontal',
@@ -503,11 +498,13 @@ export default {
     handlePreview() {
       if (!this.isPreview) {
         this.isPreview = true
+        document.getElementsByName("editorValue").style.display = 'none'
       }
     },
     handleCancel() {
       if (this.isPreview) {
         this.isPreview = false
+        document.getElementsByName("editorValue").style.display = 'inline'
       } else {
         this.$router.back()
       }
@@ -628,5 +625,10 @@ export default {
 }
 .desc {
   margin-top: -14px;
+}
+</style>
+<style>
+.el-form-item__content {
+  line-height: 1
 }
 </style>

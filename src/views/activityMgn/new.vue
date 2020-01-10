@@ -1,5 +1,5 @@
 <template>
-  <d2-container better-scroll>
+  <d2-container>
     <div style="width:100%;">
       <el-card v-loading="pageLoading">
         <el-form
@@ -84,7 +84,7 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="活动所在市区" prop="activityArea">
+          <el-form-item label="活动所在市区" prop="activityArea" :required="form.activityType === '2'" :show-message="false">
             <el-select
               v-model="form.activityArea"
               placeholder="请选择所在地（仅限上海市）"
@@ -97,7 +97,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="活动地址" prop="activityAddress">
+          <el-form-item label="活动地址" prop="activityAddress" :required="form.activityType === '2'" :show-message="false">
             <el-input
               v-model="form.activityAddress"
               placeholder="请输入活动地址"
@@ -256,8 +256,6 @@ export default {
             'underline',
             'fontborder',
             'strikethrough',
-            'superscript',
-            'subscript',
             'removeformat',
             'formatmatch',
             'autotypeset',
@@ -292,7 +290,6 @@ export default {
             'touppercase',
             'tolowercase',
             '|',
-            'link',
             'unlink',
             'anchor',
             '|',
@@ -301,10 +298,8 @@ export default {
             'imageright',
             'imagecenter',
             '|',
-            'emotion',
             'map',
             'insertframe',
-            'insertcode',
             'template',
             '|',
             'horizontal',
@@ -392,12 +387,6 @@ export default {
         ],
         applyTime: [
           { required: true, message: '请选择活动报名时间', trigger: 'change' }
-        ],
-        activityArea: [
-          { required: true, message: '请选择活动所在市区', trigger: 'change' }
-        ],
-        activityAddress: [
-          { required: true, message: '请输入活动地址', trigger: 'blur' }
         ],
         activityCost: [
           { required: true, message: '请输入消耗积分', trigger: 'change' }
@@ -568,5 +557,8 @@ export default {
 <style>
 .disableUpload .el-upload {
   display: none;
+}
+.el-form-item__content {
+  line-height: 1
 }
 </style>
