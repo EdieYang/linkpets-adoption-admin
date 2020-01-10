@@ -83,7 +83,7 @@ let componentMaps = {
       /* webpackChunkName: "user" */
       '@/views/activityMgn/new'
     ),
-    activityDetail: () =>
+  activityDetail: () =>
     import(
       /* webpackChunkName: "user" */
       '@/views/activityMgn/detail'
@@ -102,6 +102,11 @@ let componentMaps = {
     import(
       /* webpackChunkName: "user" */
       '@/views/postMgn'
+    ),
+  userIndex: () =>
+    import(
+      /* webpackChunkName: "user" */
+      '@/views/userCenter/user/index'
     )
 }
 files.keys().forEach(key => {
