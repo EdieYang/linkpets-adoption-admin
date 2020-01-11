@@ -11,7 +11,7 @@ let publicPath = process.env.VUE_APP_BASE_URL
 
 module.exports = {
   publicPath: publicPath,
-  // baseUrl:publicPath, // 根据你的实际情况更改这里
+  // baseUrl: '', // 根据你的实际情况更改这里
   lintOnSave: true,
   devServer: {
     publicPath: publicPath, // 和 publicPath 保持一致

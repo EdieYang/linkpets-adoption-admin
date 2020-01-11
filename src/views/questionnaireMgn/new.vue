@@ -5,7 +5,7 @@
         <el-form ref="form" label-width="120px" label-position="left">
           <el-form-item label="问卷标题" required>
             <el-col :span="15">
-              <div v-if="isPreview">{{ title }}</div>
+              <p v-if="isPreview">{{ title }}</p>
               <el-input v-else v-model="title" placeholder="请输入问卷标题" />
             </el-col>
           </el-form-item>
@@ -77,7 +77,7 @@
                     <el-col
                       :class="{ 'show-hover': !isPreview }"
                       :span="18"
-                      style="display:flex;position:relative;"
+                      style="display:flex;position:relative;display:flex;flex-direction:row;align-items: center"
                     >
                       <input
                         type="text"
@@ -498,13 +498,13 @@ export default {
     handlePreview() {
       if (!this.isPreview) {
         this.isPreview = true
-        document.getElementsByName("editorValue").style.display = 'none'
+        document.getElementsByName('editorValue').style.display = 'none'
       }
     },
     handleCancel() {
       if (this.isPreview) {
         this.isPreview = false
-        document.getElementsByName("editorValue").style.display = 'inline'
+        document.getElementsByName('editorValue').style.display = 'inline'
       } else {
         this.$router.back()
       }
@@ -561,6 +561,8 @@ export default {
 }
 .blue-text {
   color: #409eff;
+  cursor: pointer;
+  margin-top: 10px;
 }
 .single-icon {
   background: url('../../images/btn_round.png') no-repeat left center;
@@ -624,11 +626,11 @@ export default {
   display: inline;
 }
 .desc {
-  margin-top: -14px;
+  margin-top: 14px;
 }
 </style>
 <style>
 .el-form-item__content {
-  line-height: 1
+  line-height: 1;
 }
 </style>

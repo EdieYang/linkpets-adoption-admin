@@ -1,108 +1,57 @@
 <template>
   <d2-container>
     <el-card class="card">
-      <div slot="header"
-           class="clearfix">
+      <div slot="header" class="clearfix">
         <span>总体统计</span>
       </div>
       <div class="statistic-cover">
         <div class="statistic-item">
-          <p class="item-title">成功领养总数</p>
           <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="successAdoptCountTotal"
-                      :options="options" />
+            <ICountUp
+              :delay="delay"
+              :endVal="totalUserCount"
+              :options="options"
+            />
           </p>
+          <p class="item-title">注册用户</p>
         </div>
         <div class="statistic-item">
-          <p class="item-title">发布领养总数</p>
           <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="adoptCountTotal"
-                      :options="options" />
+            <ICountUp
+              :delay="delay"
+              :endVal="loginTodayCount"
+              :options="options"
+            />
           </p>
+          <p class="item-title">今日活跃用户</p>
         </div>
         <div class="statistic-item">
-          <p class="item-title">申请领养总数</p>
           <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="applyCountTotal"
-                      :options="options" />
+            <ICountUp :delay="delay" :endVal="applyCount" :options="options" />
           </p>
-        </div>
-      </div>
-    </el-card>
-    <el-card class="card">
-      <div slot="header"
-           class="clearfix">
-        <span>周统计</span>
-      </div>
-      <div class="statistic-cover">
-        <div class="statistic-item">
-          <p class="item-title">一周内发布领养数</p>
-          <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="adoptCountInWeek"
-                      :options="options" />
-          </p>
+          <p class="item-title">近7天申请领养数</p>
         </div>
         <div class="statistic-item">
-          <p class="item-title">一周内粉丝增长数</p>
           <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="fansCountInWeek"
-                      :options="options" />
+            <ICountUp
+              :delay="delay"
+              :endVal="adoptTotalCount"
+              :options="options"
+            />
           </p>
-        </div>
-        <div class="statistic-item">
-          <p class="item-title">一周内领养申请数</p>
-          <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="applyCountInWeek"
-                      :options="options" />
-          </p>
+          <p class="item-title">平台已送养成功</p>
         </div>
       </div>
     </el-card>
 
-    <el-card class="card">
-      <div slot="header"
-           class="clearfix">
-        <span>月统计</span>
-      </div>
-      <div class="statistic-cover">
-        <div class="statistic-item">
-          <p class="item-title">一个月内成功领养数</p>
-          <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="successAdoptCountInMonth"
-                      :options="options" />
-          </p>
-        </div>
-        <div class="statistic-item">
-          <p class="item-title">一个月内上传照片数</p>
-          <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="galleryCountInMonth"
-                      :options="options" />
-          </p>
-        </div>
-        <div class="statistic-item">
-          <p class="item-title">一个月内发布活动数</p>
-          <p class="item-val">
-            <ICountUp :delay="delay"
-                      :endVal="activityCountInMonth"
-                      :options="options" />
-          </p>
-        </div>
-      </div>
-    </el-card>
-
+    <template>
+      <ve-line :data="chartData"></ve-line>
+    </template>
   </d2-container>
 </template>
 <script>
-import ICountUp from 'vue-countup-v2';
-import { getOrgStatistic } from '@/api/statistic/statisticApi.js'
+import ICountUp from 'vue-countup-v2'
+import * as statisticService from '@/api/statistic/statisticApi.js'
 import util from '@/libs/util'
 
 var orgId = ''
@@ -111,19 +60,13 @@ export default {
   components: {
     ICountUp
   },
-  data () {
+  data() {
     return {
-      delay: 2000,
-      activityCountInMonth: 0,
-      adoptCountInWeek: 0,
-      adoptCountTotal: 0,
-      applyCountInWeek: 0,
-      applyCountTotal: 0,
-      fansCountInWeek: 0,
-      fansCountTotal: 0,
-      galleryCountInMonth: 0,
-      successAdoptCountInMonth: 0,
-      successAdoptCountTotal: 0,
+      delay: 1500,
+      totalUserCount: 0,
+      loginTodayCount: 0,
+      applyCount: 0,
+      adoptTotalCount: 0,
       options: {
         useEasing: true,
         useGrouping: true,
@@ -131,38 +74,49 @@ export default {
         decimal: '.',
         prefix: '',
         suffix: ''
+      },
+      chartData: {
+        columns: ['日期', '访问用户', '申请领养数', '送养宠物数', '发布帖子数'],
+        rows: []
       }
     }
   },
   methods: {
-    getOrgStatistic () {
-      getOrgStatistic(orgId).then(res => {
+    getOrgStatistic() {
+      getOrgStatistic(orgId)
+        .then(res => {
+          console.log(res)
+          this.activityCountInMonth = res.activityCountInMonth
+          this.adoptCountInWeek = res.adoptCountInWeek
+          this.adoptCountTotal = res.adoptCountTotal
+          this.applyCountInWeek = res.applyCountInWeek
+          this.applyCountTotal = res.applyCountTotal
+          this.fansCountInWeek = res.fansCountInWeek
+          this.fansCountTotal = res.fansCountTotal
+          this.galleryCountInMonth = res.galleryCountInMonth
+          this.successAdoptCountInMonth = res.successAdoptCountInMonth
+          this.successAdoptCountTotal = res.successAdoptCountTotal
+        })
+        .catch(err => {
+          // 异常情况
+        })
+    },
+    getStatistic() {
+      statisticService.getStatisticList().then(res => {
         console.log(res)
-        this.activityCountInMonth = res.activityCountInMonth
-        this.adoptCountInWeek = res.adoptCountInWeek
-        this.adoptCountTotal = res.adoptCountTotal
-        this.applyCountInWeek = res.applyCountInWeek
-        this.applyCountTotal = res.applyCountTotal
-        this.fansCountInWeek = res.fansCountInWeek
-        this.fansCountTotal = res.fansCountTotal
-        this.galleryCountInMonth = res.galleryCountInMonth
-        this.successAdoptCountInMonth = res.successAdoptCountInMonth
-        this.successAdoptCountTotal = res.successAdoptCountTotal
-
-      }).catch(err => {
-        // 异常情况
+        this.loginTodayCount = res.loginTodayCount
+        this.totalUserCount = res.totalUserCount
+        this.applyCount = res.applyCount
+        this.chartData.rows = res.nearlyWeekCount
       })
     }
   },
-  mounted: function () {
-    // orgId = util.cookies.get("orgId")
+  mounted: function() {
+    this.getStatistic()
+    // orgId = util.cookies.get('orgId')
     // if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
-    //   this.$router.push({
-    //     name: 'login'
-    //   })
-    //   return
+    //   this.getOrgStatistic()
     // }
-    this.getOrgStatistic()
   }
 }
 </script>
@@ -188,17 +142,15 @@ export default {
 .item-title {
   height: 40px;
   line-height: 40px;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
   text-align: center;
 }
 .item-val {
-  font-size: 44px;
+  font-size: 55px;
   color: #258cf7;
-  font-weight: bold;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 </style>
-

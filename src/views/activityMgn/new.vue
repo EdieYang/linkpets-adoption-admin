@@ -70,7 +70,12 @@
               >
               </el-date-picker>
             </div>
-            <el-button type="primary" round="" size="small" @click="addTime"
+            <el-button
+              type="primary"
+              round=""
+              size="small"
+              @click="addTime"
+              style="margin-top:10px;"
               >添加活动时间</el-button
             >
           </el-form-item>
@@ -84,7 +89,12 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="活动所在市区" prop="activityArea" :required="form.activityType === '2'" :show-message="false">
+          <el-form-item
+            label="活动所在市区"
+            prop="activityArea"
+            :required="form.activityType === '2'"
+            :show-message="false"
+          >
             <el-select
               v-model="form.activityArea"
               placeholder="请选择所在地（仅限上海市）"
@@ -97,7 +107,12 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="活动地址" prop="activityAddress" :required="form.activityType === '2'" :show-message="false">
+          <el-form-item
+            label="活动地址"
+            prop="activityAddress"
+            :required="form.activityType === '2'"
+            :show-message="false"
+          >
             <el-input
               v-model="form.activityAddress"
               placeholder="请输入活动地址"
@@ -208,7 +223,6 @@ import {
 } from '@/api/activityManage/activityManageApi'
 import { questionnaireListAll } from '@/api/questionnaireManage/questionnaireManageApi'
 import util from '@/libs/util'
- 
 
 export default {
   name: 'ActivityNew',
@@ -224,6 +238,7 @@ export default {
     return {
       pageLoading: false,
       pageType: '',
+      activity: '',
       form: {
         groupId: '',
         activityTitle: '',
@@ -337,11 +352,11 @@ export default {
       activityTypeOptions: [
         {
           label: '线上活动',
-          value: '1'
+          value: 1
         },
         {
           label: '线下活动',
-          value: '2'
+          value: 2
         }
       ],
       questionnaireTypeOptions: [],
@@ -409,25 +424,37 @@ export default {
   },
   mounted() {
     this.pageType = this.$route.query.type
+    this.activityId = this.$route.query.activityId
     if (this.pageType === 'edit') {
       this.activityDetail()
     }
     this.getCircleList()
     this.getQuestionnaireList()
   },
+  watch: {
+    '$route.query': function(newVal, oldVal) {
+      this.activityId = newVal.activityId
+      this.pageType = newVal.type
+      if (this.pageType === 'edit') {
+        this.activityDetail()
+      }
+      this.getCircleList()
+      this.getQuestionnaireList()
+    }
+  },
   methods: {
     activityDetail() {
       let data = {
-        activityId: this.$route.query.activityId
+        activityId: this.activityId
       }
       this.pageLoading = true
       activityDetail(data).then(res => {
         this.pageLoading = false
         res.joinTime = []
         this.form = JSON.parse(JSON.stringify(res))
-        this.form.activityShouldVerify = this.form.activityShouldVerify === '1'
+        this.form.activityShouldVerify = this.form.activityShouldVerify === 1
         this.form.activityShouldQuestionnaire =
-          this.form.activityShouldQuestionnaire === '1'
+          this.form.activityShouldQuestionnaire === 1
         this.fileList = [{ url: this.picturePrefix + this.form.activityBanner }]
         this.form.activityTime = [
           this.form.activityStartTime,
@@ -470,19 +497,19 @@ export default {
             pickTime.length - 1
           )
           this.form.activityShouldVerify = this.form.activityShouldVerify
-            ? '1'
-            : '0'
+            ? 1
+            : 0
           this.form.activityShouldQuestionnaire = this.form
             .activityShouldQuestionnaire
-            ? '1'
-            : '0'
+            ? 1
+            : 0
           delete this.form.activityTime
           delete this.form.applyTime
           delete this.form.joinTime
           console.log(this.form)
           this.pageLoading = true
           if (this.pageType === 'edit') {
-            this.form.activityId = this.$route.query.activityId
+            this.form.activityId = this.activityId
             activityEdit(this.form).then(res => {
               console.log(res)
               this.pageLoading = false
@@ -559,6 +586,6 @@ export default {
   display: none;
 }
 .el-form-item__content {
-  line-height: 1
+  line-height: 1;
 }
 </style>

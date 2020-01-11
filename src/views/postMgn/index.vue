@@ -129,7 +129,7 @@
                <div style="padding-left:80px">{{selectPost.postContent}}</div>
                <ul class="img-list">
                 <li v-for="item in selectPost.groupPostImgList" :key="item.sort">
-                  <div class="zoom-img" :style="{'background-image': 'url('+item.imgUrl+')'}"></div>
+                  <div class="zoom-img" :style="{'background-image': 'url('+picturePrefix+item.imgUrl+')'}"></div>
                 </li>
                </ul>
       <div slot="footer"
@@ -171,7 +171,8 @@ export default {
         isValid: ''
       },
       dialogVisible: false,
-      selectPost: {}
+      selectPost: {},
+      picturePrefix: util.picturePath,
     }
   },
   mounted () {
@@ -218,6 +219,11 @@ export default {
         memo: memo
       }
       postDelete(data).then(res => {
+        this.$notify({
+              title: "操作成功",
+              message: "已删除",
+              type: "success"
+            })
         this.getList()
       });
     },

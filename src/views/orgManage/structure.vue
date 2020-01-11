@@ -1,20 +1,16 @@
 <template>
   <d2-container>
-    <template slot="header">
+    <template slot="header" v-if="!orgPermission">
       <div>
-        <el-button
-          type="danger"
-          size="small"
-          round
-          @click="dialogFormVisible = true"
-          >创建组织</el-button
-        >
         <el-button
           type="primary"
           size="small"
           round
-          @click="dialogFormVisible = true"
-          >创建组织账号</el-button
+          @click="
+            crtOrg()
+            dialogFormVisible = true
+          "
+          >创建组织</el-button
         >
       </div>
     </template>
@@ -47,15 +43,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        prop="brief"
-        label="组织简介"
-        align="center"
-        width="200px"
-      >
+      <el-table-column prop="brief" label="组织简介" align="center" width="600">
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-tooltip
             content="修改组织信息"
@@ -255,7 +246,9 @@ export default {
       fileList: [],
       logoFileList: [],
       actionUrl: '/api/oss/image/backend',
-      picturePrefix: util.picturePath
+      picturePrefix: util.picturePath,
+      orgPermission: false,
+      type: 'new'
     }
   },
   methods: {
@@ -303,6 +296,22 @@ export default {
           this.logoFileList.push(file)
         }
       })
+    },
+    getOrgDetail() {
+      let req = {
+        orgId: orgId
+      }
+      orgService.getOrgInfo(req).then(res => {
+        var orgInfo = res
+        this.currentPage = res.pageNum
+        this.total = res.total
+        var list = []
+        list.push(orgInfo)
+        this.tableData = list
+      })
+    },
+    crtOrg() {
+      this.type = 'new'
     },
     handleSizeChange(val) {
       pageSize = val
@@ -356,7 +365,7 @@ export default {
     save() {
       this.$refs['ruleForm'].validate(valid => {
         if (valid) {
-          if (orgId != '') {
+          if (orgId != '' && this.type == 'edit') {
             this.editOrg(orgId)
             return
           }
@@ -369,6 +378,8 @@ export default {
           orgService.saveOrgInfo(req).then(res => {
             this.dialogFormVisible = false
             this.$message.success('创建成功')
+            orgId = ''
+            this.cancel('ruleForm')
             this.listOrg()
           })
         }
@@ -395,6 +406,7 @@ export default {
     edit(id) {
       orgId = id
       this.getOrgInfo(id)
+      this.type = 'edit'
       this.dialogFormVisible = true
     },
     editOrg(id) {
@@ -408,7 +420,13 @@ export default {
       orgService.uptOrgInfo(req).then(res => {
         this.dialogFormVisible = false
         this.$message.success('更新成功')
-        this.listOrg()
+        this.cancel('ruleForm')
+        if (!this.orgPermission) {
+          orgId = ''
+          this.listOrg()
+        } else {
+          this.getOrgDetail()
+        }
       })
     },
     orgMember(id, orgName) {
@@ -421,8 +439,18 @@ export default {
     }
   },
   mounted: function() {
-    pageNum = 1
-    this.listOrg()
+    orgId = util.cookies.get('orgId')
+    if (
+      orgId == '' ||
+      orgId == null ||
+      typeof orgId == 'undefined' ||
+      orgId == 'null'
+    ) {
+      this.listOrg()
+    } else {
+      this.getOrgDetail(orgId)
+      this.orgPermission = true
+    }
   }
 }
 </script>

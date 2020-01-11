@@ -102,7 +102,7 @@
         <template slot-scope="scope">
           <div
             v-for="item in scope.row.activityPickTimeArr"
-            style="margin-bottom:10px;"
+            style="margin-bottom:10px;margin-top:10px;"
           >
             <el-tag> {{ item }}</el-tag>
           </div>
@@ -148,19 +148,13 @@
               "
             ></el-button>
           </el-tooltip>
-          <el-tooltip
-            content="详情"
-            placement="top-start"
-            effect="light"
-          >
+          <el-tooltip content="详情" placement="top-start" effect="light">
             <el-button
               type="warning"
               icon="el-icon-reading"
               circle
               size="small"
-              @click="
-                detail(scope.row.id)
-              "
+              @click="detail(scope.row.id)"
             ></el-button>
           </el-tooltip>
           <el-tooltip content="编辑" placement="top-start" effect="light">
@@ -290,10 +284,10 @@ export default {
     addActivity() {
       this.$router.push({ path: '/group/activity/new', query: { type: 'new' } })
     },
-    detail(val){
-       this.$router.push({
+    detail(val) {
+      this.$router.push({
         path: '/group/activity/detail',
-        query: { activityId: val}
+        query: { activityId: val }
       })
     },
     edit(val) {

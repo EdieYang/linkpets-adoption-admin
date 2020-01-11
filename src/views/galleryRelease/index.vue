@@ -47,7 +47,11 @@ export default {
   data () {
     return {
       tableData: [],
-      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image',
+       uploadData: {
+        ossZone: "organization"
+      },
+      actionUrl: '/api/oss/image/backend',
+      picturePrefix: util.picturePath,
       dialogFormVisible: false,
       form: {
         id: '',
@@ -63,10 +67,6 @@ export default {
       formLabelWidth: '120px',
       dialogImageUrl: '',
       dialogVisible: false,
-      uploadData: {
-        userId: util.cookies.get("userId"),
-        ossZone: "organization"
-      },
       multiple: false,
       fileList: []
     }
@@ -136,7 +136,7 @@ export default {
       console.log(response)
       var tempPic = {
         orgId: orgId,
-        image: "https://pic.linchongpets.com/" + response.data
+        image: response.data
       }
       postGallery(tempPic).then(res => {
         console.log(res)
@@ -148,7 +148,7 @@ export default {
         let file = {
           name: '',
           mediaId: res.id,
-          url: tempPic.image
+          url: this.picturePrefix+tempPic.image
         }
         this.fileList.push(file)
 
@@ -158,9 +158,7 @@ export default {
           message: '上传失败！',
           type: 'error'
         })
-      })
-
-      this.fileList.push()
+      }) 
     },
     handelPreview (file) {
       this.dialogImageUrl = file.url;
@@ -179,7 +177,7 @@ export default {
           let file = {
             name: '',
             mediaId: _data.id,
-            url: _data.image
+            url: this.picturePrefix+_data.image
           }
           this.fileList.push(file)
         });
