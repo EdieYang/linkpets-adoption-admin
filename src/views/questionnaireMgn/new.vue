@@ -498,13 +498,16 @@ export default {
     handlePreview() {
       if (!this.isPreview) {
         this.isPreview = true
-        document.getElementsByName('editorValue').style.display = 'none'
+        Array.prototype.slice.call(document.getElementsByName('editorValue')).map(item => {
+          this.$nextTick(() => {
+          item.style.display = "none"
+         })
+        })
       }
     },
     handleCancel() {
       if (this.isPreview) {
         this.isPreview = false
-        document.getElementsByName('editorValue').style.display = 'inline'
       } else {
         this.$router.back()
       }
