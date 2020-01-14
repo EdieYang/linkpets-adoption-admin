@@ -472,7 +472,7 @@ export default {
       }
       activityRegisterService.getGroupActivityRegisterPage(data).then(res => { 
         this.data = res.list
-        this.csvData = res.list.map(item => {
+        this.csvData =JSON.parse(JSON.stringify(res.list)).map(item => {
           item.isPaid = item.isPaid == 0 ? '未支付' : '已支付'
           item.paymentAmount = -item.paymentAmount
           item.isValid = item.isValid == 1 ? '已报名' : '已取消'
