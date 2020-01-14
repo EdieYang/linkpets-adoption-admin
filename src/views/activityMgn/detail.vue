@@ -126,14 +126,7 @@
               <el-button type="" round="" size="small" @click="reset"
                 >重置</el-button
               >
-              <el-button
-                type="primary"
-                size="small"
-                round=""
-                icon="el-icon-download"
-                @click="downloadRegisterExcel"
-                >下载报名列表</el-button
-              >
+              <d2-export-csv csvTitle="报名列表" :tableData="csvData" style="margin-left:10px" :tableTitle="tableTitle" btnTitle="下载报名列表"></d2-export-csv>
             </el-form-item>
           </el-form>
 
@@ -409,7 +402,39 @@ export default {
           { required: true, message: '请输入取消原因备注', trigger: 'blur' },
           { max: 20, message: '小于20个字符', trigger: 'blur' }
         ]
-      }
+      },
+      csvData: [],
+      tableTitle: [{
+        name: '昵称',
+        key: 'nickName'
+      }, {
+        name: '手机',
+        key: 'mobilePhone'
+      }, {
+        name: '微信',
+        key: 'wxAccount'
+      }, {
+        name: '报名参加时间',
+        key: 'involvementTime'
+      }, {
+        name: '当前用户积分',
+        key: 'points'
+      }, {
+        name: '支付状态',
+        key: 'isPaid'
+      }, {
+        name: '消耗积分',
+        key: 'paymentAmount'
+      }, {
+        name: '报名状态',
+        key: 'isValid'
+      }, {
+        name: '备注',
+        key: 'memo'
+      }, {
+        name: '报名时间',
+        key: 'createDate'
+      }]
     }
   },
   mounted() {
@@ -445,13 +470,18 @@ export default {
         mobilePhone: this.formInline.mobilePhone,
         involvementTime: this.formInline.involvementTime
       }
-      activityRegisterService.getGroupActivityRegisterPage(data).then(res => {
+      activityRegisterService.getGroupActivityRegisterPage(data).then(res => { 
         this.data = res.list
+        this.csvData = res.list.map(item => {
+          item.isPaid = item.isPaid == 0 ? '未支付' : '已支付'
+          item.paymentAmount = -item.paymentAmount
+          item.isValid = item.isValid == 1 ? '已报名' : '已取消'
+          return item
+        })
         this.currentPage = res.pageNum
         this.total = res.total
       })
     },
-    downloadRegisterExcel() {},
     userDetail(id) {
       this.userId = id
       this.userDetailDialogVisible = true
