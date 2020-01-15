@@ -25,7 +25,9 @@ module.exports = {
           '^/api': '' // 代理的路径
         }
       }
-    }
+    },
+    sockHost: 'http://localhost:8080/',
+    disableHostCheck: true,
   },
 
   css: {
@@ -57,7 +59,7 @@ module.exports = {
       // TRAVIS 构建 vue-loader 添加 filename
       .when(
         process.env.VUE_APP_BUILD_MODE === 'TRAVIS' ||
-          process.env.NODE_ENV === 'development',
+        process.env.NODE_ENV === 'development',
         VueFilenameInjector(config, {
           propName: process.env.VUE_APP_SOURCE_VIEWER_PROP_NAME
         })
