@@ -30,7 +30,7 @@
           活动属性：
         </div>
         <div class="item-val">
-          {{ activity.activityType == 1 ? '线上活动' : '线下活动' }}
+          {{ activity.activityType == 1 ? "线上活动" : "线下活动" }}
         </div>
       </div>
       <div class="header-item">
@@ -126,7 +126,13 @@
               <el-button type="" round="" size="small" @click="reset"
                 >重置</el-button
               >
-              <d2-export-csv csvTitle="报名列表" :tableData="csvData" style="margin-left:10px" :tableTitle="tableTitle" btnTitle="下载报名列表"></d2-export-csv>
+              <d2-export-csv
+                csvTitle="报名列表"
+                :tableData="csvData"
+                style="margin-left:10px"
+                :tableTitle="tableTitle"
+                btnTitle="下载报名列表"
+              ></d2-export-csv>
             </el-form-item>
           </el-form>
 
@@ -173,7 +179,7 @@
               <template slot-scope="scope">
                 <div>
                   <el-tag>
-                    {{ scope.row.isPaid == 0 ? '未支付' : '已支付' }}</el-tag
+                    {{ scope.row.isPaid == 0 ? "未支付" : "已支付" }}</el-tag
                   >
                 </div>
               </template>
@@ -191,7 +197,7 @@
               <template slot-scope="scope">
                 <div>
                   <el-tag>
-                    {{ scope.row.isValid == 1 ? '已报名' : '已取消' }}</el-tag
+                    {{ scope.row.isValid == 1 ? "已报名" : "已取消" }}</el-tag
                   >
                 </div>
               </template>
@@ -323,8 +329,8 @@
         <el-button
           type="primary"
           @click="
-            addUserPoints()
-            pointsDialogFormVisible = false
+            addUserPoints();
+            pointsDialogFormVisible = false;
           "
           >充 值</el-button
         >
@@ -362,33 +368,33 @@
 </template>
 
 <script>
-import * as activityService from '@/api/activityManage/activityManageApi'
-import * as activityRegisterService from '@/api/activityManage/activityRegisterApi'
-import * as userService from '@/api/user/userApi'
-import util from '@/libs/util'
-import userDetail from './userDetail'
-var pageNum = 1
-var pageSize = 10
-var orgId = ''
+import * as activityService from "@/api/activityManage/activityManageApi";
+import * as activityRegisterService from "@/api/activityManage/activityRegisterApi";
+import * as userService from "@/api/user/userApi";
+import util from "@/libs/util";
+import userDetail from "./userDetail";
+var pageNum = 1;
+var pageSize = 10;
+var orgId = "";
 
 export default {
-  name: 'ActivityDetail',
+  name: "ActivityDetail",
   components: { userDetail },
   data() {
     return {
-      activityId: '',
+      activityId: "",
       activity: {},
-      activeName: 'first',
+      activeName: "first",
       formInline: {
-        wxAccount: '',
-        mobilePhone: '',
-        involvementTime: ''
+        wxAccount: "",
+        mobilePhone: "",
+        involvementTime: ""
       },
       activityPickTimeArr: [],
       rewardPoints: 0,
-      userId: '',
+      userId: "",
       form: {
-        memo: '系统取消'
+        memo: "系统取消"
       },
       data: [],
       currentPage: 1,
@@ -399,67 +405,87 @@ export default {
       cancelRegisterDialogFormVisible: false,
       rules: {
         memo: [
-          { required: true, message: '请输入取消原因备注', trigger: 'blur' },
-          { max: 20, message: '小于20个字符', trigger: 'blur' }
+          { required: true, message: "请输入取消原因备注", trigger: "blur" },
+          { max: 20, message: "小于20个字符", trigger: "blur" }
         ]
       },
       csvData: [],
-      tableTitle: [{
-        name: '昵称',
-        key: 'nickName'
-      }, {
-        name: '手机',
-        key: 'mobilePhone'
-      }, {
-        name: '微信',
-        key: 'wxAccount'
-      }, {
-        name: '报名参加时间',
-        key: 'involvementTime'
-      }, {
-        name: '当前用户积分',
-        key: 'points'
-      }, {
-        name: '支付状态',
-        key: 'isPaid'
-      }, {
-        name: '消耗积分',
-        key: 'paymentAmount'
-      }, {
-        name: '报名状态',
-        key: 'isValid'
-      }, {
-        name: '备注',
-        key: 'memo'
-      }, {
-        name: '报名时间',
-        key: 'createDate'
-      }]
-    }
+      tableTitle: [
+        {
+          name: "昵称",
+          key: "nickName"
+        },
+        {
+          name: "手机",
+          key: "mobilePhone"
+        },
+        {
+          name: "微信",
+          key: "wxAccount"
+        },
+        {
+          name: "报名参加时间",
+          key: "involvementTime"
+        },
+        {
+          name: "当前用户积分",
+          key: "points"
+        },
+        {
+          name: "支付状态",
+          key: "isPaid"
+        },
+        {
+          name: "消耗积分",
+          key: "paymentAmount"
+        },
+        {
+          name: "报名状态",
+          key: "isValid"
+        },
+        {
+          name: "备注",
+          key: "memo"
+        },
+        {
+          name: "报名时间",
+          key: "createDate"
+        }
+      ]
+    };
   },
   mounted() {
-    this.activityId = this.$route.query.activityId
-    this.getActivityDetail()
-    this.getGroupActivityRegisterPage()
+    this.activityId = this.$route.query.activityId;
+    this.getActivityDetail();
+    this.getGroupActivityRegisterPage();
+  },
+  watch: {
+    "$route.query": function(newVal, oldVal) {
+      this.activityId = newVal.activityId;
+      if (this.activityId != null) {
+        this.getActivityDetail();
+        this.getGroupActivityRegisterPage();
+      }
+    }
   },
   methods: {
     getActivityDetail() {
       let data = {
         activityId: this.activityId
-      }
+      };
       activityService.activityDetail(data).then(res => {
-        this.activity = res
-        this.activityPickTimeArr = []
-        var picArr = res.activityPickTime.split(',')
+        this.activity = res;
+        this.activityPickTimeArr = [];
+        var picArr = res.activityPickTime.split(",");
         picArr.forEach(element => {
           let pickItem = {
             label: element,
             value: element
-          }
-          this.activityPickTimeArr.push(pickItem)
-        })
-        this.rewardPoints = res.activityPoint
-      })
+          };
+          this.activityPickTimeArr.push(pickItem);
+        });
+        this.rewardPoints = res.activityPoint;
+      });
     },
     getGroupActivityRegisterPage() {
       let data = {
@@ -469,53 +495,53 @@ export default {
         wxAccount: this.formInline.wxAccount,
         mobilePhone: this.formInline.mobilePhone,
         involvementTime: this.formInline.involvementTime
-      }
-      activityRegisterService.getGroupActivityRegisterPage(data).then(res => { 
-        this.data = res.list
-        this.csvData =JSON.parse(JSON.stringify(res.list)).map(item => {
-          item.isPaid = item.isPaid == 0 ? '未支付' : '已支付'
-          item.paymentAmount = -item.paymentAmount
-          item.isValid = item.isValid == 1 ? '已报名' : '已取消'
-          return item
-        })
-        this.currentPage = res.pageNum
-        this.total = res.total
-      })
+      };
+      activityRegisterService.getGroupActivityRegisterPage(data).then(res => {
+        this.data = res.list;
+        this.csvData = JSON.parse(JSON.stringify(res.list)).map(item => {
+          item.isPaid = item.isPaid == 0 ? "未支付" : "已支付";
+          item.paymentAmount = -item.paymentAmount;
+          item.isValid = item.isValid == 1 ? "已报名" : "已取消";
+          return item;
+        });
+        this.currentPage = res.pageNum;
+        this.total = res.total;
+      });
     },
     userDetail(id) {
-      this.userId = id
-      this.userDetailDialogVisible = true
+      this.userId = id;
+      this.userDetailDialogVisible = true;
     },
     addPoints(userId) {
-      this.userId = userId
-      this.pointsDialogFormVisible = true
+      this.userId = userId;
+      this.pointsDialogFormVisible = true;
     },
     addUserPoints() {
       let data = {
         userId: this.userId,
         channel: 7,
         targetId: this.activityId
-      }
+      };
       userService.addUserPointStatement(data).then(res => {
         if (res != 0) {
           this.$notify({
-            title: '操作成功',
-            message: '添加积分',
-            type: 'success'
-          })
+            title: "操作成功",
+            message: "添加积分",
+            type: "success"
+          });
         } else {
           this.$notify({
-            title: '操作失败',
-            message: '已添加积分',
-            type: 'error'
-          })
+            title: "操作失败",
+            message: "已添加积分",
+            type: "error"
+          });
         }
-        this.getGroupActivityRegisterPage()
-      })
+        this.getGroupActivityRegisterPage();
+      });
     },
     cancelRegist(userId) {
-      this.userId = userId
-      this.cancelRegisterDialogFormVisible = true
+      this.userId = userId;
+      this.cancelRegisterDialogFormVisible = true;
     },
     cancelUserRegister(formName) {
       this.$refs[formName].validate(valid => {
@@ -524,29 +550,29 @@ export default {
             userId: this.userId,
             memo: this.form.memo,
             activityId: this.activityId
-          }
+          };
           activityRegisterService.delGroupActivityRegister(data).then(res => {
             this.$notify({
-              title: '操作成功',
-              message: '取消报名',
-              type: 'success'
-            })
-            this.cancelRegisterDialogFormVisible = false
-            this.getGroupActivityRegisterPage()
-          })
+              title: "操作成功",
+              message: "取消报名",
+              type: "success"
+            });
+            this.cancelRegisterDialogFormVisible = false;
+            this.getGroupActivityRegisterPage();
+          });
         }
-      })
+      });
     },
     handleSizeChange(val) {
-      pageSize = val
-      this.getGroupActivityRegisterPage()
+      pageSize = val;
+      this.getGroupActivityRegisterPage();
     },
     handleCurrentChange(val) {
-      pageNum = val
-      this.getGroupActivityRegisterPage()
+      pageNum = val;
+      this.getGroupActivityRegisterPage();
     },
     search() {
-      this.getGroupActivityRegisterPage()
+      this.getGroupActivityRegisterPage();
     },
     reset() {
       this.formInline.wxAccount = ''
@@ -561,7 +587,7 @@ export default {
       })
     }
   }
-}
+};
 </script>
 
 <style scoped>

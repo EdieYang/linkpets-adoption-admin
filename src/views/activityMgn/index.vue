@@ -258,7 +258,6 @@ export default {
           let arr = element.activityPickTime.split(',')
           element.activityPickTimeArr = arr
         })
-        debugger
         this.data = activityList
         this.currentPage = res.pageNum
         this.total = res.total
