@@ -553,6 +553,12 @@ export default {
       this.formInline.mobilePhone = ''
       this.formInline.involvementTime = ''
       this.getGroupActivityRegisterPage()
+    },
+    questionnaireAnswer(userId) {
+      this.$router.push({
+        path: '/group/questionnaire/new',
+        query: { userId: userId, type: 'answer', activityId: this.activityId }
+      })
     }
   }
 }

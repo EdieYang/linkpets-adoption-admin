@@ -71,3 +71,15 @@ export function questionnaireListAll(data) {
     params: data
   })
 }
+
+/**
+ * 查询答案详情
+ * @param data
+ */
+export function answerDetail(data) {
+  return request({
+    url: '/questionnaire/answer',
+    method: 'get',
+    params: data
+  })
+}

@@ -135,8 +135,8 @@
                         <input
                           :class="
                             item.questionnaireItemType === 2
-                              ? 'single-icon'
-                              : 'multiple-icon'
+                              ? (option.isCheck ? 'single-icon-check' : 'single-icon')
+                              : (option.isCheck ? 'multiple-icon-check' : 'multiple-icon')
                           "
                           type="text"
                           style="height:36px;border:none;outline:none"
@@ -201,7 +201,7 @@
               </el-form-item>
             </draggable>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="!(isPreview && pageType === 'answer')">
             <div class="btn-wrapper">
               <el-button class="btn-style" type="primary" @click="handleSave"
                 >保存</el-button
@@ -229,7 +229,8 @@ import Vue from 'vue'
 import {
   questionnaireNew,
   questionnaireEdit,
-  questionnaireDetail
+  questionnaireDetail,
+  answerDetail
 } from '@/api/questionnaireManage/questionnaireManageApi'
 import util from '@/libs/util'
 import VueInputAutowidth from 'vue-input-autowidth'
@@ -346,8 +347,16 @@ export default {
     }
     this.pageType = this.$route.query.type
     if (this.pageType === 'edit') {
-      this.questionnaireDetail()
+      this.questionnaireDetail(this.$route.query.questionnaireId)
+    } else if (this.pageType === 'answer') {
+      document.title = '问卷详情'
+      this.answerDetail()
     }
+    Array.prototype.slice.call(document.getElementsByName('editorValue')).map(item => {
+      this.$nextTick(() => {
+      item.style.display = "none"
+      })
+    })
   },
   methods: {
     addSingle: function() {
@@ -512,9 +521,9 @@ export default {
         this.$router.back()
       }
     },
-    questionnaireDetail() {
+    questionnaireDetail(questionnaireId, answerDetail) {
       let data = {
-        questionnaireId: this.$route.query.questionnaireId
+        questionnaireId: questionnaireId
       }
       this.pageLoading = true
       questionnaireDetail(data).then(res => {
@@ -527,6 +536,36 @@ export default {
             item.questionnaireItemContent
           )
         })
+        if (answerDetail) {
+          answerDetail = JSON.parse(answerDetail)
+          this.topics.map(item => {
+            answerDetail.map(answer => {
+              if (item.questionnaireItemId === answer.id) {
+                if (item.questionnaireItemType === 2 || item.questionnaireItemType === 3) {
+                  item.questionnaireItemContent.map(option => {
+                    if (answer.content.split(',').indexOf(option.content) !== -1) {
+                      option.isCheck = true
+                    }
+                  })
+                } else {
+                  item.questionnaireItemContent = answer.content
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    answerDetail() {
+      let data = {
+        userId: this.$route.query.userId,
+        activityId: this.$route.query.activityId
+      }
+      this.pageLoading = true
+      answerDetail(data).then(res => {
+        this.pageLoading = false
+        this.isPreview = true
+        this.questionnaireDetail(res.questionnaireId, res.answerDetail)
       })
     }
   }
@@ -572,8 +611,18 @@ export default {
   background-size: 14px 14px;
   padding-left: 24px;
 }
+.single-icon-check {
+  background: url('../../images/btn_round_check.png') no-repeat left center;
+  background-size: 14px 14px;
+  padding-left: 24px;
+}
 .multiple-icon {
   background: url('../../images/btn_square.png') no-repeat left center;
+  background-size: 14px 14px;
+  padding-left: 24px;
+}
+.multiple-icon-check {
+  background: url('../../images/btn_square_check.png') no-repeat left center;
   background-size: 14px 14px;
   padding-left: 24px;
 }
