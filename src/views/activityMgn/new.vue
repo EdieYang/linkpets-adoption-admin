@@ -70,6 +70,7 @@
               >
               </el-date-picker>
             </div>
+            <div style="margin-top:10px">用户在小程序前端可选择参加的活动日期/一段时间</div>
             <el-button
               type="primary"
               round=""
@@ -521,6 +522,8 @@ export default {
               console.log(res)
               this.pageLoading = false
               this.$message.success('创建成功')
+              this.fileList = []
+              this.disableUpload = false
               this.$refs['form'].resetFields()
               this.$router.go(-1)
             })
