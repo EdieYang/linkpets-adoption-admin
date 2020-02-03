@@ -1,6 +1,7 @@
 import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
+import { showLoading, hideLoading } from './loading'
 import util from '@/libs/util'
 
 // 创建一个错误
@@ -34,14 +35,15 @@ function errorLog(error) {
 }
 // 创建一个 axios 实例
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_API,
-  baseURL: '/api',
+  baseURL: process.env.VUE_APP_API,
+  // baseURL: '/api',
   timeout: 20000 // 请求超时时间
 })
 
 // 请求拦截器
 service.interceptors.request.use(
   config => {
+    showLoading()
     // 在请求发送之前做一些处理
     if (!/^https:\/\/|http:\/\//.test(config.url)) {
       const token = util.cookies.get('token')
@@ -62,6 +64,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   response => {
+    hideLoading()
     // status 是 axios 返回数据中的 status
     const status = response.status
     // dataAxios 是 axios 返回数据中的 data
@@ -101,10 +104,10 @@ service.interceptors.response.use(
           // TOKEN验证失败
           errorCreate(`创建组织账号失败`)
           break
-          case 30010:
+        case 30010:
           errorCreate(`${dataAxios.msg}`)
           break
-          
+
         default:
           // 不是正确的 code
           errorCreate(`${dataAxios.message}: ${response.config.url}`)
@@ -113,6 +116,7 @@ service.interceptors.response.use(
     }
   },
   error => {
+    hideLoading()
     if (error && error.response) {
       switch (error.response.status) {
         case 400:

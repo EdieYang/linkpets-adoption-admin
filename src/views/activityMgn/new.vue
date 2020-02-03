@@ -70,7 +70,9 @@
               >
               </el-date-picker>
             </div>
-            <div style="margin-top:10px">用户在小程序前端可选择参加的活动日期/一段时间</div>
+            <div style="margin-top:10px">
+              (让用户选择，参与活动的时间/时间段)
+            </div>
             <el-button
               type="primary"
               round=""

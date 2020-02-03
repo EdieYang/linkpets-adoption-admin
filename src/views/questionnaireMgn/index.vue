@@ -8,7 +8,7 @@
           round=""
           icon="el-icon-folder-add"
           @click="addQuestionnaire"
-          >新建表单</el-button
+          >新建问卷</el-button
         >
       </div>
     </template>

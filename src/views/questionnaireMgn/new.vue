@@ -29,9 +29,6 @@
                   @click="addSingle"
                   >添加单选问题</el-button
                 >
-                <!-- <div class="box-content" >
-                  <span class="single-tag">单选题</span>
-                </div> -->
               </el-col>
               <el-col :span="8">
                 <el-button
@@ -42,9 +39,6 @@
                   @click="addMultiple"
                   >添加多选问题</el-button
                 >
-                <!-- <div class="box-content" @click="addMultiple">
-                  <span class="multiple-tag">多选题</span>
-                </div> -->
               </el-col>
               <el-col :span="8">
                 <el-button
@@ -55,9 +49,6 @@
                   @click="addFill"
                   >添加填空题</el-button
                 >
-                <!-- <div class="box-content" @click="addFill">
-                  <span class="fill-tag">填空题</span>
-                </div> -->
               </el-col>
             </el-row>
             <draggable v-model="topics">
@@ -87,6 +78,7 @@
                           minWidth: '250px',
                           comfortZone: 0
                         }"
+                        placeholder="请输入题目内容"
                         v-model="item.questionnaireItemTitle"
                         :disabled="isPreview ? true : false"
                       />
@@ -135,8 +127,12 @@
                         <input
                           :class="
                             item.questionnaireItemType === 2
-                              ? (option.isCheck ? 'single-icon-check' : 'single-icon')
-                              : (option.isCheck ? 'multiple-icon-check' : 'multiple-icon')
+                              ? option.isCheck
+                                ? 'single-icon-check'
+                                : 'single-icon'
+                              : option.isCheck
+                              ? 'multiple-icon-check'
+                              : 'multiple-icon'
                           "
                           type="text"
                           style="height:36px;border:none;outline:none"
@@ -145,6 +141,7 @@
                             minWidth: '100%',
                             comfortZone: 0
                           }"
+                          placeholder="请填写选项内容"
                           v-model="option.content"
                           :disabled="isPreview ? true : false"
                         />
@@ -352,50 +349,55 @@ export default {
       document.title = '问卷详情'
       this.answerDetail()
     }
-    Array.prototype.slice.call(document.getElementsByName('editorValue')).map(item => {
-      this.$nextTick(() => {
-      item.style.display = "none"
+    Array.prototype.slice
+      .call(document.getElementsByName('editorValue'))
+      .map(item => {
+        this.$nextTick(() => {
+          item.style.display = 'none'
+        })
       })
-    })
   },
   methods: {
     addSingle: function() {
+      this.$message.success('已添加一个单选题')
       this.topics.push({
-        questionnaireItemTitle: '请输入题目',
+        questionnaireItemTitle: '',
         questionnaireItemType: 2,
         sort: this.topics.length + 1,
         questionnaireItemContent: [
           {
-            content: '选项1',
+            content: '',
             sort: 1
           }
         ]
       })
     },
     addMultiple: function() {
+      this.$message.success('已添加一个多选题')
       this.topics.push({
-        questionnaireItemTitle: '请输入题目',
+        questionnaireItemTitle: '',
         questionnaireItemType: 3,
         sort: this.topics.length + 1,
         questionnaireItemContent: [
           {
-            content: '选项1',
+            content: '',
             sort: 1
           }
         ]
       })
     },
     addFill: function() {
+      this.$message.success('已添加一个填空题')
       this.topics.push({
-        questionnaireItemTitle: '请输入题目',
+        questionnaireItemTitle: '',
         sort: this.topics.length + 1,
         questionnaireItemType: 1
       })
     },
     addOption: function(index) {
+      this.$message.success('已添加一个选项')
       this.topics[index].questionnaireItemContent.push({
-        content:
-          '选项' + (this.topics[index].questionnaireItemContent.length + 1),
+        content: '',
         sort: this.topics[index].questionnaireItemContent.length + 1
       })
     },
@@ -438,7 +440,7 @@ export default {
           this.topics[i].questionnaireItemType === 3
         ) {
           if (this.topics[i].questionnaireItemContent.length <= 1) {
-            this.$message.warning('单选题和多选题至少添加两个选项')
+            this.$message.warning('还有题目没有填写完整，请查看')
             return
           } else {
             for (
@@ -507,11 +509,13 @@ export default {
     handlePreview() {
       if (!this.isPreview) {
         this.isPreview = true
-        Array.prototype.slice.call(document.getElementsByName('editorValue')).map(item => {
-          this.$nextTick(() => {
-          item.style.display = "none"
-         })
-        })
+        Array.prototype.slice
+          .call(document.getElementsByName('editorValue'))
+          .map(item => {
+            this.$nextTick(() => {
+              item.style.display = 'none'
+            })
+          })
       }
     },
     handleCancel() {
@@ -541,9 +545,14 @@ export default {
           this.topics.map(item => {
             answerDetail.map(answer => {
               if (item.questionnaireItemId === answer.id) {
-                if (item.questionnaireItemType === 2 || item.questionnaireItemType === 3) {
+                if (
+                  item.questionnaireItemType === 2 ||
+                  item.questionnaireItemType === 3
+                ) {
                   item.questionnaireItemContent.map(option => {
-                    if (answer.content.split(',').indexOf(option.content) !== -1) {
+                    if (
+                      answer.content.split(',').indexOf(option.content) !== -1
+                    ) {
                       option.isCheck = true
                     }
                   })

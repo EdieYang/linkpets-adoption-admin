@@ -19,7 +19,7 @@ module.exports = {
       '/api': {
         // target: 'https://result.eolinker.com/nw4JNpZd854dddc83b53ca8f65d6aa33f5ddbfe20d420e8?uri=',
         // target: 'https://result.eolinker.com/SSn5AuU5fa51ddababb58a0370bc6211478ffd8d9a8ca24?uri=',
-        target: 'http://linchong.natapp1.cc/lpCmsTest/',
+        target: 'http://linchongpets.natapp1.cc/lpCmsTest/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '' // 代理的路径
@@ -27,7 +27,7 @@ module.exports = {
       }
     },
     sockHost: 'http://localhost:8080/',
-    disableHostCheck: true,
+    disableHostCheck: true
   },
 
   css: {
@@ -59,7 +59,7 @@ module.exports = {
       // TRAVIS 构建 vue-loader 添加 filename
       .when(
         process.env.VUE_APP_BUILD_MODE === 'TRAVIS' ||
-        process.env.NODE_ENV === 'development',
+          process.env.NODE_ENV === 'development',
         VueFilenameInjector(config, {
           propName: process.env.VUE_APP_SOURCE_VIEWER_PROP_NAME
         })

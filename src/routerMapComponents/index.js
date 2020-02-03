@@ -107,6 +107,11 @@ let componentMaps = {
     import(
       /* webpackChunkName: "user" */
       '@/views/userCenter/user/index'
+    ),
+  bannerIndex: () =>
+    import(
+      /* webpackChunkName: "user" */
+      '@/views/baseMgn/bannerMgn/index'
     )
 }
 files.keys().forEach(key => {
