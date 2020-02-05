@@ -330,7 +330,7 @@ export default {
             'searchreplace'
           ]
         ],
-        UEDITOR_HOME_URL: '/lib/UEditor/'
+        UEDITOR_HOME_URL: '/adopt-admin/lib/UEditor/'
       }
     }
   },

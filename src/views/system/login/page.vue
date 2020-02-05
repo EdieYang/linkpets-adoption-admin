@@ -129,8 +129,10 @@ export default {
             util.cookies.set('userId', res.userId)
             util.cookies.set('token', res.token)
             util.cookies.set('userName', res.userName)
-            util.cookies.set('orgId',res.orgId)
-            setTimeout(()=>{this.$router.push('/index')},500)
+            util.cookies.set('orgId', res.orgId)
+            setTimeout(() => {
+              this.$router.push('/index')
+            }, 500)
           })
         } else {
           // 登录表单校验失败
@@ -201,7 +203,7 @@ export default {
   $backgroundColor: #fff;
   // ---
   background-color: $backgroundColor;
-  background-image: url('/image/local/login.jpg');
+  background-image: url('/adopt-admin/image/local/login.jpg');
   background-repeat: no-repeat;
   height: 100%;
   background-size: auto 100%;

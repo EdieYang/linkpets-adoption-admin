@@ -4,7 +4,9 @@ import log from './util.log'
 
 const util = {
   picturePath:
-    'https://linkpets-adopt-platform-bucket-test.oss-cn-shanghai.aliyuncs.com/',
+    // 'https://linkpets-adopt-platform-bucket-test.oss-cn-shanghai.aliyuncs.com/',
+    'https://linkpet-image-bucket-1.oss-cn-hangzhou.aliyuncs.com/',
+  uploadPath: 'https://www.linchongpets.com/lpCms/oss/image/backend',
   cookies,
   db,
   log

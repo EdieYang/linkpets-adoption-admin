@@ -352,7 +352,7 @@ export default {
         ]
       },
       formLabelWidth: '120px',
-      actionUrl: '/api/oss/image/backend',
+      actionUrl: util.uploadPath,
       picturePrefix: util.picturePath,
       multiple: false,
       limit: 1,
@@ -459,13 +459,13 @@ export default {
         file.type === 'image/gif' ||
         file.type === 'image/bmp' ||
         file.type === 'image/jpg'
-      const isLt = file.size / 1024 / 1024 < 2
+      const isLt = file.size / 1024 / 1024 <= 5
       if (!isType) {
         this.$message.error('上传图片格式不对!')
         return isType
       }
       if (!isLt) {
-        this.$message.error('上传图片大小不能超过2M!')
+        this.$message.error('上传图片大小不能超过5M!')
       }
       return isType && isLt
     },

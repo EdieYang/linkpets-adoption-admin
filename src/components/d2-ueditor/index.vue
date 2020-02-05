@@ -1,7 +1,19 @@
 <template>
   <div>
-    <input ref="uploadBtn" @change="uploadFile" type="file" class="selecte-img" />
-    <vue-ueditor-wrap ref="ueditor" v-model="currentValue" :config="config" :destroy="true" :init="init" @ready="ready" />
+    <input
+      ref="uploadBtn"
+      @change="uploadFile"
+      type="file"
+      class="selecte-img"
+    />
+    <vue-ueditor-wrap
+      ref="ueditor"
+      v-model="currentValue"
+      :config="config"
+      :destroy="true"
+      :init="init"
+      @ready="ready"
+    />
   </div>
 </template>
 
@@ -28,7 +40,7 @@ export default {
   data() {
     return {
       currentValue: '',
-      editorInstance: null,
+      editorInstance: null
       // ossData: { 'userId ': util.cookies.get('userId'), 'ossZone ': 'adopt' }
     }
   },
@@ -65,8 +77,8 @@ export default {
         formData.append('file', file)
         formData.append('userId', util.cookies.get('userId'))
         formData.append('ossZone', 'adopt')
-        let apiEntry = 'https://www.linchongpets.com/lpCmsTest/oss/image'
-        axios.post(apiEntry, formData).then((res) => {
+        let apiEntry = 'https://www.linchongpets.com/lpCms/oss/image'
+        axios.post(apiEntry, formData).then(res => {
           this.editorInstance.execCommand('insertimage', {
             src: 'https://pic.linchongpets.com/' + res.data.data
           })
@@ -119,6 +131,6 @@ export default {
   opacity: 0;
 }
 .el-form-item__content {
-  line-height: 1
+  line-height: 1;
 }
 </style>

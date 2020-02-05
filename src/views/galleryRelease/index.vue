@@ -50,7 +50,7 @@ export default {
        uploadData: {
         ossZone: "organization"
       },
-      actionUrl: '/api/oss/image/backend',
+      actionUrl: util.uploadPath,
       picturePrefix: util.picturePath,
       dialogFormVisible: false,
       form: {

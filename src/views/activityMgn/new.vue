@@ -344,12 +344,12 @@ export default {
             'searchreplace'
           ]
         ],
-        UEDITOR_HOME_URL: '/lib/UEditor/'
+        UEDITOR_HOME_URL: '/adopt-admin/lib/UEditor/'
       },
       dialogImageUrl: '',
       dialogVisible: false,
       fileList: [],
-      actionUrl: '/api/oss/image/backend',
+      actionUrl: util.uploadPath,
       ossData: { 'ossZone ': 'group/activity' },
       picturePrefix: util.picturePath,
       activityTypeOptions: [

@@ -182,7 +182,7 @@ export default {
       multiple: false,
       limit: 1,
       fileList: [],
-      actionUrl: 'https://www.linchongpets.com/lpCmsTest/oss/image'
+      actionUrl: 'https://www.linchongpets.com/lpCms/oss/image'
     }
   },
   methods: {
@@ -241,14 +241,14 @@ export default {
         file.type === 'image/gif' ||
         file.type === 'image/bmp' ||
         file.type === 'image/jpg'
-      const isLt = file.size / 1024 / 1024 < 5
+      const isLt = file.size / 1024 / 1024 <= 5
       debugger
       if (!isType) {
         this.$message.error('上传图片格式不对!')
         return isType
       }
       if (!isLt) {
-        this.$message.error('上传图片大小不能超过2M!')
+        this.$message.error('上传图片大小不能超过5M!')
       }
       return isType && isLt
     },

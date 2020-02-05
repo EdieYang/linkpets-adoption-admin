@@ -1,167 +1,161 @@
 <template>
-
   <d2-container>
     <template slot="header">
-
       <div class="header-cover">
         <p>发布组织近期活动，微信公众号文章</p>
-        <el-button type="primary"
-                   size="medium"
-                   @click="dialogFormVisible = true">发布新的活动</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          @click="dialogFormVisible = true"
+          >发布新的活动</el-button
+        >
       </div>
-
     </template>
 
-    <el-table :data="tableData"
-              border
-              style="width: 100%">
-      <el-table-column prop="title"
-                       width="300px"
-                       align="center"
-                       label="公众号文章标题">
-
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column
+        prop="title"
+        width="300px"
+        align="center"
+        label="公众号文章标题"
+      >
       </el-table-column>
-      <el-table-column label="公众号文章封面"
-                       align="center"
-                       width="230px">
+      <el-table-column label="公众号文章封面" align="center" width="230px">
         <template slot-scope="scope">
-          <img :src="scope.row.activityCover"
-               alt=""
-               style="width: 200px;height: 100px">
+          <img
+            :src="scope.row.activityCover"
+            alt=""
+            style="width: 200px;height: 100px"
+          />
         </template>
-
       </el-table-column>
-      <el-table-column label="公众号文章链接"
-                       align="center">
+      <el-table-column label="公众号文章链接" align="center">
         <template slot-scope="scope">
-          <el-popover placement="top"
-                      width="400"
-                      trigger="click">
+          <el-popover placement="top" width="400" trigger="click">
             <div class="tag-popover">
-              {{scope.row.activityPath}}
+              {{ scope.row.activityPath }}
             </div>
-            <el-button slot="reference"
-                       size="mini"
-                       round>查看链接</el-button>
+            <el-button slot="reference" size="mini" round>查看链接</el-button>
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="createDate"
-                       width="170px"
-                       align="center"
-                       label="发布时间">
+      <el-table-column
+        prop="createDate"
+        width="170px"
+        align="center"
+        label="发布时间"
+      >
       </el-table-column>
-      <el-table-column fixed="right"
-                       label="操作"
-                       align="center"
-                       width="180px">
+      <el-table-column fixed="right" label="操作" align="center" width="180px">
         <template slot-scope="scope">
-          <el-tooltip content="预览"
-                      placement="top-start"
-                      effect="light">
-            <el-button icon="el-icon-document"
-                       circle
-                       size="small"
-                       @click="openLink(scope.row.activityPath)"></el-button>
+          <el-tooltip content="预览" placement="top-start" effect="light">
+            <el-button
+              icon="el-icon-document"
+              circle
+              size="small"
+              @click="openLink(scope.row.activityPath)"
+            ></el-button>
           </el-tooltip>
-          <el-tooltip content="编辑"
-                      placement="top-start"
-                      effect="light">
-            <el-button type="success"
-                       icon="el-icon-edit"
-                       circle
-                       size="small"
-                       @click="edit(scope.row)"></el-button>
+          <el-tooltip content="编辑" placement="top-start" effect="light">
+            <el-button
+              type="success"
+              icon="el-icon-edit"
+              circle
+              size="small"
+              @click="edit(scope.row)"
+            ></el-button>
           </el-tooltip>
-          <el-tooltip content="删除"
-                      placement="top-start"
-                      effect="light">
-            <el-button type="danger"
-                       icon="el-icon-delete-solid"
-                       circle
-                       size="small"
-                       @click="del(scope.row)"></el-button>
+          <el-tooltip content="删除" placement="top-start" effect="light">
+            <el-button
+              type="danger"
+              icon="el-icon-delete-solid"
+              circle
+              size="small"
+              @click="del(scope.row)"
+            ></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- Form -->
-    <el-dialog title="活动发布"
-               :visible.sync="dialogFormVisible"
-               :closeOnClickModal="closeOnClickModal"
-               :closeOnPressEscape="closeOnPressEscape"
-               :showClose="showClose">
-      <el-form :model="form"
-               ref="ruleForm"
-               :rules="rules">
-        <el-form-item label="公众号文章标题"
-                      :label-width="formLabelWidth"
-                      prop="title">
-          <el-input v-model="form.title"
-                    autocomplete="off"></el-input>
+    <el-dialog
+      title="活动发布"
+      :visible.sync="dialogFormVisible"
+      :closeOnClickModal="closeOnClickModal"
+      :closeOnPressEscape="closeOnPressEscape"
+      :showClose="showClose"
+    >
+      <el-form :model="form" ref="ruleForm" :rules="rules">
+        <el-form-item
+          label="公众号文章标题"
+          :label-width="formLabelWidth"
+          prop="title"
+        >
+          <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="公众号文章链接"
-                      :label-width="formLabelWidth"
-                      prop="activityPath">
-          <el-input v-model="form.activityPath"
-                    autocomplete="off"></el-input>
+        <el-form-item
+          label="公众号文章链接"
+          :label-width="formLabelWidth"
+          prop="activityPath"
+        >
+          <el-input v-model="form.activityPath" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="公众号文章封面"
-                      :label-width="formLabelWidth"
-                      prop="activityCover">
-          <el-upload :action="actionUrl"
-                     ref="upload"
-                     list-type="picture-card"
-                     :multiple="multiple"
-                     :limit="limit"
-                     :data="uploadData"
-                     :on-success="handleSuccess"
-                     :on-remove="handleRemove"
-                     :file-list="fileList"
-                     :before-upload="beforeThumbImageUpload">
+        <el-form-item
+          label="公众号文章封面"
+          :label-width="formLabelWidth"
+          prop="activityCover"
+        >
+          <el-upload
+            :action="actionUrl"
+            ref="upload"
+            list-type="picture-card"
+            :multiple="multiple"
+            :limit="limit"
+            :data="uploadData"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :before-upload="beforeThumbImageUpload"
+          >
             <i class="el-icon-plus"></i>
-            <div slot="tip"
-                 class="el-upload__tip">
+            <div slot="tip" class="el-upload__tip">
               支持bmp/png/jpeg/jpg/gif格式，大小不超过5M
             </div>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
-            <img width="100%"
-                 :src="form.activityCover"
-                 alt="">
-
+            <img width="100%" :src="form.activityCover" alt="" />
           </el-dialog>
-          <el-input type="hidden"
-                    v-model="form.activityCover" />
+          <el-input type="hidden" v-model="form.activityCover" />
         </el-form-item>
       </el-form>
-      <div slot="footer"
-           class="dialog-footer">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="cancel('ruleForm')">取 消</el-button>
-        <el-button type="primary"
-                   @click="save('ruleForm')">上 传</el-button>
+        <el-button type="primary" @click="save('ruleForm')">上 传</el-button>
       </div>
     </el-dialog>
 
     <template slot="footer">
-
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="currentPage"
-                     :page-sizes="[10,20,30,40]"
-                     :page-size="10"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
       </el-pagination>
-
     </template>
   </d2-container>
 </template>
 
-
 <script>
-import { listActivities, postActivity, uptActivity } from '@/api/activity/activityApi.js'
+import {
+  listActivities,
+  postActivity,
+  uptActivity
+} from '@/api/activity/activityApi.js'
 import util from '@/libs/util'
 
 var pageNum = 1
@@ -169,15 +163,15 @@ var pageSize = 10
 var orgId = ''
 
 export default {
-  name: "AdoptionWxArticle",
-  data () {
+  name: 'AdoptionWxArticle',
+  data() {
     return {
       tableData: [],
-       uploadData: {
-        userId: util.cookies.get("userId"),
-        ossZone: "organization/article"
+      uploadData: {
+        userId: util.cookies.get('userId'),
+        ossZone: 'organization/article'
       },
-      actionUrl: '/api/oss/image/backend',
+      actionUrl: util.uploadPath,
       dialogFormVisible: false,
       form: {
         id: '',
@@ -212,21 +206,26 @@ export default {
     }
   },
   methods: {
-    handleClick (row) {
-      console.log(row);
+    handleClick(row) {
+      console.log(row)
       this.activityPath = row.activityPath
       this.activityDetail = true
     },
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       pageSize = val
       this.listActivities()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       pageNum = val
       this.listActivities()
     },
-    beforeThumbImageUpload (file) {
-      const isType = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/jpg';
+    beforeThumbImageUpload(file) {
+      const isType =
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'image/gif' ||
+        file.type === 'image/bmp' ||
+        file.type === 'image/jpg'
       const isLt = file.size / 1024 / 1024 < 5
       debugger
       if (!isType) {
@@ -238,37 +237,38 @@ export default {
       }
       return isType && isLt
     },
-    handleRemove (file, fileList) {
+    handleRemove(file, fileList) {
       console.log(file, fileList)
       this.fileList = fileList
       this.form.activityCover = ''
     },
-    handlePictureCardPreview (file) {
-      this.activityCover = file.url;
-      this.dialogVisible = true;
+    handlePictureCardPreview(file) {
+      this.activityCover = file.url
+      this.dialogVisible = true
     },
-    handleSuccess (response, file, fileList) {
+    handleSuccess(response, file, fileList) {
       console.log(response)
       this.form.activityCover = util.picturePath + response.data
     },
-    listActivities () {
+    listActivities() {
       let actInfo = {
         orgId: orgId,
         pageNum: pageNum,
-        pageSize: pageSize,
-      };
-      listActivities(actInfo).then(res => {
-        console.log(res)
-        this.currentPage = res.pageNum
-        this.total = res.total
-        this.tableData = res.list
-
-      }).catch(err => {
-        // 异常情况
-      })
+        pageSize: pageSize
+      }
+      listActivities(actInfo)
+        .then(res => {
+          console.log(res)
+          this.currentPage = res.pageNum
+          this.total = res.total
+          this.tableData = res.list
+        })
+        .catch(err => {
+          // 异常情况
+        })
     },
-    save (formName) {
-      this.$refs[formName].validate((valid) => {
+    save(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.form.id != '') {
             let actInfo = {
@@ -277,55 +277,55 @@ export default {
               title: this.form.title,
               activityPath: this.form.activityPath,
               activityCover: this.form.activityCover
-            };
-            uptActivity(actInfo).then(res => {
-              console.log(res)
-              this.$message({
-                message: '上传成功！',
-                type: 'success'
+            }
+            uptActivity(actInfo)
+              .then(res => {
+                console.log(res)
+                this.$message({
+                  message: '上传成功！',
+                  type: 'success'
+                })
+                this.$refs[formName].resetFields()
+                this.dialogVisible = false
+                this.dialogFormVisible = false
+                pageNum = 1
+                this.listActivities()
               })
-              this.$refs[formName].resetFields()
-              this.dialogVisible = false
-              this.dialogFormVisible = false
-              pageNum = 1
-              this.listActivities()
-
-            }).catch(err => {
-              // 异常情况
-            })
+              .catch(err => {
+                // 异常情况
+              })
           } else {
-
             let actInfo = {
               orgId: orgId,
               title: this.form.title,
               activityPath: this.form.activityPath,
               activityCover: this.form.activityCover
-            };
-            postActivity(actInfo).then(res => {
-              console.log(res)
-              this.$message({
-                message: '上传成功！',
-                type: 'success'
+            }
+            postActivity(actInfo)
+              .then(res => {
+                console.log(res)
+                this.$message({
+                  message: '上传成功！',
+                  type: 'success'
+                })
+                this.$refs[formName].resetFields()
+                this.dialogVisible = false
+                this.dialogFormVisible = false
+                pageNum = 1
+                this.listActivities()
               })
-              this.$refs[formName].resetFields()
-              this.dialogVisible = false
-              this.dialogFormVisible = false
-              pageNum = 1
-              this.listActivities()
-
-            }).catch(err => {
-              // 异常情况
-              this.$message({
-                message: '上传失败！',
-                type: 'error'
+              .catch(err => {
+                // 异常情况
+                this.$message({
+                  message: '上传失败！',
+                  type: 'error'
+                })
               })
-            })
-
           }
         }
       })
     },
-    cancel (formName) {
+    cancel(formName) {
       this.$refs[formName].resetFields()
       this.$refs.upload.clearFiles()
       this.form.activityCover = ''
@@ -334,13 +334,13 @@ export default {
       this.dialogFormVisible = false
       this.form.id = ''
     },
-    onCopy () {
+    onCopy() {
       this.$message({
         message: '复制成功！',
         type: 'success'
       })
     },
-    edit (row) {
+    edit(row) {
       this.fileList = []
       this.form.activityPath = row.activityPath
       this.form.activityCover = row.activityCover
@@ -353,7 +353,7 @@ export default {
       this.form.id = row.id
       this.dialogFormVisible = true
     },
-    del (row) {
+    del(row) {
       console.log(row.id)
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -363,7 +363,7 @@ export default {
         let actInfo = {
           id: row.id,
           isValid: 0
-        };
+        }
         uptActivity(actInfo).then(res => {
           console.log(res)
           this.$message({
@@ -373,17 +373,14 @@ export default {
           pageNum = 1
           this.listActivities()
         })
-
       })
-
     },
-    openLink (link) {
-      window.open(link, '_blank');
+    openLink(link) {
+      window.open(link, '_blank')
     }
-
   },
-  mounted: function () {
-    orgId = util.cookies.get("orgId")
+  mounted: function() {
+    orgId = util.cookies.get('orgId')
     if (orgId == '' || orgId == null || typeof orgId == 'undefined') {
       this.$router.push({
         name: 'login'
