@@ -330,7 +330,7 @@ export default {
             'searchreplace'
           ]
         ],
-        UEDITOR_HOME_URL: '/adopt-admin/lib/UEditor/'
+        UEDITOR_HOME_URL: process.env.NODE_ENV === 'development' ? '/lib/UEditor/' : '/adopt-admin/lib/UEditor/'
       }
     }
   },
