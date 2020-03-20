@@ -163,7 +163,7 @@
               icon="el-icon-edit"
               circle
               size="small"
-              @click="edit(scope.row.id)"
+              @click="edit(scope.row.id, scope.row.isActive)"
             ></el-button>
           </el-tooltip>
           <el-tooltip content="删除" placement="top-start" effect="light">
@@ -289,11 +289,18 @@ export default {
         query: { activityId: val }
       })
     },
-    edit(val) {
-      this.$router.push({
-        path: '/group/activity/new',
-        query: { activityId: val, type: 'edit' }
-      })
+    edit(val, isActive) {
+      if (isActive === 1) {
+        this.$message({
+          message: '请先下线活动再进行编辑',
+          type: 'warning'
+        })
+      } else {
+        this.$router.push({
+          path: '/group/activity/new',
+          query: { activityId: val, type: 'edit' }
+        })
+      }
     },
     handleSizeChange(val) {
       pageSize = val
